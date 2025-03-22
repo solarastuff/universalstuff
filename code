@@ -1,12 +1,12 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local player = game.Players.LocalPlayer
 
-local plr = game.Players.LocalPlayer
 
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Rayfield Interface Suite",
-   LoadingSubtitle = "by Sirius",
+   LoadingTitle = "loading universalstuff",
+   LoadingSubtitle = "by solarastuff",
    Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
@@ -41,7 +41,12 @@ local Tab = Window:CreateTab("local", 4483362458) -- Title, Image
 
 local Section = Tab:CreateSection("plr")
 
-
+local Button = Tab:CreateButton({
+   Name =  "Hi " .. player.Name,
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
 
 local Divider = Tab:CreateDivider()
 
@@ -71,6 +76,33 @@ end
 })
 
 
+local Slider = Tab:CreateSlider({
+   Name = "jump power",
+   Range = {0, 500},
+   Increment = 1,
+   Suffix = "power",
+   CurrentValue = 50,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+
+
+
+
+
+
+
+
+
+
+local Tab = Window:CreateTab("fling", 4483362458) -- Title, Image
 
 
 -- Initial setup of services and variables
