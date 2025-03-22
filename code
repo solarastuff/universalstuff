@@ -24,15 +24,15 @@ local Window = Rayfield:CreateWindow({
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
 
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = true, -- Set this to true to use our key system
    KeySettings = {
-      Title = "Untitled",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      Title = "Key",
+      Subtitle = "only has to be done once!!!",
+      Note = "key: keystuff", -- Use this to tell the user how to get a key
       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      Key = {"keystuff"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
    }
 })
 
@@ -94,6 +94,47 @@ game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
 
 
 
+local Players = game:GetService("Players")
+
+-- Function to teleport to the player with a matching display name
+local function teleportToPlayer(playerName)
+    local matchedPlayer = nil
+    
+    -- Loop through all players to find a match based on display name
+    for _, player in ipairs(Players:GetPlayers()) do
+        if string.sub(player.DisplayName:lower(), 1, #playerName) == playerName:lower() then
+            matchedPlayer = player
+            break
+        end
+    end
+
+    -- If a player is found, teleport the local player to them
+    if matchedPlayer then
+        local character = game.Players.LocalPlayer.Character
+        if character and matchedPlayer.Character then
+            character:SetPrimaryPartCFrame(matchedPlayer.Character.HumanoidRootPart.CFrame)
+        end
+    else
+        -- If no match is found, notify the player (using a different UI element)
+        print("Player not found!")
+    end
+end
+
+-- Input component callback
+local Input = Tab:CreateInput({
+   Name = "teleport to",
+   CurrentValue = "",
+   PlaceholderText = "player name...",
+   RemoveTextAfterFocusLost = false,
+   Flag = "Input1",
+   Callback = function(Text)
+       -- When the input changes, attempt to teleport to the player
+       if Text and Text ~= "" then
+           teleportToPlayer(Text)
+       end
+   end,
+})
+
 
 
 
@@ -103,6 +144,66 @@ game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
 
 
 local Tab = Window:CreateTab("fling", 4483362458) -- Title, Image
+
+
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Ensure the detection object exists
+if not ReplicatedStorage:FindFirstChild("juisdfj0i32i0eidsuf0iok") then
+    local detection = Instance.new("Decal")
+    detection.Name = "juisdfj0i32i0eidsuf0iok"
+    detection.Parent = ReplicatedStorage
+end
+
+local running = false  -- Flag to control the running state of the fling
+
+-- Fling function
+local function fling()
+    local lp = Players.LocalPlayer
+    local c, hrp, vel, movel = nil, nil, nil, 0.1
+
+    while running do  -- Runs only if the flag is true
+        RunService.Heartbeat:Wait()
+        c = lp.Character
+        hrp = c and c:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            vel = hrp.Velocity
+            hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            hrp.Velocity = vel
+            RunService.Stepped:Wait()
+            hrp.Velocity = vel + Vector3.new(0, movel, 0)
+            movel = -movel
+        end
+    end
+end
+
+-- Toggle creation (using Rayfield UI or any other UI framework you are using)
+local Toggle = Tab:CreateToggle({
+    Name = "Enable Fling",
+    CurrentValue = false,
+    Flag = "Toggle1", -- This is the identifier for saving the configuration
+    Callback = function(Value)
+        if Value then
+            -- Toggle is on, start the fling function
+            print("Fling Enabled")
+            if not running then
+                running = true
+                -- Start the fling task when the toggle is on
+                task.spawn(fling)
+            end
+        else
+            -- Toggle is off, stop the fling function
+            print("Fling Disabled")
+            running = false
+            -- The fling loop will exit as running is false
+        end
+    end,
+})
 
 
 -- Initial setup of services and variables
