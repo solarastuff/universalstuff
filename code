@@ -73,18 +73,113 @@ end
 
 
 
-local Toggle = Tab:CreateToggle({
-   Name = "fling aura",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-while Value do
-loadstring(game:HttpGet("https://pastefy.app/jr7jOVtB/raw"))()
+-- Initial setup of services and variables
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-
+-- Ensure the detection object exists
+if not ReplicatedStorage:FindFirstChild("juisdfj0i32i0eidsuf0iok") then
+    local detection = Instance.new("Decal")
+    detection.Name = "juisdfj0i32i0eidsuf0iok"
+    detection.Parent = ReplicatedStorage
 end
-   -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
-   end,
+
+local running = false  -- Flag to control the running state of the code
+local flingCoroutine
+local teleportCoroutine
+
+-- Fling function
+local function fling()
+    local lp = Players.LocalPlayer
+    local c, hrp, vel, movel = nil, nil, nil, 0.1
+
+    while running do  -- Runs only if the flag is set to true
+        RunService.Heartbeat:Wait()
+        c = lp.Character
+        hrp = c and c:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            vel = hrp.Velocity
+            hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            hrp.Velocity = vel
+            RunService.Stepped:Wait()
+            hrp.Velocity = vel + Vector3.new(0, movel, 0)
+            movel = -movel
+        end
+    end
+end
+
+-- Find closest player function
+local function findClosestPlayer()
+    local closestPlayer = nil
+    local closestDistance = 10  -- 10 studs range
+
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local otherRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if otherRootPart then
+                local distance = (humanoidRootPart.Position - otherRootPart.Position).Magnitude
+                if distance <= closestDistance then
+                    closestDistance = distance
+                    closestPlayer = otherRootPart
+                end
+            end
+        end
+    end
+
+    return closestPlayer
+end
+
+-- Teleport to closest player with anchoring
+local function teleportToClosestPlayer()
+    while running do  -- Runs only if the flag is set to true
+        local closestTarget = findClosestPlayer()
+        if closestTarget then
+            -- Anchor the character to prevent flinging
+            local character = player.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.Anchored = true
+            end
+
+            -- Teleport to the closest target
+            humanoidRootPart.CFrame = closestTarget.CFrame  -- Teleport to them
+
+            -- Unanchor after teleportation
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.Anchored = false
+            end
+        end
+        task.wait(0.1) -- Check every 0.1 seconds
+    end
+end
+
+-- Toggle creation
+local Toggle = Tab:CreateToggle({
+    Name = "Enable Feature",
+    CurrentValue = false,
+    Flag = "Toggle1", -- This is the identifier for saving the configuration
+    Callback = function(Value)
+        if Value then
+            -- Toggle is on, start the code
+            print("Feature Enabled")
+            if not running then
+                running = true
+                -- Start the fling and teleport tasks when the toggle is on
+                flingCoroutine = task.spawn(fling)
+                teleportCoroutine = task.spawn(teleportToClosestPlayer)
+            end
+        else
+            -- Toggle is off, stop the code
+            print("Feature Disabled")
+            running = false
+            -- Stop the tasks when the toggle is off by just setting running to false
+            -- The loops will exit since `running` will be false
+        end
+    end,
 })
