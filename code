@@ -184,7 +184,7 @@ end
 
 -- Toggle creation (using Rayfield UI or any other UI framework you are using)
 local Toggle = Tab:CreateToggle({
-    Name = "Enable Fling",
+    Name = "touch fling",
     CurrentValue = false,
     Flag = "Toggle1", -- This is the identifier for saving the configuration
     Callback = function(Value)
@@ -294,7 +294,7 @@ end
 
 -- Toggle creation
 local Toggle = Tab:CreateToggle({
-    Name = "Enable Feature",
+    Name = "fling aura",
     CurrentValue = false,
     Flag = "Toggle1", -- This is the identifier for saving the configuration
     Callback = function(Value)
