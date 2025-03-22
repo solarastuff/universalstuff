@@ -1,5 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
 local plr = game.Players.LocalPlayer
+
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
@@ -41,7 +43,7 @@ local Section = Tab:CreateSection("plr")
 
 
 
-local Paragraph = Tab:CreateParagraph({Title = "", Content =  "hi thanks for using this script🥀 " .. playerName .. "}) 
+local Paragraph = Tab:CreateParagraph({Title = "hi", Content =  "hi thanks for using this script🥀 " .. plr.Name .. "}) 
 
 local Divider = Tab:CreateDivider()
 
