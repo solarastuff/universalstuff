@@ -78,10 +78,10 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-if Value then
+while Value do
 loadstring(game:HttpGet("https://pastefy.app/jr7jOVtB/raw"))()
-else 
-loadstring(game:HttpGet("https://pastefy.app/jr7jOVtB/raw"))() = nil
+
+
 
 end
    -- The function that takes place when the toggle is pressed
