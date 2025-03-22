@@ -52,7 +52,7 @@ local Divider = Tab:CreateDivider()
 
 local Slider = Tab:CreateSlider({
    Name = "walkspeed",
-   Range = {0.0001, 400},
+   Range = {1, 400},
    Increment = 1,
    Suffix = "speed",
    CurrentValue = 16,
