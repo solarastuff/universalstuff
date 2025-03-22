@@ -41,9 +41,12 @@ local Tab = Window:CreateTab("local", 4483362458) -- Title, Image
 
 local Section = Tab:CreateSection("plr")
 
-
-
-local Paragraph = Tab:CreateParagraph({Title = "hi", Content =  "hi thanks for using this script🥀 " .. plr.Name .. "}) 
+local Button = Tab:CreateButton({
+   Name = "hi thanks for using this script" ..plr.Name.. ",
+   Callback = function()
+   -- The function that takes place when the button is pressed
+   end,
+})
 
 local Divider = Tab:CreateDivider()
 
