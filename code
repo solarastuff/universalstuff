@@ -2,6 +2,7 @@
 local player = game.Players.LocalPlayer
 loopSpeed = true
 loopJump = true
+floating = true
 
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
@@ -66,7 +67,7 @@ local Divider = Tab:CreateDivider()
 
 local Slider = Tab:CreateSlider({
    Name = "walkspeed",
-   Range = {1, 400},
+   Range = {0, 1000},
    Increment = 1,
    Suffix = "speed",
    CurrentValue = 16,
@@ -196,6 +197,23 @@ local Input = Tab:CreateInput({
    end,
 })
 
+local Slider = Tab:CreateSlider({
+   Name = "float",
+   Range = {-250, 5000},
+   Increment = 1,
+   Suffix = "height",
+   CurrentValue = 0,
+   Flag = "sftuhhg", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value
+
+
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
 
 
 
