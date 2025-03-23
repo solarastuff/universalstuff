@@ -413,3 +413,31 @@ local Toggle = Tab:CreateToggle({
 })
 
 
+
+
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Example",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       local player = game.Players.LocalPlayer
+       local character = player.Character or player.CharacterAdded:Wait()
+
+       local function setCollisions(state)
+           for _, part in pairs(character:GetDescendants()) do
+               if part:IsA("BasePart") then
+                   part.CanCollide = state
+               end
+           end
+       end
+
+       if Value then
+           -- Toggle is ON: Disable collisions
+           setCollisions(false)
+       else
+           -- Toggle is OFF: Enable collisions
+           setCollisions(true)
+       end
+   end,
+})
+
