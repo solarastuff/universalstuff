@@ -784,3 +784,46 @@ rejoinServer()
 local Tab = Window:CreateTab("debug", 4483362458) -- Title, Image
 
 local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this."})
+
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local noClip = false
+
+-- Function to enable/disable no-clip
+local function setNoClipMode()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not noClip  -- Disable collision when no-clip is active
+        end
+    end
+end
+
+-- Set up the toggle for enabling/disabling no-clip
+local Toggle = Tab:CreateToggle({
+    Name = "No-Clip Toggle",
+    CurrentValue = false,
+    Flag = "Toggle1", -- A flag to identify the setting
+    Callback = function(Value)
+        -- This callback is triggered when the toggle state changes
+        noClip = Value
+        setNoClipMode()  -- Update no-clip based on the toggle state
+    end,
+})
+
+-- Continuously update no-clip mode based on the toggle state
+game:GetService("RunService").RenderStepped:Connect(function()
+    if noClip then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    else
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end)
