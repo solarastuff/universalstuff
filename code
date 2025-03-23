@@ -179,7 +179,7 @@ local Input = Tab:CreateInput({
    Name = "teleport to",
    CurrentValue = "",
    PlaceholderText = "player name...",
-   RemoveTextAfterFocusLost = false,
+   RemoveTextAfterFocusLost = true,
    Flag = "Input1",
    Callback = function(Text)
        -- When the input changes, attempt to teleport to the player
@@ -556,33 +556,29 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local camera = workspace.CurrentCamera
 local orbitRadius = 4.9  -- Closer orbit
 local orbitSpeed = 20     -- Speed of orbiting
-local switchTime = 1000     -- Change target every X seconds
 
 local targetRootPart = nil
 local isOrbiting = false
 local orbitEnabled = false -- Track toggle state
 
--- Function to pick a random player
-local function pickRandomPlayer()
-    if not orbitEnabled then return end -- Stop if toggle is off
+-- Function to find the nearest player
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge  -- Start with a very large distance
 
-    local playerList = Players:GetPlayers()
-    local validPlayers = {}
-
-    for _, plr in pairs(playerList) do
+    for _, plr in pairs(Players:GetPlayers()) do
         if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
-            table.insert(validPlayers, plr)
+            local target = plr.Character:FindFirstChild("HumanoidRootPart")
+            local distance = (target.Position - humanoidRootPart.Position).Magnitude
+
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = target
+            end
         end
     end
 
-    if #validPlayers > 0 then
-        local randomPlayer = validPlayers[math.random(1, #validPlayers)]
-        targetRootPart = randomPlayer.Character:FindFirstChild("HumanoidRootPart")
-        isOrbiting = true
-    else
-        targetRootPart = nil
-        isOrbiting = false
-    end
+    return nearestPlayer
 end
 
 -- Prevent camera from rotating with player
@@ -591,22 +587,10 @@ local function lockCamera()
     UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 end
 
--- Repeatedly switch targets when enabled
-task.spawn(function()
-    while true do
-        if orbitEnabled then
-            pickRandomPlayer()
-        else
-            isOrbiting = false
-        end
-        task.wait(switchTime)
-    end
-end)
-
 -- Orbit logic
 local angle = 0
 RunService.RenderStepped:Connect(function(deltaTime)
-    if orbitEnabled and isOrbiting and targetRootPart and humanoidRootPart then
+    if orbitEnabled and isOrbiting and targetRootPart then
         angle = angle + orbitSpeed * deltaTime
 
         -- Calculate new position (same Y level as target)
@@ -624,12 +608,19 @@ end)
 
 -- Toggle integration
 local Toggle = Tab:CreateToggle({
-   Name = "Orbit",
+   Name = "Toggle Orbit",
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
        orbitEnabled = Value -- Enable or disable orbiting based on toggle
-       if not orbitEnabled then
+       
+       if orbitEnabled then
+           -- Find the nearest player when toggling on
+           targetRootPart = findNearestPlayer()
+           if targetRootPart then
+               isOrbiting = true -- Start orbiting the nearest player
+           end
+       else
            isOrbiting = false -- Stop orbiting
            targetRootPart = nil -- Remove target
            
@@ -639,7 +630,6 @@ local Toggle = Tab:CreateToggle({
        end
    end,
 })
-
 
 local Tab = Window:CreateTab("appearance", 4483362458) -- Title, Image
 
@@ -727,3 +717,45 @@ Window.ModifyTheme('Serenity')
    end,
 })
 
+
+
+local Tab = Window:CreateTab("server", 4483362458) -- Title, Image
+
+local Button = Tab:CreateButton({
+   Name = "reset",
+   Callback = function()
+local player = game:GetService("Players").LocalPlayer
+
+local function resetCharacter()
+    local character = player.Character
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid.Health = 0  -- This will cause the character to die
+    end
+end
+
+resetCharacter()
+
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+local Button = Tab:CreateButton({
+   Name = "rejoin",
+   Callback = function()
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function rejoinServer()
+    TeleportService:Teleport(game.PlaceId, player)
+end
+
+rejoinServer()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Tab = Window:CreateTab("debug", 4483362458) -- Title, Image
+
+local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this."})
