@@ -316,3 +316,100 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local camera = workspace.CurrentCamera
+local orbitRadius = 4.9  -- Closer orbit
+local orbitSpeed = 20     -- Speed of orbiting
+local switchTime = 5      -- Change target every X seconds
+
+local targetRootPart = nil
+local isOrbiting = false
+local orbitEnabled = false -- Track toggle state
+
+-- Function to pick a random player
+local function pickRandomPlayer()
+    if not orbitEnabled then return end -- Stop if toggle is off
+
+    local playerList = Players:GetPlayers()
+    local validPlayers = {}
+
+    for _, plr in pairs(playerList) do
+        if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            table.insert(validPlayers, plr)
+        end
+    end
+
+    if #validPlayers > 0 then
+        local randomPlayer = validPlayers[math.random(1, #validPlayers)]
+        targetRootPart = randomPlayer.Character:FindFirstChild("HumanoidRootPart")
+        isOrbiting = true
+    else
+        targetRootPart = nil
+        isOrbiting = false
+    end
+end
+
+-- Prevent camera from rotating with player
+local function lockCamera()
+    camera.CameraSubject = humanoidRootPart  -- Keep normal third-person view
+    UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+end
+
+-- Repeatedly switch targets when enabled
+task.spawn(function()
+    while true do
+        if orbitEnabled then
+            pickRandomPlayer()
+        else
+            isOrbiting = false
+        end
+        task.wait(switchTime)
+    end
+end)
+
+-- Orbit logic
+local angle = 0
+RunService.RenderStepped:Connect(function(deltaTime)
+    if orbitEnabled and isOrbiting and targetRootPart and humanoidRootPart then
+        angle = angle + orbitSpeed * deltaTime
+
+        -- Calculate new position (same Y level as target)
+        local offsetX = math.cos(angle) * orbitRadius
+        local offsetZ = math.sin(angle) * orbitRadius
+        local newPosition = targetRootPart.Position + Vector3.new(offsetX, 0, offsetZ)
+
+        -- Set position smoothly without affecting camera movement
+        humanoidRootPart.CFrame = CFrame.new(newPosition) * CFrame.Angles(0, math.rad(angle * 10), 0)
+
+        -- Lock the camera to prevent jerky movement
+        lockCamera()
+    end
+end)
+
+-- Toggle integration
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Orbit",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       orbitEnabled = Value -- Enable or disable orbiting based on toggle
+       if not orbitEnabled then
+           isOrbiting = false -- Stop orbiting
+           targetRootPart = nil -- Remove target
+           
+           -- Reset the camera to normal Roblox controls
+           camera.CameraSubject = player.Character:FindFirstChild("Humanoid") or humanoidRootPart
+           UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+       end
+   end,
+})
+
+
