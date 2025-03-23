@@ -37,6 +37,13 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
+local Tab = Window:CreateTab("details", 4483362458) -- Title, Image
+
+local Label = Tab:CreateLabel("PC support ✅", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+local Label = Tab:CreateLabel("Mobile support ✅", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+local Label = Tab:CreateLabel("Console support ❌", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
+
+local Paragraph = Tab:CreateParagraph({Title = "updates", Content = "W.I.P"})
 
 local Tab = Window:CreateTab("local", 4483362458) -- Title, Image
 
