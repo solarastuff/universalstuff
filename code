@@ -256,6 +256,31 @@ end
 
 
 
+local Slider = Tab:CreateSlider({
+   Name = "FOV",
+   Range = {0, 120},
+   Increment = 1,
+   Suffix = "fov",
+   CurrentValue = 70,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+local camera = workspace.CurrentCamera
+camera.FieldOfView = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "reset to default fov",
+   Callback = function()
+local camera = workspace.CurrentCamera
+camera.FieldOfView = 70
+Slider:Set(70) -- The new slider integer value
+
+   -- The function that takes place when the button is pressed
+   end,
+})
 
 local Tab = Window:CreateTab("fling", 4483362458) -- Title, Image
 
@@ -821,44 +846,53 @@ local Tab = Window:CreateTab("debug", 4483362458) -- Title, Image
 local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this.Also oliver if your using this fuck u."})
 
 
+
+
+
+
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local noClip = false
+local connection -- Stores the RunService connection so we can stop it
 
 -- Function to enable/disable no-clip
-local function setNoClipMode()
-    for _, part in pairs(character:GetDescendants()) do
-        if part:IsA("BasePart") then
-            part.CanCollide = not noClip  -- Disable collision when no-clip is active
-        end
+local function setNoClipMode(enable)
+    if connection then connection:Disconnect() end -- Stop previous loop
+
+    if enable then
+        connection = game:GetService("RunService").Stepped:Connect(function()
+            if character and character.Parent then
+                local head = character:FindFirstChild("Head")
+                local torso = character:FindFirstChild("Torso")
+
+                if head then head.CanCollide = false end
+                if torso then torso.CanCollide = false end
+            end
+        end)
     end
 end
 
--- Set up the toggle for enabling/disabling no-clip
+-- Function to handle character respawn
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    character:WaitForChild("Head")
+    character:WaitForChild("Torso")
+    
+    if noClip then
+        setNoClipMode(true) -- Reapply no-clip if it was enabled before dying
+    end
+end
+
+-- Listen for character respawn
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Toggle button to control no-clip
 local Toggle = Tab:CreateToggle({
     Name = "No-Clip Toggle",
     CurrentValue = false,
-    Flag = "Toggle1", -- A flag to identify the setting
+    Flag = "Toggle1",
     Callback = function(Value)
-        -- This callback is triggered when the toggle state changes
         noClip = Value
-        setNoClipMode()  -- Update no-clip based on the toggle state
+        setNoClipMode(noClip)
     end,
 })
-
--- Continuously update no-clip mode based on the toggle state
-game:GetService("RunService").RenderStepped:Connect(function()
-    if noClip then
-        for _, part in pairs(character:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = false
-            end
-        end
-    else
-        for _, part in pairs(character:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = true
-            end
-        end
-    end
-end)
