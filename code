@@ -55,7 +55,7 @@ local Button = Tab:CreateButton({
    Callback = function()
 Rayfield:Notify({
    Title = "ow",
-   Content = "why'd you press me?? i just wanted to say hi🥀",
+   Content = "why'd you press me?? i just wanted to say hi🥀. Also oliver fuck u ur fat",
    Duration = 3.4,
    Image = 4483362458,
 })
@@ -212,6 +212,41 @@ game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value
 
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "stop floating",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+floating = false
+local player = game.Players.LocalPlayer -- Get the local player
+
+-- Reset HipHeight when the script runs
+local function resetHipHeight()
+    -- Wait for the player's character and humanoid to load
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    -- Check the rig type and set default hip height accordingly
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then
+        humanoid.HipHeight = 0 -- Default R6 height
+    elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+        humanoid.HipHeight = 2 -- Default R15 height
+    end
+end
+
+-- Call the function to reset the hip height
+resetHipHeight()
+
+else 
+floating = true
+
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
 
@@ -783,7 +818,7 @@ rejoinServer()
 
 local Tab = Window:CreateTab("debug", 4483362458) -- Title, Image
 
-local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this."})
+local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this.Also oliver if your using this fuck u."})
 
 
 local player = game.Players.LocalPlayer
