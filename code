@@ -646,6 +646,23 @@ local targetRootPart = nil
 local isOrbiting = false
 local orbitEnabled = false -- Track toggle state
 
+-- Function to update the character and humanoid root part on respawn
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- If the orbit was enabled before dying, re-enable it
+    if orbitEnabled then
+        targetRootPart = findNearestPlayer()
+        if targetRootPart then
+            isOrbiting = true
+        end
+    end
+end
+
+-- Connect the character respawn event
+player.CharacterAdded:Connect(onCharacterAdded)
+
 -- Function to find the nearest player
 local function findNearestPlayer()
     local nearestPlayer = nil
@@ -675,7 +692,7 @@ end
 -- Orbit logic
 local angle = 0
 RunService.RenderStepped:Connect(function(deltaTime)
-    if orbitEnabled and isOrbiting and targetRootPart then
+    if orbitEnabled and isOrbiting and targetRootPart and humanoidRootPart then
         angle = angle + orbitSpeed * deltaTime
 
         -- Calculate new position (same Y level as target)
