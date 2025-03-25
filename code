@@ -350,7 +350,7 @@ local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local player = game.Players.LocalPlayer
+local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
@@ -364,6 +364,21 @@ end
 local running = false  -- Flag to control the running state of the code
 local flingCoroutine
 local teleportCoroutine
+
+-- Function to update the character and humanoidRootPart when the player respawns
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- If the aura was enabled before dying, restart it
+    if running then
+        flingCoroutine = task.spawn(fling)
+        teleportCoroutine = task.spawn(teleportToClosestPlayer)
+    end
+end
+
+-- Connect the respawn event
+player.CharacterAdded:Connect(onCharacterAdded)
 
 -- Fling function
 local function fling()
@@ -392,7 +407,7 @@ local function findClosestPlayer()
     local closestPlayer = nil
     local closestDistance = 10  -- 10 studs range
 
-    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
             local otherRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
             if otherRootPart then
