@@ -881,11 +881,10 @@ local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things li
 
 
 
-
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local noClip = false
-local connection -- Stores the RunService connection so we can stop it
+local connection -- Stores the RunService connection
 
 -- Function to enable/disable no-clip
 local function setNoClipMode(enable)
@@ -901,6 +900,15 @@ local function setNoClipMode(enable)
                 if torso then torso.CanCollide = false end
             end
         end)
+    else
+        -- Instantly reset CanCollide when turning off no-clip
+        if character and character.Parent then
+            local head = character:FindFirstChild("Head")
+            local torso = character:FindFirstChild("Torso")
+
+            if head then head.CanCollide = true end
+            if torso then torso.CanCollide = true end
+        end
     end
 end
 
@@ -909,7 +917,7 @@ local function onCharacterAdded(newCharacter)
     character = newCharacter
     character:WaitForChild("Head")
     character:WaitForChild("Torso")
-    
+
     if noClip then
         setNoClipMode(true) -- Reapply no-clip if it was enabled before dying
     end
