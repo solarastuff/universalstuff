@@ -931,52 +931,44 @@ local Toggle = Tab:CreateToggle({
 })
 
 local Toggle = Tab:CreateToggle({
-   Name = "glue",
+   Name = "Teleport to Nearest Player",
    CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "Toggle1",
    Callback = function(Value)
+       local player = game.Players.LocalPlayer
+       local character = player.Character
+       local root = character and character:FindFirstChild("HumanoidRootPart")
+       
+       if root then
+           if Value then
+               -- Start teleporting loop
+               task.spawn(function()
+                   while Toggle.CurrentValue do
+                       local nearestPlayer = nil
+                       local shortestDistance = math.huge
 
+                       for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                           if otherPlayer ~= player and otherPlayer.Character then
+                               local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                               if otherRoot then
+                                   local distance = (root.Position - otherRoot.Position).Magnitude
+                                   if distance < shortestDistance then
+                                       shortestDistance = distance
+                                       nearestPlayer = otherRoot
+                                   end
+                               end
+                           end
+                       end
 
-if Value then
+                       if nearestPlayer then
+                           root.CFrame = nearestPlayer.CFrame
+                       end
 
-
-
-
-local player = game.Players.LocalPlayer
-local character = player.Character
-local root = character and character:FindFirstChild("HumanoidRootPart")
-
-if root then
-    local nearestPlayer = nil
-    local shortestDistance = math.huge
-
-    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-        if otherPlayer ~= player and otherPlayer.Character then
-            local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if otherRoot then
-                local distance = (root.Position - otherRoot.Position).Magnitude
-                if distance < shortestDistance then
-                    shortestDistance = distance
-                    nearestPlayer = otherRoot
-                end
-            end
-        end
-    end
-
-    -- Continuously teleport to the nearest player while they exist
-    while nearestPlayer do
-        root.CFrame = nearestPlayer.CFrame
-        task.wait()
-    end
-end
-
-else 
-nearestPlayer = false
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, 10, 0) -- Change to any default position
-end
-
-   -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
+                       task.wait()
+                   end
+               end)
+           end
+       end
    end,
 })
 local Tab = Window:CreateTab("appearance", 4483362458) -- Title, Image
