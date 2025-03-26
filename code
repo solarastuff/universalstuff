@@ -38,13 +38,9 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
-local Tab = Window:CreateTab("details", 4483362458) -- Title, Image
 
-local Label = Tab:CreateLabel("PC support ✅", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
-local Label = Tab:CreateLabel("Mobile support ✅", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
-local Label = Tab:CreateLabel("Console support ❌", 4483362458, Color3.fromRGB(255, 255, 255), false) -- Title, Icon, Color, IgnoreTheme
 
-local Paragraph = Tab:CreateParagraph({Title = "updates", Content = "W.I.P"})
+
 
 local Tab = Window:CreateTab("local", 4483362458) -- Title, Image
 
@@ -280,6 +276,63 @@ Slider:Set(70) -- The new slider integer value
 
    -- The function that takes place when the button is pressed
    end,
+})
+
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local noClip = false
+local connection -- Stores the RunService connection
+
+-- Function to enable/disable no-clip
+local function setNoClipMode(enable)
+    if connection then connection:Disconnect() end -- Stop previous loop
+
+    if enable then
+        connection = game:GetService("RunService").Stepped:Connect(function()
+            if character and character.Parent then
+                local head = character:FindFirstChild("Head")
+                local torso = character:FindFirstChild("Torso")
+
+                if head then head.CanCollide = false end
+                if torso then torso.CanCollide = false end
+            end
+        end)
+    else
+        -- Instantly reset CanCollide when turning off no-clip
+        if character and character.Parent then
+            local head = character:FindFirstChild("Head")
+            local torso = character:FindFirstChild("Torso")
+
+            if head then head.CanCollide = true end
+            if torso then torso.CanCollide = true end
+        end
+    end
+end
+
+-- Function to handle character respawn
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    character:WaitForChild("Head")
+    character:WaitForChild("Torso")
+
+    if noClip then
+        setNoClipMode(true) -- Reapply no-clip if it was enabled before dying
+    end
+end
+
+-- Listen for character respawn
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Toggle button to control no-clip
+local Toggle = Tab:CreateToggle({
+    Name = "No-Clip Toggle",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        noClip = Value
+        setNoClipMode(noClip)
+    end,
 })
 
 local Tab = Window:CreateTab("fling", 4483362458) -- Title, Image
@@ -953,70 +1006,4 @@ rejoinServer()
    -- The function that takes place when the button is pressed
    end,
 })
-
-local Tab = Window:CreateTab("debug", 4483362458) -- Title, Image
-
-local Paragraph = Tab:CreateParagraph({Title = "bugs", Content = "some things like fling aura may not work if you die with it on. Run the script again to fix this.Also oliver if your using this fuck u."})
-
-
-
-
-
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local noClip = false
-local connection -- Stores the RunService connection
-
--- Function to enable/disable no-clip
-local function setNoClipMode(enable)
-    if connection then connection:Disconnect() end -- Stop previous loop
-
-    if enable then
-        connection = game:GetService("RunService").Stepped:Connect(function()
-            if character and character.Parent then
-                local head = character:FindFirstChild("Head")
-                local torso = character:FindFirstChild("Torso")
-
-                if head then head.CanCollide = false end
-                if torso then torso.CanCollide = false end
-            end
-        end)
-    else
-        -- Instantly reset CanCollide when turning off no-clip
-        if character and character.Parent then
-            local head = character:FindFirstChild("Head")
-            local torso = character:FindFirstChild("Torso")
-
-            if head then head.CanCollide = true end
-            if torso then torso.CanCollide = true end
-        end
-    end
-end
-
--- Function to handle character respawn
-local function onCharacterAdded(newCharacter)
-    character = newCharacter
-    character:WaitForChild("Head")
-    character:WaitForChild("Torso")
-
-    if noClip then
-        setNoClipMode(true) -- Reapply no-clip if it was enabled before dying
-    end
-end
-
--- Listen for character respawn
-player.CharacterAdded:Connect(onCharacterAdded)
-
--- Toggle button to control no-clip
-local Toggle = Tab:CreateToggle({
-    Name = "No-Clip Toggle",
-    CurrentValue = false,
-    Flag = "Toggle1",
-    Callback = function(Value)
-        noClip = Value
-        setNoClipMode(noClip)
-    end,
-})
-
-
 
