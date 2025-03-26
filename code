@@ -291,7 +291,7 @@ end
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
-
+})
 
 local Slider = Tab:CreateSlider({
    Name = "FOV",
