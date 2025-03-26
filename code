@@ -287,7 +287,7 @@ while tpWalking and char and hum and hum.Parent do
         char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
     end
 end
-
+end
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
