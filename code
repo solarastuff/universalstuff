@@ -931,39 +931,42 @@ local Toggle = Tab:CreateToggle({
 })
 
 local Toggle = Tab:CreateToggle({
-   Name = "Teleport to Nearest Player",
+   Name = "Toggle Example",
    CurrentValue = false,
-   Flag = "Toggle1",
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
-       if Value then
-           local player = game.Players.LocalPlayer
-           local character = player.Character
-           local root = character and character:FindFirstChild("HumanoidRootPart")
+while Value do
+local player = game.Players.LocalPlayer
+local character = player.Character
+local root = character and character:FindFirstChild("HumanoidRootPart")
 
-           if root then
-               local nearestPlayer = nil
-               local shortestDistance = math.huge
+if root then
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
 
-               for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                   if otherPlayer ~= player and otherPlayer.Character then
-                       local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
-                       if otherRoot then
-                           local distance = (root.Position - otherRoot.Position).Magnitude
-                           if distance < shortestDistance then
-                               shortestDistance = distance
-                               nearestPlayer = otherRoot
-                           end
-                       end
-                   end
-               end
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if otherRoot then
+                local distance = (root.Position - otherRoot.Position).Magnitude
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    nearestPlayer = otherRoot
+                end
+            end
+        end
+    end
 
-               -- Continuously teleport to the nearest player while the toggle is ON
-               while Value and nearestPlayer do
-                   root.CFrame = nearestPlayer.CFrame
-                   task.wait()
-               end
-           end
-       end
+    -- Continuously teleport to the nearest player while they exist
+    while nearestPlayer do
+        root.CFrame = nearestPlayer.CFrame
+        task.wait()
+    end
+end
+task.wait(0.1)
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
 local Tab = Window:CreateTab("appearance", 4483362458) -- Title, Image
