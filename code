@@ -968,7 +968,7 @@ if root then
     end
 end
 
-
+task.wait(0.1)
 end
 
    -- The function that takes place when the toggle is pressed
