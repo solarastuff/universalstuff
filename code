@@ -936,41 +936,33 @@ local Toggle = Tab:CreateToggle({
    Flag = "Toggle1",
    Callback = function(Value)
        if Value then
-           task.spawn(function()
-               while Value do
-                   local player = game.Players.LocalPlayer
-                   local character = player.Character
-                   local root = character and character:FindFirstChild("HumanoidRootPart")
+           local player = game.Players.LocalPlayer
+           local character = player.Character
+           local root = character and character:FindFirstChild("HumanoidRootPart")
 
-                   if root then
-                       local nearestPlayer = nil
-                       local shortestDistance = math.huge
+           if root then
+               local nearestPlayer = nil
+               local shortestDistance = math.huge
 
-                       for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                           if otherPlayer ~= player and otherPlayer.Character then
-                               local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
-                               if otherRoot then
-                                   local distance = (root.Position - otherRoot.Position).Magnitude
-                                   if distance < shortestDistance then
-                                       shortestDistance = distance
-                                       nearestPlayer = otherRoot
-                                   end
-                               end
-                           end
-                       end
-
-                       -- Continuously teleport to the nearest player while toggle is ON
-                       if nearestPlayer then
-                           while Value and nearestPlayer do
-                               root.CFrame = nearestPlayer.CFrame
-                               task.wait()
+               for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                   if otherPlayer ~= player and otherPlayer.Character then
+                       local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                       if otherRoot then
+                           local distance = (root.Position - otherRoot.Position).Magnitude
+                           if distance < shortestDistance then
+                               shortestDistance = distance
+                               nearestPlayer = otherRoot
                            end
                        end
                    end
+               end
 
+               -- Continuously teleport to the nearest player while the toggle is ON
+               while Value and nearestPlayer do
+                   root.CFrame = nearestPlayer.CFrame
                    task.wait()
                end
-           end)
+           end
        end
    end,
 })
