@@ -936,7 +936,9 @@ local Toggle = Tab:CreateToggle({
    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
 
-while Value do
+
+if Value then
+
 
 
 
@@ -968,7 +970,9 @@ if root then
     end
 end
 
-task.wait(0.1)
+else 
+nearestPlayer = false
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, 10, 0) -- Change to any default position
 end
 
    -- The function that takes place when the toggle is pressed
