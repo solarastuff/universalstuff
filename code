@@ -825,7 +825,7 @@ end
    end,
 })
 
-local Tab = Window:CreateTab("fighting", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("fighting") -- Title, Image
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -969,7 +969,15 @@ end
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
-local Tab = Window:CreateTab("appearance", 4483362458) -- Title, Image
+
+local Button = Tab:CreateButton({
+   Name = "unglue (reset)",
+   Callback = function()
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Tab = Window:CreateTab("appearance") -- Title, Image
 
 local Dropdown = Tab:CreateDropdown({
    Name = "Dropdown Example",
@@ -1057,7 +1065,7 @@ Window.ModifyTheme('Serenity')
 
 
 
-local Tab = Window:CreateTab("server", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("server") -- Title, Image
 
 local Button = Tab:CreateButton({
    Name = "reset",
