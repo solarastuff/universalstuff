@@ -43,7 +43,7 @@ local Window = Rayfield:CreateWindow({
 
 
 local Tab = Window:CreateTab("local") -- Title, Image
-local Paragraph = Tab:CreateParagraph({Title = "Paragraph Example", Content = "Paragraph Example"})
+
 local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "• added glue • added CFrame speed method"})
  
 local Section = Tab:CreateSection("plr")
