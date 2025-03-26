@@ -83,6 +83,39 @@ end
    end,
 })
 
+local RunService = game:GetService("RunService")
+
+local Slider = Tab:CreateSlider({
+    Name = "CFrame speed (better walkspeed)",
+    Range = {0, 50},
+    Increment = 1,
+    Suffix = "CFrame",
+    CurrentValue = 0,
+    Flag = "Slider1", 
+    Callback = function(Value)
+        tpWalking = true
+        tpWalkSpeed = Value
+
+        -- Stop existing loop if already running
+        if not tpWalking then return end
+        
+        -- Run movement loop in a separate thread
+        task.spawn(function()
+            local hb = RunService.Heartbeat
+            local char = game.Players.LocalPlayer.Character
+            local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+            
+            while tpWalking and char and hum and hum.Parent do
+                local delta = hb:Wait()
+                if hum.MoveDirection.Magnitude > 0 then
+                    char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
+                end
+            end
+        end)
+    
+end,
+})
+
 
 
 
@@ -264,65 +297,9 @@ end
 
 
 
---[[local Slider = Tab:CreateSlider({
-   Name = "CFrame speed (better walkspeed)",
-   Range = {0, 50},
-   Increment = 1,
-   Suffix = "CFrame",
-   CurrentValue = 0,
-   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-tpWalking = true
-tpWalkSpeed = Value
-if not tpWalking then return end
-local hb = RunService.Heartbeat
-local char = game.Players.LocalPlayer.Character
-local hum = char and char:FindFirstChildWhichIsA("Humanoid")
-while tpWalking and char and hum and hum.Parent do
-    local delta = hb:Wait()
-    if hum.MoveDirection.Magnitude > 0 then
-        char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
-    end
-end
 
-   -- The function that takes place when the slider changes
-   -- The variable (Value) is a number which correlates to the value the slider is currently at
-   end,
-})
-]]
 
-local RunService = game:GetService("RunService")
 
-local Slider = Tab:CreateSlider({
-    Name = "CFrame speed (better walkspeed)",
-    Range = {0, 50},
-    Increment = 1,
-    Suffix = "CFrame",
-    CurrentValue = 0,
-    Flag = "Slider1", 
-    Callback = function(Value)
-        tpWalking = true
-        tpWalkSpeed = Value
-
-        -- Stop existing loop if already running
-        if not tpWalking then return end
-        
-        -- Run movement loop in a separate thread
-        task.spawn(function()
-            local hb = RunService.Heartbeat
-            local char = game.Players.LocalPlayer.Character
-            local hum = char and char:FindFirstChildWhichIsA("Humanoid")
-            
-            while tpWalking and char and hum and hum.Parent do
-                local delta = hb:Wait()
-                if hum.MoveDirection.Magnitude > 0 then
-                    char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
-                end
-            end
-        end)
-    
-end,
-})
 local Slider = Tab:CreateSlider({
    Name = "FOV",
    Range = {0, 120},
