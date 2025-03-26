@@ -199,7 +199,7 @@ local Input = Tab:CreateInput({
 
 local Slider = Tab:CreateSlider({
    Name = "float",
-   Range = {-250, 5000},
+   Range = {-250, 1000},
    Increment = 1,
    Suffix = "height",
    CurrentValue = 0,
@@ -471,38 +471,119 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
+-- // Constants \\ --
+
+-- [ Services ] --
+local Services = setmetatable({}, {
+    __index = function(Self, Index)
+        local NewService = game:GetService(Index)
+        if NewService then
+            Self[Index] = NewService
+        end
+        return NewService
+    end
+})
+
+-- [ LocalPlayer ] --
+local LocalPlayer = Services.Players.LocalPlayer
+
+-- Toggle System
+local AntiFlingEnabled = false -- Default state
+
+-- UI Toggle
 local Toggle = Tab:CreateToggle({
-   Name = "anti fling",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-       local player = game.Players.LocalPlayer
-       local character = player.Character or player.CharacterAdded:Wait()
-
-       local function setCollisions(state)
-           for _, part in pairs(character:GetDescendants()) do
-               if part:IsA("BasePart") then
-                   part.CanCollide = state
-               end
-           end
-       end
-Rayfield:Notify({
-   Title = "anti fling",
-   Content = "successfully enabled you cannot get flung by other exploiters now ",
-   Duration = 5,
-   Image = 4483362458,
+    Name = "Anti-Fling",
+    CurrentValue = false,
+    Flag = "AntiFlingToggle",
+    Callback = function(Value)
+        AntiFlingEnabled = Value
+        game.StarterGui:SetCore("ChatMakeSystemMessage", {
+            Text = "Anti-Fling " .. (AntiFlingEnabled and "Enabled" or "Disabled"),
+            Color = Color3.fromRGB(0, 255, 0)
+        })
+    end
 })
-       if Value then
-           -- Toggle is ON: Disable collisions
-           setCollisions(false)
-       else
-           -- Toggle is OFF: Enable collisions
-           setCollisions(true)
-       end
 
+-- // Functions \\ --
+local function PlayerAdded(Player)
+    local Detected = false
+    local Character;
+    local PrimaryPart;
 
-   end,
-})
+    local function CharacterAdded(NewCharacter)
+        Character = NewCharacter
+        repeat
+            wait()
+            PrimaryPart = NewCharacter:FindFirstChild("HumanoidRootPart")
+        until PrimaryPart
+        Detected = false
+    end
+
+    CharacterAdded(Player.Character or Player.CharacterAdded:Wait())
+    Player.CharacterAdded:Connect(CharacterAdded)
+
+    Services.RunService.Heartbeat:Connect(function()
+        if AntiFlingEnabled and Character and Character:IsDescendantOf(workspace) and PrimaryPart and PrimaryPart:IsDescendantOf(Character) then
+            if PrimaryPart.AssemblyAngularVelocity.Magnitude > 50 or PrimaryPart.AssemblyLinearVelocity.Magnitude > 100 then
+                if not Detected then
+                    game.StarterGui:SetCore("ChatMakeSystemMessage", {
+                        Text = "Fling Exploit detected, Player: " .. tostring(Player),
+                        Color = Color3.fromRGB(255, 200, 0)
+                    })
+                end
+
+                Detected = true
+
+                for _, v in ipairs(Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                        v.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                        v.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                        v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+                    end
+                end
+
+                PrimaryPart.CanCollide = false
+                PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                PrimaryPart.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0)
+            end
+        end
+    end)
+end
+
+-- // Event Listeners \\ --
+for _, v in ipairs(Services.Players:GetPlayers()) do
+    if v ~= LocalPlayer then
+        PlayerAdded(v)
+    end
+end
+
+Services.Players.PlayerAdded:Connect(PlayerAdded)
+
+local LastPosition = nil
+
+Services.RunService.Heartbeat:Connect(function()
+    if AntiFlingEnabled then
+        pcall(function()
+            local PrimaryPart = LocalPlayer.Character and LocalPlayer.Character.PrimaryPart
+            if PrimaryPart then
+                if PrimaryPart.AssemblyLinearVelocity.Magnitude > 250 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 250 then
+                    PrimaryPart.AssemblyAngularVelocity = Vector3.new(0, 0, 0)
+                    PrimaryPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                    PrimaryPart.CFrame = LastPosition
+
+                    game.StarterGui:SetCore("ChatMakeSystemMessage", {
+                        Text = "You were flung. Neutralizing velocity.",
+                        Color = Color3.fromRGB(255, 0, 0)
+                    })
+                elseif PrimaryPart.AssemblyLinearVelocity.Magnitude < 50 or PrimaryPart.AssemblyAngularVelocity.Magnitude > 50 then
+                    LastPosition = PrimaryPart.CFrame
+                end
+            end
+        end)
+    end
+end)
 
 local Button = Tab:CreateButton({
    Name = "fling everyone",
@@ -936,3 +1017,6 @@ local Toggle = Tab:CreateToggle({
         setNoClipMode(noClip)
     end,
 })
+
+
+
