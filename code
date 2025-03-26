@@ -42,7 +42,7 @@ local Window = Rayfield:CreateWindow({
 
 
 
-local Tab = Window:CreateTab("local", 4483362458) -- Title, Image
+local Tab = Window:CreateTab("local") -- Title, Image
 
 local Section = Tab:CreateSection("plr")
 
@@ -59,7 +59,7 @@ Rayfield:Notify({
    end,
 })
 
-local Divider = Tab:CreateDivider()
+local Section = Tab:CreateSection("speed")
 
 local Slider = Tab:CreateSlider({
    Name = "walkspeed",
@@ -86,6 +86,32 @@ end
    end,
 })
 
+local Slider = Tab:CreateSlider({
+   Name = "CFrame speed (better walkspeed)",
+   Range = {0, 50},
+   Increment = 1,
+   Suffix = "CFrame",
+   CurrentValue = 0,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+tpWalking = true
+tpWalkSpeed = Value
+if not tpWalking then return end
+local hb = RunService.Heartbeat
+local char = game.Players.LocalPlayer.Character
+local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+while tpWalking and char and hum and hum.Parent do
+    local delta = hb:Wait()
+    if hum.MoveDirection.Magnitude > 0 then
+        char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
+    end
+end
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
 
 
 local Toggle = Tab:CreateToggle({
@@ -100,6 +126,22 @@ Slider:Set(16) -- The new slider integer value
 
 else 
 loopSpeed = true
+
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "reset CFrame speed",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+tpWalking = false
+else
+tpWalking = true
 
 end
    -- The function that takes place when the toggle is pressed
@@ -1007,28 +1049,4 @@ rejoinServer()
    end,
 })
 
-local Slider = Tab:CreateSlider({
-   Name = "Slider Example",
-   Range = {0, 100},
-   Increment = 10,
-   Suffix = "Bananas",
-   CurrentValue = 10,
-   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-tpWalking = true
-tpWalkSpeed = Value
-if not tpWalking then return end
-local hb = RunService.Heartbeat
-local char = game.Players.LocalPlayer.Character
-local hum = char and char:FindFirstChildWhichIsA("Humanoid")
-while tpWalking and char and hum and hum.Parent do
-    local delta = hb:Wait()
-    if hum.MoveDirection.Magnitude > 0 then
-        char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
-    end
-end
 
-   -- The function that takes place when the slider changes
-   -- The variable (Value) is a number which correlates to the value the slider is currently at
-   end,
-})
