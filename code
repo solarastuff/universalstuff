@@ -829,6 +829,85 @@ end
 
 local Tab = Window:CreateTab("fighting") -- Title, Image
 
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local runService = game:GetService("RunService")
+local userInputService = game:GetService("UserInputService")
+
+local lockOn = false
+local target = nil
+
+-- Function to get the closest player
+local function getClosestPlayer()
+    local character = localPlayer.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return nil end
+
+    local root = character.HumanoidRootPart
+    local closestDistance = math.huge
+    local closestPlayer = nil
+
+    for _, player in pairs(players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local targetRoot = player.Character.HumanoidRootPart
+            local distance = (root.Position - targetRoot.Position).Magnitude
+
+            if distance < closestDistance then
+                closestDistance = distance
+                closestPlayer = targetRoot
+            end
+        end
+    end
+
+    return closestPlayer
+end
+
+-- Enable Lock-On (Aimbot Mode)
+local function enableLockOn()
+    target = getClosestPlayer()
+    if target then
+        lockOn = true
+    end
+end
+
+-- Disable Lock-On
+local function disableLockOn()
+    lockOn = false
+    target = nil
+end
+
+-- Toggle Lock-On when the toggle is pressed
+local Toggle = Tab:CreateToggle({
+    Name = "Lock On Toggle",
+    CurrentValue = false,
+    Flag = "LockOnToggle",
+    Callback = function(Value)
+        if Value then
+            enableLockOn()
+        else
+            disableLockOn()
+        end
+    end,
+})
+
+-- Update camera and character rotation while locked on
+runService.RenderStepped:Connect(function()
+    if lockOn and target then
+        local character = localPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local root = character.HumanoidRootPart
+
+            -- Aim character and camera towards the target
+            local direction = (target.Position - root.Position).unit
+            local newCFrame = CFrame.lookAt(root.Position, target.Position)
+
+            -- Rotate character and camera
+            root.CFrame = CFrame.new(root.Position) * CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+            camera.CFrame = CFrame.new(camera.CFrame.Position, target.Position)
+        end
+    end
+end)
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
