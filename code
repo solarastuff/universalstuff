@@ -1183,4 +1183,64 @@ rejoinServer()
    end,
 })
 
+local Tab = Window:CreateTab("troll") -- Title, Image
+local Button = Tab:CreateButton({
+   Name = "jerk off",
+   Callback = function()
+loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))("Spider Script")
+   -- The function that takes place when the button is pressed
+   end,
+})
 
+
+
+
+
+
+local Button = Tab:CreateButton({
+   Name = "tpTool",
+   Callback = function()
+local player = game.Players.LocalPlayer
+
+-- Check if the tool has already been given
+local toolGiven = false
+
+local function giveTeleportTool()
+    if toolGiven then return end -- Prevent giving the tool again
+
+    -- Create the tool
+    local tool = Instance.new("Tool")
+    tool.Name = "TeleportTool"
+    tool.RequiresHandle = false -- No need for a physical handle
+
+    -- Tool activation event
+    tool.Activated:Connect(function()
+        local character = player.Character
+        if not character then return end
+
+        local mouse = player:GetMouse()
+        local targetPosition = mouse.Hit.p
+
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            -- Teleport slightly above the clicked position
+            humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 5, 0))
+        end
+    end)
+
+    -- Give the tool to the player
+    tool.Parent = player.Backpack
+    toolGiven = true -- Mark that the tool has been given
+end
+
+-- Give the tool when the player spawns for the first time
+if player.Character then
+    giveTeleportTool()
+end
+player.CharacterAdded:Connect(function()
+    giveTeleportTool() -- Only runs the first time
+end)
+
+   -- The function that takes place when the button is pressed
+   end,
+})
