@@ -56,7 +56,7 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("local") -- Title, Image
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "• added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool"})
+local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "New features|• added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool || Bug fixes •"})
  
 local Section = Tab:CreateSection("plr")
 
@@ -984,43 +984,47 @@ local Toggle = Tab:CreateToggle({
 })
 
 local Toggle = Tab:CreateToggle({
-   Name = "glue",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-while Value do
-local player = game.Players.LocalPlayer
-local character = player.Character
-local root = character and character:FindFirstChild("HumanoidRootPart")
+    Name = "glue",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        isToggled = Value  -- Update toggle state
 
-if root then
-    local nearestPlayer = nil
-    local shortestDistance = math.huge
+        if isToggled then
+            task.spawn(function()  -- Run in a separate thread
+                while isToggled do
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character
+                    local root = character and character:FindFirstChild("HumanoidRootPart")
 
-    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-        if otherPlayer ~= player and otherPlayer.Character then
-            local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if otherRoot then
-                local distance = (root.Position - otherRoot.Position).Magnitude
-                if distance < shortestDistance then
-                    shortestDistance = distance
-                    nearestPlayer = otherRoot
+                    if root then
+                        local nearestPlayer = nil
+                        local shortestDistance = math.huge
+
+                        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                            if otherPlayer ~= player and otherPlayer.Character then
+                                local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                if otherRoot then
+                                    local distance = (root.Position - otherRoot.Position).Magnitude
+                                    if distance < shortestDistance then
+                                        shortestDistance = distance
+                                        nearestPlayer = otherRoot
+                                    end
+                                end
+                            end
+                        end
+
+                        -- Continuously teleport to the nearest player while toggled on
+                        if nearestPlayer then
+                            root.CFrame = nearestPlayer.CFrame
+                        end
+                    end
+                    
+                    task.wait()  -- Prevent excessive looping
                 end
-            end
+            end)
         end
-    end
-
-    -- Continuously teleport to the nearest player while they exist
-    while nearestPlayer do
-        root.CFrame = nearestPlayer.CFrame
-        task.wait()
-    end
-end
-task.wait(0.1)
-end
-   -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
-   end,
+    end,
 })
 
 local Button = Tab:CreateButton({
