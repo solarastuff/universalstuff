@@ -1,4 +1,16 @@
- local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local part = Instance.new("Part") -- Create the catch platform
+part.Size = Vector3.new(500, 5, 500) -- Huge platform to catch falling players
+part.Transparency = 0 -- Fully visible
+part.Anchored = true -- Keeps it in place
+part.CanCollide = true -- Ensures players land on it
+part.BrickColor = BrickColor.new("Bright blue") -- Color (optional)
+part.CFrame = CFrame.new(150, -500, 30) -- Position below the void
+
+part.Parent = game.Workspace -- Add to game
+
+
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local player = game.Players.LocalPlayer
 loopSpeed = true
 loopJump = true
@@ -1018,12 +1030,17 @@ game.Players.LocalPlayer.Character.Humanoid.Health = 0
 local Button = Tab:CreateButton({
    Name = "Void Tool",
    Callback = function()
-local player = game.Players.LocalPlayer
 
--- Create a Tool
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create the Tool
 local tool = Instance.new("Tool")
 tool.Name = "Void Tool"
-tool.RequiresHandle = false  -- No handle needed
+tool.RequiresHandle = false -- No handle needed
+tool.Parent = player.Backpack -- Add tool to the player's backpack
+
+local lastPosition = nil -- Variable to store last position
 
 -- Function to teleport when the tool is equipped
 local function onToolEquipped()
@@ -1031,16 +1048,29 @@ local function onToolEquipped()
     if character then
         local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
         if humanoidRootPart then
-            humanoidRootPart.CFrame = CFrame.new(0, -100, 0) -- Teleport above the void
+            lastPosition = humanoidRootPart.Position -- Save last position
+            humanoidRootPart.CFrame = CFrame.new(0, -100, 0) -- Teleport into the void
         end
     end
 end
 
--- Connect the function to the tool's Equipped event
-tool.Equipped:Connect(onToolEquipped)
+-- Function to teleport back when the tool is unequipped
+local function onToolUnequipped()
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart and lastPosition then
+            task.wait(0.1) -- Small delay to ensure smooth teleporting
+            humanoidRootPart.CFrame = CFrame.new(lastPosition) -- Teleport back
+        end
+    end
+end
 
--- Add the tool to the player's Backpack
-tool.Parent = player.Backpack
+-- Connect the functions to the tool's events
+tool.Equipped:Connect(onToolEquipped)
+tool.Unequipped:Connect(onToolUnequipped)
+
+
    -- The function that takes place when the button is pressed
    end,
 })
