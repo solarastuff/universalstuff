@@ -586,75 +586,79 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
--- // Constants \\ --
+-- // Services \\ --
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
--- [ Services ] --
-local Services = setmetatable({}, {
-    __index = function(Self, Index)
-        local NewService = game:GetService(Index)
-        if NewService then
-            Self[Index] = NewService
-        end
-        return NewService
-    end
-})
-
-local LocalPlayer = game.Players.LocalPlayer
+-- // Variables \\ --
+local antiflingConnection = nil
 local isFlingDisabled = false -- Keeps track of the toggle state
 
-local function disableFling()
-    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
+-- // Functions \\ --
 
+local function enableFlingProtection()
+    -- First Anti-Fling Script (Disabling collision on other players)
+    antiflingConnection = RunService.Stepped:Connect(function()
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                for _, v in pairs(player.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                    end
+                end
+            end
+        end
+    end)
+
+    -- Second Anti-Fling Script (Disabling collision on LocalPlayer)
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     for _, v in ipairs(Character:GetDescendants()) do
         if v:IsA("BasePart") then
             v.CanCollide = false
         end
     end
-
+    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
     if PrimaryPart then
         PrimaryPart.CanCollide = false
     end
 end
 
-local function enableFling()
-    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
+local function disableFlingProtection()
+    -- Stop the first antifling script
+    if antiflingConnection then
+        antiflingConnection:Disconnect()
+        antiflingConnection = nil
+    end
 
+    -- Restore collision on LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     for _, v in ipairs(Character:GetDescendants()) do
         if v:IsA("BasePart") then
             v.CanCollide = true
         end
     end
-
+    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
     if PrimaryPart then
         PrimaryPart.CanCollide = true
     end
 end
 
--- Toggle integration
+-- // Toggle Implementation \\ --
 local Toggle = Tab:CreateToggle({
-   Name = "Anti-Fling",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-       isFlingDisabled = Value
-       if isFlingDisabled then
-           disableFling()
-       else
-           enableFling()
-       end
-   end,
+    Name = "Anti-Fling",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        if Value then
+            enableFlingProtection()
+        else
+            disableFlingProtection()
+        end
+    end,
 })
 
--- Apply the setting when the character spawns
-LocalPlayer.CharacterAdded:Connect(function()
-    if isFlingDisabled then
-        disableFling()
-    else
-        enableFling()
-    end
-end)
+
 
 local Button = Tab:CreateButton({
    Name = "fling everyone",
