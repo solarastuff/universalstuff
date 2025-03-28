@@ -1,0 +1,19 @@
+local part = Instance.new("Part") -- Create the catch platform
+part.Size = Vector3.new(500, 5, 500) -- Huge platform to cover a large area
+part.Transparency = 0 -- Fully visible
+part.Anchored = true -- Keeps it in place
+part.CanCollide = true -- Ensures players land on it
+part.BrickColor = BrickColor.new("Bright blue") -- Color (optional)
+part.CFrame = CFrame.new(150, -500, 30) -- Position below the void
+
+part.Parent = game.Workspace -- Add to game
+
+-- Function to teleport the player back to safety
+local function onTouched(other)
+    local character = other.Parent
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = CFrame.new(150, 10, 30) -- Safe respawn position
+    end
+end
+
+part.Touched:Connect(onTouched) -- Connect the event
