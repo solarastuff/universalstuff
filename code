@@ -1255,6 +1255,19 @@ end)
 
 local Tab = Window:CreateTab("esp") -- Title, Image
 
+
+
+local ColorPicker = Tab:CreateColorPicker({
+    Name = "Color Picker",
+    Color = Color3.fromRGB(255,255,255),
+    Flag = "ColorPicker1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+highlight.FillColor = Value   
+        -- The function that takes place every time the color picker is moved/changed
+        -- The variable (Value) is a Color3fromRGB value based on which color is selected
+    end
+})
+
 local Toggle = Tab:CreateToggle({
    Name = "esp",
    CurrentValue = false,
@@ -1271,7 +1284,7 @@ local function addHighlight(character)
     local highlight = Instance.new("Highlight")
     highlight.Parent = character
     highlight.FillColor = Color3.new(1, 0, 0) -- Red glow
-    highlight.OutlineColor = Color3.new(1, 1, 1) -- White outline
+    
 end
 
 -- Add highlight when a player spawns
@@ -1297,15 +1310,4 @@ end
    -- The function that takes place when the toggle is pressed
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
-})
-
-local ColorPicker = Tab:CreateColorPicker({
-    Name = "Color Picker",
-    Color = Color3.fromRGB(255,255,255),
-    Flag = "ColorPicker1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-    Callback = function(Value)
-highlight.FillColor = Value   
-        -- The function that takes place every time the color picker is moved/changed
-        -- The variable (Value) is a Color3fromRGB value based on which color is selected
-    end
 })
