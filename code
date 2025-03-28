@@ -5,7 +5,7 @@ part.Anchored = true -- Keeps it in place
 part.CanCollide = true -- Ensures players land on it
 part.BrickColor = BrickColor.new("Bright blue") -- Color (optional)
 part.CFrame = CFrame.new(150, -500, 30) -- Position below the void
-
+ 
 part.Parent = game.Workspace -- Add to game
 
 
