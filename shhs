@@ -1,0 +1,29 @@
+local LocalPlayer = game.Players.LocalPlayer
+
+local function disableFling()
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
+
+    -- Disable CanCollide and reset velocities
+    for _, v in ipairs(Character:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.CanCollide = false
+         
+          
+        end
+    end
+
+    -- Ensure PrimaryPart is also protected
+    if PrimaryPart then
+        PrimaryPart.CanCollide = false
+       
+
+    end
+end
+
+-- Run the anti-fling when the player spawns
+if LocalPlayer.Character then
+    disableFling()
+end
+
+LocalPlayer.CharacterAdded:Connect(disableFling)
