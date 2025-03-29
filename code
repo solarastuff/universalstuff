@@ -792,10 +792,10 @@ end
 
 -- **Rayfield Input Field** - Updated to allow partial username or display name
 local Input = Tab:CreateInput({
-    Name = "Enter Player Name",
+    Name = "User fling",
     CurrentValue = "",
     PlaceholderText = "UserName/DisplayName",
-    RemoveTextAfterFocusLost = false,
+    RemoveTextAfterFocusLost = true,
     Flag = "Input1",
     Callback = function(Text)
         local targetPlayer = GetPlayer(Text)
