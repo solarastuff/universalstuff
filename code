@@ -1400,6 +1400,63 @@ end)
    end,
 })
 
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local teleporting = false
+local teleportLoop
+
+-- Toggle function
+local Toggle = Tab:CreateToggle({
+    Name = "Made In Heaven",
+    CurrentValue = false,
+    Flag = "RandomTeleportToggle",
+    Callback = function(Value)
+if Value then
+
+
+local sound = Instance.new("Sound") -- Create a new Sound object
+sound.SoundId = "rbxassetid://8753555979" -- Replace with your actual sound ID
+sound.Volume = 10 -- Adjust volume (1 is default, max is 10)
+sound.PlaybackSpeed = 1 -- Adjust playback speed if needed
+sound.Looped = false -- Set to true if you want it to loop
+
+-- Parent the sound to something that allows it to play (like PlayerGui)
+local player = game.Players.LocalPlayer
+sound.Parent = player:WaitForChild("PlayerGui") 
+
+sound:Play() -- Play the sound
+
+else
+print("idk")
+end
+        teleporting = Value -- Set teleporting to the toggle value
+
+        if teleporting then
+            teleportLoop = task.spawn(function()
+                while teleporting do
+
+                    local rootPart = character:FindFirstChild("HumanoidRootPart")
+                    if rootPart then
+                        -- Generate random offsets for movement relative to current position
+                        local randomOffset = Vector3.new(
+                            math.random(-10, 10), -- Random X offset
+                            math.random(1, 5),    -- Random Y offset (small to avoid void)
+                            math.random(-10, 10)  -- Random Z offset
+                        )
+
+                        -- Apply the random offset to current position
+                        rootPart.CFrame = rootPart.CFrame * CFrame.new(randomOffset)
+                    end
+                    task.wait(0.1)
+                end
+            end)
+        else
+            task.cancel(teleportLoop)
+        end
+    end,
+})
 
 local Tab = Window:CreateTab("esp") -- Title, Image
 
