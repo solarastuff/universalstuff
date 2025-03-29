@@ -561,32 +561,7 @@ local function teleportToClosestPlayer()
     end
 end
 
--- Toggle creation
-local Toggle = Tab:CreateToggle({
-    Name = "fling aura",
-    CurrentValue = false,
-    Flag = "Toggle1", -- This is the identifier for saving the configuration
-    Callback = function(Value)
-        if Value then
 
-            -- Toggle is on, start the code
-            print("Feature Enabled")
-            if not running then
-                running = true
-antiflingtoggle:Set(true)
-                -- Start the fling and teleport tasks when the toggle is on
-                flingCoroutine = task.spawn(fling)
-                teleportCoroutine = task.spawn(teleportToClosestPlayer)
-            end
-        else
-            -- Toggle is off, stop the code
-            print("Feature Disabled")
-            running = false
-            -- Stop the tasks when the toggle is off by just setting running to false
-            -- The loops will exit since `running` will be false
-        end
-    end,
-})
 
 -- // Services \\ --
 local RunService = game:GetService("RunService")
@@ -647,7 +622,7 @@ local function disableFlingProtection()
 end
 
 -- // Toggle Implementation \\ --
-local antiflingtoggle = Tab:CreateToggle({
+local toggle5 = Tab:CreateToggle({
     Name = "Anti-Fling",
     CurrentValue = false,
     Flag = "Toggle1",
@@ -656,6 +631,33 @@ local antiflingtoggle = Tab:CreateToggle({
             enableFlingProtection()
         else
             disableFlingProtection()
+        end
+    end,
+})
+
+-- Toggle creation
+local Toggle = Tab:CreateToggle({
+    Name = "fling aura",
+    CurrentValue = false,
+    Flag = "Toggle1", -- This is the identifier for saving the configuration
+    Callback = function(Value)
+        if Value then
+
+            -- Toggle is on, start the code
+            print("Feature Enabled")
+            if not running then
+                running = true
+toggle5:Set(true)
+                -- Start the fling and teleport tasks when the toggle is on
+                flingCoroutine = task.spawn(fling)
+                teleportCoroutine = task.spawn(teleportToClosestPlayer)
+            end
+        else
+            -- Toggle is off, stop the code
+            print("Feature Disabled")
+            running = false
+            -- Stop the tasks when the toggle is off by just setting running to false
+            -- The loops will exit since `running` will be false
         end
     end,
 })
