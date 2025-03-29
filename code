@@ -568,6 +568,7 @@ local Toggle = Tab:CreateToggle({
     Flag = "Toggle1", -- This is the identifier for saving the configuration
     Callback = function(Value)
         if Value then
+antiflingtoggle:Set(true)
             -- Toggle is on, start the code
             print("Feature Enabled")
             if not running then
@@ -645,7 +646,7 @@ local function disableFlingProtection()
 end
 
 -- // Toggle Implementation \\ --
-local Toggle = Tab:CreateToggle({
+local antiflingtoggle = Tab:CreateToggle({
     Name = "Anti-Fling",
     CurrentValue = false,
     Flag = "Toggle1",
