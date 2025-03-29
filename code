@@ -101,7 +101,7 @@ local RunService = game:GetService("RunService")
 
 local Slider = Tab:CreateSlider({
     Name = "CFrame speed (better walkspeed)",
-    Range = {0, 50},
+    Range = {0, 120},
     Increment = 1,
     Suffix = "CFrame",
     CurrentValue = 0,
