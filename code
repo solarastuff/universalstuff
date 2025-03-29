@@ -56,7 +56,7 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("local") -- Title, Image
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "New features || • added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool || Bug fixes/improvments • fixed glue toggle • improved fling aura • re scripted anti fling • fixed fling aura sometimes flinging u "})
+local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "New features || • added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool • added user fling • added chat bypass || Bug fixes/improvments • fixed glue toggle • improved fling aura • re scripted anti fling • fixed fling aura sometimes flinging u "})
  
 local Section = Tab:CreateSection("plr")
 
