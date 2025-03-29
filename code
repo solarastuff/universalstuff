@@ -1498,3 +1498,13 @@ Toggle:Set(false)
    -- The function that takes place when the button is pressed
    end,
 })
+
+local Tab = Window:CreateTab("misc") -- Title, Image
+
+local Button = Tab:CreateButton({
+   Name = "chat bypass (GUI)",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Markklol/aw/refs/heads/main/CPXoXsHjoi.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
