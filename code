@@ -1449,7 +1449,7 @@ end
                         -- Apply the random offset to current position
                         rootPart.CFrame = rootPart.CFrame * CFrame.new(randomOffset)
                     end
-                    task.wait(0.1)
+                    task.wait()
                 end
             end)
         else
