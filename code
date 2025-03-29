@@ -1399,7 +1399,6 @@ end)
    -- The function that takes place when the button is pressed
    end,
 })
-
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -1413,9 +1412,7 @@ local Toggle = Tab:CreateToggle({
     CurrentValue = false,
     Flag = "RandomTeleportToggle",
     Callback = function(Value)
-if Value then
-
-
+if Value then 
 local sound = Instance.new("Sound") -- Create a new Sound object
 sound.SoundId = "rbxassetid://8753555979" -- Replace with your actual sound ID
 sound.Volume = 10 -- Adjust volume (1 is default, max is 10)
@@ -1427,18 +1424,9 @@ local player = game.Players.LocalPlayer
 sound.Parent = player:WaitForChild("PlayerGui") 
 
 sound:Play() -- Play the sound
-
 else
 print("idk")
 end
-        local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-
-local teleporting = false
-local teleportLoop
-
-
         teleporting = Value -- Set teleporting to the toggle value
 
         if teleporting then
@@ -1456,7 +1444,7 @@ local teleportLoop
                         -- Apply the random offset to current position (no change in Y)
                         rootPart.CFrame = rootPart.CFrame * CFrame.new(randomOffset)
                     end
-                    task.wait()
+                    task.wait(0.1)
                 end
             end)
         else
@@ -1464,6 +1452,7 @@ local teleportLoop
         end
     end,
 })
+
 local Tab = Window:CreateTab("esp") -- Title, Image
 
 
