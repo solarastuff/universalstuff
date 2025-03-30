@@ -1414,24 +1414,25 @@ local Toggle = Tab:CreateToggle({
     Flag = "RandomTeleportToggle",
     Callback = function(Value)
 if Value then 
-local sound = Instance.new("Sound") -- Create a new Sound object
-sound.SoundId = "rbxassetid://8753555979" -- Replace with your actual sound ID
+local sound1 = Instance.new("Sound")
+sound1.SoundId = "rbxassetid://8753555979"
+sound1.Volume = 10
+sound1.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
 local sound2 = Instance.new("Sound")
-sound2.SoundId =  "rbxassetid://8968843545"
+sound2.SoundId = "rbxassetid://8968843545"
 sound2.Volume = 10
-sound2.PlaybackSpeed = 1
-sound2.Looped = false
-sound.Volume = 10 -- Adjust volume (1 is default, max is 10)
-sound.PlaybackSpeed = 1 -- Adjust playback speed if needed
-sound.Looped = false -- Set to true if you want it to loop
+sound2.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Parent the sound to something that allows it to play (like PlayerGui)
-local player = game.Players.LocalPlayer
-sound.Parent = player:WaitForChild("PlayerGui") 
+-- Play the first sound
+sound1:Play()
 
-sound:Play() -- Play the sound
-wait(1.3)
+-- Wait for 1 second
+task.wait(1.3)
+
+-- Play the second sound
 sound2:Play()
+
 else
 print("idk")
 end
