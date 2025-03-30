@@ -57,7 +57,7 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("local") -- Title, Image
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates ldkdk", Content = "New features || • added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool • added user fling • added chat bypass || Bug fixes/improvments • fixed glue toggle • improved fling aura • re scripted anti fling • fixed fling aura sometimes flinging u "})
+local Paragraph = Tab:CreateParagraph({Title = "Updates ", Content = "New features || • added glue • added CFrame speed method • added jerk tool • added tpTool • added Void Tool • added user fling • added chat bypass || Bug fixes/improvments • fixed glue toggle • improved fling aura • re scripted anti fling • fixed fling aura sometimes flinging u "})
  
 local Section = Tab:CreateSection("plr")
 
@@ -1623,6 +1623,7 @@ mouse.Button1Down:Connect(function()
 end)
 else 
 skibidi:Set(false)
+target = nil
 end
    -- The function that takes place when the toggle is pressed
    -- The variable (Value) is a boolean on whether the toggle is true or false
