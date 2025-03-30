@@ -1569,7 +1569,7 @@ local Toggle = Tab:CreateToggle({
    Callback = function(Value)
 if Value then 
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
-
+ 
 else
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
 
