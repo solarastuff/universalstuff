@@ -1623,6 +1623,7 @@ mouse.Button1Down:Connect(function()
 end)
 else 
 skibidi:Set(false)
+end
    -- The function that takes place when the toggle is pressed
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
