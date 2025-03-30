@@ -947,7 +947,39 @@ end
    -- The function that takes place when the button is pressed
    end,
 })
+local Toggle = Tab:CreateToggle({
+   Name = "click fling (click on someone",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+skibidi:Set(true)
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
 
+mouse.Button1Down:Connect(function()
+    local target = mouse.Target
+    if target then
+        -- Try to get the character from the clicked part's parent
+        local character = target:FindFirstAncestorOfClass("Model")
+        local clickedPlayer = game.Players:GetPlayerFromCharacter(character)
+        if clickedPlayer and clickedPlayer ~= player then
+            local targetRoot = character:FindFirstChild("HumanoidRootPart")
+            if targetRoot and player.Character then
+                -- Teleport your character to the target player's position
+                player.Character:MoveTo(targetRoot.Position)
+            end
+        end
+    end
+end)
+else 
+skibidi:Set(false)
+targetRoot = nil
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
 local Tab = Window:CreateTab("fighting") -- Title, Image
 
 local players = game:GetService("Players")
@@ -1597,36 +1629,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Markklol/aw/refs/head
    -- The function that takes place when the button is pressed
    end,
 })
-local Toggle = Tab:CreateToggle({
-   Name = "Toggle Example",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-if Value then
-skibidi:Set(true)
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
 
-mouse.Button1Down:Connect(function()
-    local target = mouse.Target
-    if target then
-        -- Try to get the character from the clicked part's parent
-        local character = target:FindFirstAncestorOfClass("Model")
-        local clickedPlayer = game.Players:GetPlayerFromCharacter(character)
-        if clickedPlayer and clickedPlayer ~= player then
-            local targetRoot = character:FindFirstChild("HumanoidRootPart")
-            if targetRoot and player.Character then
-                -- Teleport your character to the target player's position
-                player.Character:MoveTo(targetRoot.Position)
-            end
-        end
-    end
-end)
-else 
-skibidi:Set(false)
-targetRoot = nil
-end
-   -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
-   end,
-})
