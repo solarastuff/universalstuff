@@ -1,0 +1,49 @@
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Example",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+
+local sund = Instance.new("Sound")
+sund.SoundId = "rbxassetid://108032941696005"
+sund.Volume = 15
+sund.Looped = false
+sund.Parent = game.Players.LocalPlayer
+
+sund:Play()
+wait(0.5)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Function to anchor all parts of a character
+local function anchorCharacter(character, anchor)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Anchored = anchor
+        end
+    end
+end
+
+-- Loop through all players and anchor their characters (except the local player)
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer and player.Character then
+        anchorCharacter(player.Character, true)
+    end
+end
+
+-- Listen for new players joining
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        player.CharacterAdded:Connect(function(character)
+            anchorCharacter(character, true)
+        end)
+    end
+end)
+else
+print("dudh")
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
