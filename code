@@ -1723,25 +1723,10 @@ local function toggleAnchorAndAnimations(Value)
         humanoidRootPart.Anchored = Value -- Anchor when true, unanchor when false
     end
 
-    if animator then
-        if Value then
-            animator.Parent = nil -- Remove animator to stop animations
-        else
-            animator.Parent = character -- Restore animator when disabled
-        end
-    end
+    
 end
 
-local function restoreAnimations()
-    local character = game.Players.LocalPlayer.Character
-    if character then
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if humanoid and not humanoid:FindFirstChildOfClass("Animator") then
-            local newAnimator = Instance.new("Animator")
-            newAnimator.Parent = humanoid
-        end
-    end
-end
+
 
 -- Toggle UI Button Integration
 local Toggle = Tab:CreateToggle({
@@ -1757,12 +1742,12 @@ sound.Volume = 20
 sound.Parent = game.Players.LocalPlayer
 
 sound:Play()
+end
 
        toggleAnchorAndAnimations(Value)
-else
-restoreAnimations()
 
-end
+
+
    end,
 })
 
