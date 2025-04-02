@@ -1738,6 +1738,12 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxasetid://9058393493"
+sound.Looped = false
+sound.Volume = 20
+
+sound:Play()
        toggleAnchorAndAnimations(Value)
    end,
 })
