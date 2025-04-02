@@ -1711,4 +1711,34 @@ rotatespeed = Value
    end,
 })
 
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+local animator = character:FindFirstChildWhichIsA("Animator", true)
+
+-- Function to enable or disable the effect
+local function toggleAnchorAndAnimations(Value)
+    if humanoidRootPart then
+        humanoidRootPart.Anchored = Value -- Anchor when true, unanchor when false
+    end
+
+    if animator then
+        if Value then
+            animator.Parent = nil -- Remove animator to stop animations
+        else
+            animator.Parent = character -- Restore animator when disabled
+        end
+    end
+end
+
+-- Toggle UI Button Integration
+local Toggle = Tab:CreateToggle({
+   Name = "get za warudoded",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       toggleAnchorAndAnimations(Value)
+   end,
+})
 
