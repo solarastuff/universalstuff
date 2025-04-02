@@ -1432,67 +1432,39 @@ end)
    -- The function that takes place when the button is pressed
    end,
 })
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+
+local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+local root = character:WaitForChild("HumanoidRootPart")
+local runService = game:GetService("RunService")
 
-local teleporting = false
-local teleportLoop
+local radius = 10  -- Radius of the circle
+local speed = 20   -- Speed of the teleportation (higher is faster)
+local angle = 0    -- Starting angle
+local running = false -- Toggle state
 
--- Toggle function
 local Toggle = Tab:CreateToggle({
-    Name = "Made In Heaven",
+    Name = "Made In Heaven ",
     CurrentValue = false,
-    Flag = "RandomTeleportToggle",
+    Flag = "Toggle1",
     Callback = function(Value)
-if Value then 
-local sound1 = Instance.new("Sound")
-sound1.SoundId = "rbxassetid://8753555979"
-sound1.Volume = 10
-sound1.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-local sound2 = Instance.new("Sound")
-sound2.SoundId = "rbxassetid://8968843545"
-sound2.Volume = 10
-sound2.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
--- Play the first sound
-sound1:Play()
-
--- Wait for 1 second
-task.wait(1.3)
-
--- Play the second sound
-sound2:Play()
-
-else
-print("idk")
-end
-        teleporting = Value -- Set teleporting to the toggle value
-
-        if teleporting then
-            teleportLoop = task.spawn(function()
-                while teleporting do
-                    local rootPart = character:FindFirstChild("HumanoidRootPart")
-                    if rootPart then
-                        -- Generate random offsets for movement relative to current position
-                        local randomOffset = Vector3.new(
-                            math.random(-50, 50), -- Random X offset
-                            math.random(1, 2),    -- Random Y offset (small to avoid void)
-                            math.random(-25, 25)  -- Random Z offset
-                        )
-
-                        -- Apply the random offset to current position
-                        rootPart.CFrame = rootPart.CFrame * CFrame.new(randomOffset)
-                    end
-                    task.wait()
-                end
-            end)
-        else
-            task.cancel(teleportLoop)
+        running = Value -- Update toggle state
+        if running then
+            -- Start teleporting loop
+            while running do
+                angle = angle + speed * task.wait() -- Increases the angle
+                local x = math.cos(angle) * radius
+                local z = math.sin(angle) * radius
+                root.CFrame = CFrame.new(root.Position) * CFrame.new(x, 0, z)
+            end
         end
     end,
 })
+
+
+
+
+
 local Toggle = Tab:CreateToggle({
    Name = "tp to all loop",
    CurrentValue = false,
@@ -1529,18 +1501,17 @@ local Toggle = Tab:CreateToggle({
    Callback = function(Value)
       local Players = game:GetService("Players")
       local LocalPlayer = Players.LocalPlayer
-      local Workspace = game:GetService("Workspace")
 
-      -- Function to set anchor state for all parts in a given model or workspace
-      local function setAnchorState(object, anchor)
-          for _, part in ipairs(object:GetDescendants()) do
+      -- Function to set anchor state for all parts of a character
+      local function setAnchorState(character, anchor)
+          for _, part in ipairs(character:GetDescendants()) do
               if part:IsA("BasePart") then
                   part.Anchored = anchor
               end
           end
       end
 
-      -- Function to anchor all players (except local player)
+      -- Function to anchor all players except the local player
       local function anchorAllOthers()
           for _, player in ipairs(Players:GetPlayers()) do
               if player ~= LocalPlayer and player.Character then
@@ -1558,30 +1529,6 @@ local Toggle = Tab:CreateToggle({
           end
       end
 
-      -- Function to anchor everything in the workspace (except local player)
-      local function anchorEverything()
-          for _, obj in ipairs(Workspace:GetChildren()) do
-              if obj:IsA("Model") or obj:IsA("Folder") or obj:IsA("BasePart") then
-                  -- Don't anchor the local player's character
-                  if obj ~= LocalPlayer.Character then
-                      setAnchorState(obj, true)
-                  end
-              end
-          end
-      end
-
-      -- Function to unanchor everything in the workspace
-      local function unanchorEverything()
-          for _, obj in ipairs(Workspace:GetChildren()) do
-              if obj:IsA("Model") or obj:IsA("Folder") or obj:IsA("BasePart") then
-                  -- Don't unanchor the local player's character
-                  if obj ~= LocalPlayer.Character then
-                      setAnchorState(obj, false)
-                  end
-              end
-          end
-      end
-
       if Value then
           -- Play sound when toggle is enabled
           local sund = Instance.new("Sound")
@@ -1595,7 +1542,6 @@ local Toggle = Tab:CreateToggle({
           
           -- Apply anchoring
           anchorAllOthers()
-          anchorEverything()
 
           -- Listen for new players and anchor them when they spawn
           Players.PlayerAdded:Connect(function(player)
@@ -1606,9 +1552,8 @@ local Toggle = Tab:CreateToggle({
               end
           end)
       else
-          -- Unanchor everything when the toggle is turned off
+          -- Unanchor all players when the toggle is turned off
           unanchorAllOthers()
-          unanchorEverything()
       end
    end,
 })
