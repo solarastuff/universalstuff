@@ -1738,6 +1738,7 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
+if Value then
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxasetid://9058393493"
 sound.Looped = false
@@ -1745,6 +1746,7 @@ sound.Volume = 20
 sound.Parent = game.Players.LocalPlayer
 
 sound:Play()
+end
        toggleAnchorAndAnimations(Value)
    end,
 })
