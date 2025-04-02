@@ -1667,3 +1667,48 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Markklol/aw/refs/head
    end,
 })
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local isRotating = false -- Toggle state
+local rotatespeed = 1
+
+-- Toggle function
+local spinnybot = Tab:CreateToggle({
+   Name = "Character Rotation",
+   CurrentValue = false,
+   Flag = "ToggleRotation",
+   Callback = function(Value)
+       isRotating = Value -- Set the toggle state
+   end,
+})
+
+-- Rotation logic
+RunService.RenderStepped:Connect(function()
+    if isRotating then
+        local Character = LocalPlayer.Character
+        if Character then
+            local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+            if HumanoidRootPart then
+                HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(rotatespeed), 0)
+            end
+        end
+    end
+end)
+
+local Slider = Tab:CreateSlider({
+   Name = "spinbot speed",
+   Range = {0, 100},
+   Increment = 10,
+   Suffix = "speed",
+   CurrentValue = 1,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+rotatespeed = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+
