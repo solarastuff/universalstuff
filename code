@@ -1450,6 +1450,23 @@ local Toggle = Tab:CreateToggle({
     Callback = function(Value)
         running = Value -- Update toggle state
         if running then
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://4650379787"
+sound.Looped = false
+sound.Volume = 15
+sound.Parent = game.Players.LocalPlayer
+
+sound:Play()
+task.wait(3.9)
+local soundo = Instance.new("Sound")
+soundo.SoundId = "rbxassetid://8753555979"
+soundo.Looped = false
+soundo.Volume = 15
+soundo.Parent = game.Players.LocalPlayer
+
+soundo:Play()
+
+
             -- Start teleporting loop
             while running do
                 angle = angle + speed * task.wait() -- Increases the angle
