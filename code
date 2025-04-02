@@ -1740,7 +1740,7 @@ local Toggle = Tab:CreateToggle({
    Callback = function(Value)
 if Value then
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxasetid://9058393493"
+sound.SoundId = "rbxassetid://9058393493"
 sound.Looped = false
 sound.Volume = 20
 sound.Parent = game.Players.LocalPlayer
