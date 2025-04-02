@@ -1732,6 +1732,45 @@ local function toggleAnchorAndAnimations(Value)
     end
 end
 
+local function unanchorEverythingAndRestoreAnimations()
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Workspace = game:GetService("Workspace")
+
+    -- Function to unanchor all parts in a given object
+    local function setAnchorState(object, anchor)
+        for _, part in ipairs(object:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Anchored = anchor
+            end
+        end
+    end
+
+    -- Unanchor all objects in the workspace (except local player's character)
+    for _, obj in ipairs(Workspace:GetChildren()) do
+        if obj:IsA("Model") or obj:IsA("Folder") or obj:IsA("BasePart") then
+            if obj ~= LocalPlayer.Character then
+                setAnchorState(obj, false)
+            end
+        end
+    end
+
+    -- Unanchor all players except the local player
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character then
+            setAnchorState(player.Character, false)
+        end
+    end
+
+    -- Restore local player's animations
+    if LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) -- Force animation reset
+        end
+    end
+end
+
 -- Toggle UI Button Integration
 local Toggle = Tab:CreateToggle({
    Name = "get za warudoded",
@@ -1746,8 +1785,11 @@ sound.Volume = 20
 sound.Parent = game.Players.LocalPlayer
 
 sound:Play()
-end
+
        toggleAnchorAndAnimations(Value)
+else
+unanchorEverythingAndRestoreAnimations()
+end
    end,
 })
 
