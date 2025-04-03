@@ -1772,3 +1772,57 @@ end
    end,
 })
 
+local Button = Tab:CreateButton({
+   Name = "stand",
+   Callback = function()
+-- LocalScript placed in StarterPlayer -> StarterPlayerScripts
+
+local player = game.Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+-- Wait for the character to load
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Clone the character and remove scripts so the clone doesn't run any code or interfere
+local clone = character:Clone()
+clone.Name = character.Name .. "_Clone"
+clone.Parent = workspace
+
+-- Optionally remove any LocalScripts or Scripts from the clone so it just acts as a dummy
+for _, descendant in ipairs(clone:GetDescendants()) do
+    if descendant:IsA("LocalScript") or descendant:IsA("Script") then
+        descendant:Destroy()
+    end
+end
+
+-- Define the offset from the original character (adjust as needed)
+local offsetVector = Vector3.new(5, 0, 0)
+
+-- Ensure both models have a PrimaryPart set (Roblox sets HumanoidRootPart by default)
+if not character.PrimaryPart then
+    character.PrimaryPart = character:FindFirstChild("HumanoidRootPart")
+end
+if not clone.PrimaryPart then
+    clone.PrimaryPart = clone:FindFirstChild("HumanoidRootPart")
+end
+
+-- Function to update the clone's parts so that it mimics the player's character
+local function updateClone()
+    -- Iterate over each part in the player's character
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            -- Try to find a matching part in the clone
+            local clonePart = clone:FindFirstChild(part.Name, true)
+            if clonePart and clonePart:IsA("BasePart") then
+                -- Copy the CFrame with the offset applied
+                clonePart.CFrame = part.CFrame * CFrame.new(offsetVector)
+            end
+        end
+    end
+end
+
+-- Update the clone every frame
+RunService.RenderStepped:Connect(updateClone)
+   -- The function that takes place when the button is pressed
+   end,
+})
