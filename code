@@ -1433,54 +1433,6 @@ end)
    end,
 })
 
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local root = character:WaitForChild("HumanoidRootPart")
-local runService = game:GetService("RunService")
-
-local radius = 10  -- Radius of the circle
-local speed = 20   -- Speed of the teleportation (higher is faster)
-local angle = 0    -- Starting angle
-local running = false -- Toggle state
-
-local function audio()
-local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://4650379787"
-sound.Looped = false
-sound.Volume = 15
-sound.Parent = game.Players.LocalPlayer
-
-sound:Play()
-task.wait(3.3)
-local soundo = Instance.new("Sound")
-soundo.SoundId = "rbxassetid://8753555979"
-soundo.Looped = false
-soundo.Volume = 15
-soundo.Parent = game.Players.LocalPlayer
-
-soundo:Play()
-end
-
-local Toggle = Tab:CreateToggle({
-    Name = "Made In Heaven ",
-    CurrentValue = false,
-    Flag = "Toggle1",
-    Callback = function(Value)
-        running = Value -- Update toggle state
-        if running then
-audio()
-
-
-            -- Start teleporting loop
-            while running do
-                angle = angle + speed * task.wait() -- Increases the angle
-                local x = math.cos(angle) * radius
-                local z = math.sin(angle) * radius
-                root.CFrame = CFrame.new(root.Position) * CFrame.new(x, 0, z)
-            end
-        end
-    end,
-})
 
 
 
@@ -1515,69 +1467,7 @@ end
    end,
 })
 
-local Toggle = Tab:CreateToggle({
-   Name = "za warudo",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-      local Players = game:GetService("Players")
-      local LocalPlayer = Players.LocalPlayer
 
-      -- Function to set anchor state for all parts of a character
-      local function setAnchorState(character, anchor)
-          for _, part in ipairs(character:GetDescendants()) do
-              if part:IsA("BasePart") then
-                  part.Anchored = anchor
-              end
-          end
-      end
-
-      -- Function to anchor all players except the local player
-      local function anchorAllOthers()
-          for _, player in ipairs(Players:GetPlayers()) do
-              if player ~= LocalPlayer and player.Character then
-                  setAnchorState(player.Character, true)
-              end
-          end
-      end
-
-      -- Function to unanchor all players
-      local function unanchorAllOthers()
-          for _, player in ipairs(Players:GetPlayers()) do
-              if player ~= LocalPlayer and player.Character then
-                  setAnchorState(player.Character, false)
-              end
-          end
-      end
-
-      if Value then
-          -- Play sound when toggle is enabled
-          local sund = Instance.new("Sound")
-          sund.SoundId = "rbxassetid://108032941696005"
-          sund.Volume = 15
-          sund.Looped = false
-          sund.Parent = game.Players.LocalPlayer
-          sund:Play()
-          
-          wait(0.5)
-          
-          -- Apply anchoring
-          anchorAllOthers()
-
-          -- Listen for new players and anchor them when they spawn
-          Players.PlayerAdded:Connect(function(player)
-              if player ~= LocalPlayer then
-                  player.CharacterAdded:Connect(function(character)
-                      setAnchorState(character, true)
-                  end)
-              end
-          end)
-      else
-          -- Unanchor all players when the toggle is turned off
-          unanchorAllOthers()
-      end
-   end,
-})
 
 
 local Tab = Window:CreateTab("esp") -- Title, Image
@@ -1729,6 +1619,122 @@ local Slider = Tab:CreateSlider({
 rotatespeed = Value
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+
+
+local Tab = Window:CreateTab("jojos") -- Title, Image
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local root = character:WaitForChild("HumanoidRootPart")
+local runService = game:GetService("RunService")
+
+local radius = 10  -- Radius of the circle
+local speed = 20   -- Speed of the teleportation (higher is faster)
+local angle = 0    -- Starting angle
+local running = false -- Toggle state
+
+local function audio()
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://4650379787"
+sound.Looped = false
+sound.Volume = 15
+sound.Parent = game.Players.LocalPlayer
+
+sound:Play()
+task.wait(3.3)
+local soundo = Instance.new("Sound")
+soundo.SoundId = "rbxassetid://8753555979"
+soundo.Looped = false
+soundo.Volume = 15
+soundo.Parent = game.Players.LocalPlayer
+
+soundo:Play()
+end
+
+local Toggle = Tab:CreateToggle({
+    Name = "Made In Heaven ",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        running = Value -- Update toggle state
+        if running then
+audio()
+
+
+            -- Start teleporting loop
+            while running do
+                angle = angle + speed * task.wait() -- Increases the angle
+                local x = math.cos(angle) * radius
+                local z = math.sin(angle) * radius
+                root.CFrame = CFrame.new(root.Position) * CFrame.new(x, 0, z)
+            end
+        end
+    end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "za warudo",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      local Players = game:GetService("Players")
+      local LocalPlayer = Players.LocalPlayer
+
+      -- Function to set anchor state for all parts of a character
+      local function setAnchorState(character, anchor)
+          for _, part in ipairs(character:GetDescendants()) do
+              if part:IsA("BasePart") then
+                  part.Anchored = anchor
+              end
+          end
+      end
+
+      -- Function to anchor all players except the local player
+      local function anchorAllOthers()
+          for _, player in ipairs(Players:GetPlayers()) do
+              if player ~= LocalPlayer and player.Character then
+                  setAnchorState(player.Character, true)
+              end
+          end
+      end
+
+      -- Function to unanchor all players
+      local function unanchorAllOthers()
+          for _, player in ipairs(Players:GetPlayers()) do
+              if player ~= LocalPlayer and player.Character then
+                  setAnchorState(player.Character, false)
+              end
+          end
+      end
+
+      if Value then
+          -- Play sound when toggle is enabled
+          local sund = Instance.new("Sound")
+          sund.SoundId = "rbxassetid://108032941696005"
+          sund.Volume = 15
+          sund.Looped = false
+          sund.Parent = game.Players.LocalPlayer
+          sund:Play()
+          
+          wait(0.5)
+          
+          -- Apply anchoring
+          anchorAllOthers()
+
+          -- Listen for new players and anchor them when they spawn
+          Players.PlayerAdded:Connect(function(player)
+              if player ~= LocalPlayer then
+                  player.CharacterAdded:Connect(function(character)
+                      setAnchorState(character, true)
+                  end)
+              end
+          end)
+      else
+          -- Unanchor all players when the toggle is turned off
+          unanchorAllOthers()
+      end
    end,
 })
 
