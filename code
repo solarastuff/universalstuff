@@ -65,7 +65,7 @@ local Button = Tab:CreateButton({
    Name =  "Hi " .. player.Name,
    Callback = function()
 Rayfield:Notify({
-   Title = "ohw",
+   Title = "ohwj",
    Content = "why'd you press me?? i just wanted to say hi🥀. Also oliver fuck u ur fat",
    Duration = 3.4,
    Image = 4483362458,
@@ -139,7 +139,16 @@ local Button = Tab:CreateButton({
    Name = "Button Example",
    Callback = function()
 wsl:Set(16) -- The new slider integer value
-loopSpeed = false
+local function stopspeed()
+if loopSpeed == true then 
+ loopSpeed = false
+while not loopSpeed do
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+task.wait(0.1)
+end
+
+end
+end
    -- The function that takes place when the button is pressed
    end,
 })
