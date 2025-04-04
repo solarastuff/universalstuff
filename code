@@ -12,7 +12,7 @@ part.Parent = game.Workspace -- Add to game
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local player = game.Players.LocalPlayer
-loopSpeed = true
+local loopSpeed = true
 loopJump = true
 floating = true
 local looptping = false
