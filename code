@@ -1356,19 +1356,18 @@ resetCharacter()
 
 
 local Button = Tab:CreateButton({
-   Name = "rejoin",
-   Callback = function()
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+    Name = "Rejoin",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
 
-local function rejoinServer()
-    TeleportService:Teleport(game.PlaceId, player)
-end
+        -- Get the player's current server ID
+        local serverId = game.JobId 
 
-rejoinServer()
-   -- The function that takes place when the button is pressed
-   end,
+        -- Rejoin the exact same server
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, serverId, player)
+    end,
 })
 
 local Tab = Window:CreateTab("troll") -- Title, Image
