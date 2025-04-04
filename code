@@ -1851,3 +1851,36 @@ RunService.RenderStepped:Connect(updateClone)
    -- The function that takes place when the button is pressed
    end,
 })
+
+if game.PlaceId ==  13772394625 then
+local Button = Tab:CreateButton({
+   Name = "Button Example",
+   Callback = function()
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local RunService = game:GetService("RunService")
+
+local clicking = false -- Starts off
+
+local function autoClick()
+    while clicking do
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 1) -- Press M1
+        task.wait(0.05) -- Adjust speed
+        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 1) -- Release M1
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.F then
+        clicking = not clicking -- Toggle clicking
+        if clicking then
+            autoClick()
+        end
+    end
+end)
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+end
