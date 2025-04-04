@@ -17,6 +17,7 @@ loopJump = true
 floating = true
 local looptping = false
 local speedo = 16
+local heypal = false
  
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
@@ -86,9 +87,13 @@ if Value then
 while loopSpeed do
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedo
 task.wait(0.1)
+if heypal then
+break
+end
 end
 else
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+heypal = true
 end
 
    -- The function that takes place when the toggle is pressed
