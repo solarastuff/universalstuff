@@ -55,7 +55,7 @@ local Window = Rayfield:CreateWindow({
 
 
 
-local Tab = Window:CreateTab("m") -- Title, Image
+local Tab = Window:CreateTab("jjm") -- Title, Image
 
 local Paragraph = Tab:CreateParagraph({Title = "Updates h", Content = " "})
  
@@ -142,10 +142,9 @@ wsl:Set(16) -- The new slider integer value
 local function stopspeed()
 if loopSpeed == true then 
  loopSpeed = false
-while not loopSpeed do
+
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-task.wait(0.1)
-end
+
 
 end
 end
