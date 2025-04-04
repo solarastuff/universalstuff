@@ -87,7 +87,8 @@ while loopSpeed do
 game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedo
 task.wait(0.1)
 end
-
+else
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
 end
 
    -- The function that takes place when the toggle is pressed
