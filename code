@@ -16,6 +16,7 @@ local loopSpeed = true
 loopJump = true
 floating = true
 local looptping = false
+local speedo = 16
  
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
@@ -76,6 +77,24 @@ Rayfield:Notify({
 
 local Section = Tab:CreateSection("speed")
 
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Example",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+while loopSpeed do
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedo
+task.wait(0.1)
+end
+
+end
+
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
 local wsl = Tab:CreateSlider({
    Name = "walkspeed",
    Range = {0, 1000},
@@ -85,10 +104,7 @@ local wsl = Tab:CreateSlider({
    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
 
-while loopSpeed do
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-task.wait(0.1)
-end
+speedo = Value
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently 
 
