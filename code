@@ -65,7 +65,7 @@ local Button = Tab:CreateButton({
    Name =  "Hi " .. player.Name,
    Callback = function()
 Rayfield:Notify({
-   Title = "ow",
+   Title = "ohw",
    Content = "why'd you press me?? i just wanted to say hi🥀. Also oliver fuck u ur fat",
    Duration = 3.4,
    Image = 4483362458,
