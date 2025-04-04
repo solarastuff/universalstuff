@@ -55,7 +55,7 @@ local Window = Rayfield:CreateWindow({
 
 
 
-local Tab = Window:CreateTab("local") -- Title, Image
+local Tab = Window:CreateTab("m") -- Title, Image
 
 local Paragraph = Tab:CreateParagraph({Title = "Updates h", Content = " "})
  
