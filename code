@@ -418,6 +418,21 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
+local Slider = Tab:CreateSlider({
+   Name = "gravity",
+   Range = {0, 300},
+   Increment = 2,
+   Suffix = "gravity",
+   CurrentValue = 196.2,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        game.Workspace.Gravity = Value  -- Example: Reduce gravity to 50
+
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
 local Tab = Window:CreateTab("fling") -- Title, Image
 
 
