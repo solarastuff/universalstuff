@@ -1926,4 +1926,25 @@ end
    end,
 })
 
+local Button = Tab:CreateButton({
+   Name = "death counter notifier",
+   Callback = function()
+-- Made by ItsLouisPlayz AKA 1ml3g1t
+loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/TSB%20Death%20Counter%20Identifier.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "character lock on",
+   Callback = function()
+
+
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/refs/heads/main/Lock%20On.lua"))()
+
+    
+   -- The function that takes place when the button is pressed
+   end,
+})
+
 end
