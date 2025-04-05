@@ -1947,4 +1947,12 @@ local Button = Tab:CreateButton({
    end,
 })
 
+
+local Button = Tab:CreateButton({
+   Name = "gojo moveset (saitama)",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/BaldyToSorcerer/refs/heads/main/LatestV2.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
 end
