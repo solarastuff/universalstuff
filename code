@@ -1032,6 +1032,7 @@ if Value then
 game.Workspace.Gravity = 500
 else
 game.Workspace.Gravity = 196.2
+end
    -- The function that takes place when the toggle is pressed
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
