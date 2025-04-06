@@ -1956,3 +1956,58 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/
    end,
 })
 end
+
+local Tab = Window:CreateTab("...") -- Title, Image
+local Label = Tab:CreateLabel("everything in this tab makes people in your game look like exploiters. If you are playing a game that has a explorer report section in their discord, you can screen record and use one of these, and the player will get banned from the game.", 4483362458, Color3.fromRGB(173,21,21), false) -- Title, Icon, Color, IgnoreTheme
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+local Teleporting = false -- Variable to track toggle state
+
+-- Toggle function
+local Toggle = Tab:CreateToggle({
+   Name = "make random player teleport around u",
+   CurrentValue = false,
+   Flag = "SpamTeleportToggle", 
+   Callback = function(Value)
+       Teleporting = Value -- Set Teleporting to true/false based on toggle state
+   end,
+})
+
+-- Function to find the nearest player
+local function getNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+    local myPosition = Character.PrimaryPart.Position
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character.PrimaryPart then
+            local distance = (player.Character.PrimaryPart.Position - myPosition).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = player
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+-- Teleport loop (runs only when toggle is ON)
+RunService.RenderStepped:Connect(function()
+    if Teleporting then
+        local nearestPlayer = getNearestPlayer()
+        
+        if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character.PrimaryPart then
+            local randomOffset = Vector3.new(
+                math.random(-10, 10),
+                math.random(1, 5),
+                math.random(-10, 10)
+            )
+            nearestPlayer.Character.PrimaryPart.CFrame = Character.PrimaryPart.CFrame * CFrame.new(randomOffset)
+        end
+    end
+end)
+
