@@ -2219,20 +2219,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 local Tab = Window:CreateTab("suggestions🥀") -- Title, Image
--- Create an Input box using Rayfield
-local Input = Tab:CreateInput({
-    Name = "Input Example",
-    CurrentValue = "",
-    PlaceholderText = "Input Placeholder",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Input1",
-    Callback = function(Text)
-        -- The function that takes place when the input is changed
-        -- The variable (Text) is a string for the value in the text box
-        sendToDiscord(Text)
-    end,
-})
-
 -- Function to send a message to the Discord webhook
 local function sendToDiscord(message)
     local url = "https://discord.com/api/webhooks/1357796855643373578/bo0x1HPb8_KNxAB_lZoJkYTXaqXKKItsvBKlsws6RTqIpJi8BcffRNFALMxrrB0L8GyC" -- Your webhook URL
@@ -2251,4 +2237,18 @@ local function sendToDiscord(message)
         Body = jsonData
     })
 end
+
+-- Create an Input box using Rayfield
+local Input = Tab:CreateInput({
+    Name = "test webhook",
+    CurrentValue = "",
+    PlaceholderText = "what should i add...",
+    RemoveTextAfterFocusLost = true,
+    Flag = "Input1",
+    Callback = function(Text)
+        -- The function that takes place when the input is changed
+        -- The variable (Text) is a string for the value in the text box
+        sendToDiscord(Text)
+    end,
+})
 
