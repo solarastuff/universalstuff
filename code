@@ -2219,5 +2219,36 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 local Tab = Window:CreateTab("suggestions🥀") -- Title, Image
+-- Create an Input box using Rayfield
+local Input = Tab:CreateInput({
+    Name = "Input Example",
+    CurrentValue = "",
+    PlaceholderText = "Input Placeholder",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Input1",
+    Callback = function(Text)
+        -- The function that takes place when the input is changed
+        -- The variable (Text) is a string for the value in the text box
+        sendToDiscord(Text)
+    end,
+})
 
+-- Function to send a message to the Discord webhook
+local function sendToDiscord(message)
+    local url = "https://discord.com/api/webhooks/1357796855643373578/bo0x1HPb8_KNxAB_lZoJkYTXaqXKKItsvBKlsws6RTqIpJi8BcffRNFALMxrrB0L8GyC" -- Your webhook URL
+    local data = {
+        ["content"] = message
+    }
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+    
+    -- Use the executor's http_request function to send the POST request
+    http_request({
+        Url = url,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
 
