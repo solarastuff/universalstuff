@@ -2218,4 +2218,6 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
+local Tab = Window:CreateTab("suggestions🥀") -- Title, Image
+
 
