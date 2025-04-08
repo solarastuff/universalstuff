@@ -488,6 +488,13 @@ local Slider = Tab:CreateSlider({
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
 })
+local Button = Tab:CreateButton({
+   Name = "reset gravity",
+   Callback = function()
+game.Workspace.Gravity = 196.2
+   -- The function that takes place when the button is pressed
+   end,
+})
 local Tab = Window:CreateTab("fling") -- Title, Image
 
 
