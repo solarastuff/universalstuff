@@ -1603,7 +1603,7 @@ end
 
 -- Create the toggle
 Tab:CreateToggle({
-    Name = "Follow Nearest Player", -- Name of the toggle
+    Name = "behind", -- Name of the toggle
     CurrentValue = false, -- Initial state is OFF
     Callback = function(Value) -- Function triggered when the toggle is toggled
         following = Value
