@@ -1564,15 +1564,8 @@ end
    end,
 })
 
-local Toggle = Tab:CreateToggle({
-   Name = "behind",
-   CurrentValue = false,
-   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-if Value then
-local button = script.Parent -- The button
-local player = game.Players.LocalPlayer -- The player using the script
 local runService = game:GetService("RunService")
+local player = game.Players.LocalPlayer -- The player using the script
 local following = false -- Toggle state
 
 -- Function to find the nearest player
@@ -1608,25 +1601,21 @@ local function followNearestPlayer()
     end
 end
 
--- Toggle following when the button is clicked
-button.MouseButton1Click:Connect(function()
-    following = not following
-    button.Text = following and "Following: ON" or "Following: OFF"
-    if following then
-        -- Start following
-        runService.RenderStepped:Connect(function()
-            if following then
-                followNearestPlayer()
-            end
-        end)
+-- Create the toggle
+Tab:CreateToggle({
+    Name = "Follow Nearest Player", -- Name of the toggle
+    CurrentValue = false, -- Initial state is OFF
+    Callback = function(Value) -- Function triggered when the toggle is toggled
+        following = Value
+        if following then
+            -- Start following
+            runService.RenderStepped:Connect(function()
+                if following then
+                    followNearestPlayer()
+                end
+            end)
+        end
     end
-end)
-else
-
-end
-   -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
-   end,
 })
 
 
