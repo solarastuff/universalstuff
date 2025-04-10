@@ -1569,7 +1569,61 @@ local Toggle = Tab:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
+if Value then
+local button = script.Parent -- The button
+local player = game.Players.LocalPlayer -- The player using the script
+local runService = game:GetService("RunService")
+local following = false -- Toggle state
 
+-- Function to find the nearest player
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local myPosition = character.HumanoidRootPart.Position
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local otherPosition = otherPlayer.Character.HumanoidRootPart.Position
+                local distance = (myPosition - otherPosition).Magnitude
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    nearestPlayer = otherPlayer
+                end
+            end
+        end
+    end
+    return nearestPlayer
+end
+
+-- Function to follow the nearest player
+local function followNearestPlayer()
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local nearestPlayer = findNearestPlayer()
+        if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local targetPosition = nearestPlayer.Character.HumanoidRootPart.Position - nearestPlayer.Character.HumanoidRootPart.CFrame.LookVector * 3
+            character.HumanoidRootPart.CFrame = CFrame.new(targetPosition, nearestPlayer.Character.HumanoidRootPart.Position)
+        end
+    end
+end
+
+-- Toggle following when the button is clicked
+button.MouseButton1Click:Connect(function()
+    following = not following
+    button.Text = following and "Following: ON" or "Following: OFF"
+    if following then
+        -- Start following
+        runService.RenderStepped:Connect(function()
+            if following then
+                followNearestPlayer()
+            end
+        end)
+    end
+end)
+else
+
+end
    -- The function that takes place when the toggle is pressed
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
