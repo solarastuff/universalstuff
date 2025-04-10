@@ -1170,7 +1170,7 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
 local camera = workspace.CurrentCamera
 local orbitRadius = 4.9  -- Closer orbit
-local orbitSpeed = 20     -- Speed of orbiting
+local orbitSpeed = oss     -- Speed of orbiting
 
 local targetRootPart = nil
 local isOrbiting = false
@@ -1240,7 +1240,7 @@ end)
 
 -- Toggle integration
 local Toggle = Tab:CreateToggle({
-   Name = "Toggle Orbit",
+   Name = "orbit",
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
@@ -1260,6 +1260,19 @@ local Toggle = Tab:CreateToggle({
            camera.CameraSubject = player.Character:FindFirstChild("Humanoid") or humanoidRootPart
            UserInputService.MouseBehavior = Enum.MouseBehavior.Default
        end
+   end,
+})
+local Slider = Tab:CreateSlider({
+   Name = "orbit speed",
+   Range = {0, 100},
+   Increment = 2,
+   Suffix = "speed",
+   CurrentValue = 15,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+oss = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
 })
 
