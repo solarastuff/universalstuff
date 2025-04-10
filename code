@@ -73,8 +73,8 @@ local Window = Rayfield:CreateWindow({
 
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Big Hub"
+      FolderName = universalstuff, -- Create a custom folder for your hub/game
+      FileName = "config"
    },
 
    Discord = {
@@ -87,7 +87,7 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "Key",
       Subtitle = "only has to be done once!!!",
-      Note = "key: keystuff", -- Use this to tell the user how to get a key
+      Note = "THIS IS A LIFETIME KEY!! YOU ONLY NEED TO PUT IT IN ONCE!!!", -- Use this to tell the user how to get a key
       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
@@ -1944,38 +1944,7 @@ RunService.RenderStepped:Connect(updateClone)
    end,
 })
 
-if game.PlaceId ==  13772394625 then
-local Button = Tab:CreateButton({
-   Name = "Button Example",
-   Callback = function()
-local UserInputService = game:GetService("UserInputService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local RunService = game:GetService("RunService")
 
-local clicking = false -- Starts off
-
-local function autoClick()
-    while clicking do
-        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 1) -- Press M1
-        task.wait(0.05) -- Adjust speed
-        VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 1) -- Release M1
-    end
-end
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.F then
-        clicking = not clicking -- Toggle clicking
-        if clicking then
-            autoClick()
-        end
-    end
-end)
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-end
 
 if game.PlaceId == 10449761463 then
 local Tab = Window:CreateTab("tsb") -- Title, Image
