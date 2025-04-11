@@ -254,5 +254,64 @@ if game.PlaceId == 10449761463 then
 local Tab = Window:CreateTab("Tab Example", 4483362458) -- Title, Image
 else
 print("uh")
-    -- Code to execute if the player is in "The Strongest Battlegrounds"
+ 
 end
+
+
+-- Assuming you already have the Tab and Rayfield initialized
+-- Replace "YourTab" with your existing tab variable
+
+Tab:CreateInput({
+    Name = "Player Name",
+    PlaceholderText = "Enter part of username or display name",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(input)
+        local localPlayer = game.Players.LocalPlayer
+        local targetPlayer = nil
+
+        -- Search for a player based on input (partial match for display name or username)
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= localPlayer then
+                if player.DisplayName:lower():find(input:lower(), 1, true) or player.Name:lower():find(input:lower(), 1, true) then
+                    targetPlayer = player
+                    break
+                end
+            end
+        end
+
+        if targetPlayer then
+            -- Tween to the target player
+            local character = localPlayer.Character
+            local targetCharacter = targetPlayer.Character
+
+            if character and targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+                local tweenService = game:GetService("TweenService")
+                local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                local targetPosition = targetCharacter:FindFirstChild("HumanoidRootPart").Position
+
+                if humanoidRootPart then
+                    local tween = tweenService:Create(humanoidRootPart, TweenInfo.new(2, Enum.EasingStyle.Linear), {CFrame = CFrame.new(targetPosition)})
+                    tween:Play()
+                else
+                    Rayfield:Notify({
+                        Title = "Error",
+                        Content = "Your character is missing the HumanoidRootPart.",
+                        Duration = 5,
+                    })
+                end
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Target player's character is not valid.",
+                    Duration = 5,
+                })
+            end
+        else
+            Rayfield:Notify({
+                Title = "Player Not Found",
+                Content = "No player found with the given name.",
+                Duration = 5,
+            })
+        end
+    end,
+})
