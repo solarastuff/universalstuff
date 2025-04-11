@@ -62,7 +62,7 @@ local speedo = 16
 local heypal = false
  
 local Window = Rayfield:CreateWindow({
-   Name = "universalstuff",
+   Name = "universalstufff",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "loading universalstuff",
    LoadingSubtitle = "by solarastuff",
@@ -591,7 +591,7 @@ local function fling()
 
         if hrp then
             vel = hrp.Velocity
-            hrp.Velocity = vel * 100000 + Vector3.new(0, 10000, 0)
+            hrp.Velocity = vel * 5000 + Vector3.new(0, 10000, 0)
             RunService.RenderStepped:Wait()
             hrp.Velocity = vel
             RunService.Stepped:Wait()
