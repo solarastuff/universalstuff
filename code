@@ -1962,57 +1962,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/
    -- The function that takes place when the button is pressed
    end,
 })
-local Toggle = Tab:CreateToggle({
-   Name = "Toggle Visibility",  -- The name of the toggle
-   CurrentValue = false,  -- Default state (false means the player is visible)
-   Flag = "VisibilityToggle",  -- A unique flag for this toggle
-   Callback = function(Value)
-       -- The function that runs when the toggle is pressed
-       -- 'Value' is true if the toggle is on, false if it’s off
-       
-       local player = game.Players.LocalPlayer
-       local character = player.Character
-       if not character then return end
 
-       local position = character.HumanoidRootPart.Position
-       if Value then
-           -- Hide the player
-           character:MoveTo(position + Vector3.new(0, 1000000, 0))  -- Move to an unreachable position first
-           wait(0.1)
-           local humanoidrootpart = character.HumanoidRootPart:clone()  -- Clone the HumanoidRootPart
-           wait(0.1)
-           character.HumanoidRootPart:Destroy()  -- Destroy the original
-           humanoidrootpart.Parent = character  -- Add the clone
-           character:MoveTo(position)  -- Return the character to original position
-           wait(0.1)
-
-           -- Apply transparency to hide the player
-           character.Torso.Transparency = 0.9
-           character.Head.Transparency = 0.9
-           character["Left Arm"].Transparency = 0.9
-           character["Right Arm"].Transparency = 0.9
-           character["Left Leg"].Transparency = 0.9
-           character["Right Leg"].Transparency = 0.9
-           character.Humanoid:RemoveAccessories()
-           character.Head.face:Remove()
-       else
-           -- Unhide the player
-           character.HumanoidRootPart.Transparency = 0
-           character.Torso.Transparency = 0
-           character.Head.Transparency = 0
-           character["Left Arm"].Transparency = 0
-           character["Right Arm"].Transparency = 0
-           character["Left Leg"].Transparency = 0
-           character["Right Leg"].Transparency = 0
-           character.HumanoidRootPart:Destroy()  -- Destroy the clone
-           -- Restore accessories and face
-           character.Humanoid:RestoreAccessories()
-           character.Head.face = Instance.new("ObjectValue")  -- Restore face
-       end
-
-   end,
-
-})
 local Section = Tab:CreateSection("void stuff")
 local Button = Tab:CreateButton({
    Name = "void kill (GUI)",
