@@ -1371,7 +1371,13 @@ local Button = Tab:CreateButton({
         TeleportService:TeleportToPlaceInstance(game.PlaceId, serverId, player)
     end,
 })
-
+local Button = Tab:CreateButton({
+   Name = "unsuspend vc (use after getting suspensed)",
+   Callback = function()
+game:GetService("VoiceChatService"):joinVoice()
+   -- The function that takes place when the button is pressed
+   end,
+})
 local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
 local Button = Tab:CreateButton({
