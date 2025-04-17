@@ -272,6 +272,7 @@ local Input = Tab:CreateInput({
        end
    end,
 })
+local Section = Tab:CreateSection("more")
 
 local Slider = Tab:CreateSlider({
    Name = "float",
@@ -329,7 +330,7 @@ end
 
 
 
-
+local Divider = Tab:CreateDivider()
 
 
 
@@ -359,7 +360,7 @@ Slider:Set(70) -- The new slider integer value
    end,
 })
 
-
+local Section = Tab:CreateSection("workspace")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local noClip = false
@@ -415,6 +416,8 @@ local Toggle = Tab:CreateToggle({
         setNoClipMode(noClip)
     end,
 })
+
+local Divider = Tab:CreateDivider()
 
 local Slider = Tab:CreateSlider({
    Name = "gravity",
@@ -1369,7 +1372,7 @@ local Button = Tab:CreateButton({
     end,
 })
 
-local Tab = Window:CreateTab("troll") -- Title, Image
+local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
 local Button = Tab:CreateButton({
    Name = "jerk off",
