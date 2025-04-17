@@ -1750,8 +1750,10 @@ rotatespeed = Value
    end,
 })
 
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
-
+if player.Name == "sigmaguypie" or player.Name == "hashtag_hashtagcoma8" then
 local Tab = Window:CreateTab("jojos") -- Title, Image
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -1960,6 +1962,9 @@ RunService.RenderStepped:Connect(updateClone)
    -- The function that takes place when the button is pressed
    end,
 })
+
+end
+
 
 
 
@@ -2209,7 +2214,7 @@ local Section = Tab:CreateSection("clientstuff")
 local Input = Tab:CreateInput({
    Name = "total kills (CLIENT)",
    CurrentValue = "",
-   PlaceholderText = "how many killd u want...",
+   PlaceholderText = "how many kills u want...",
    RemoveTextAfterFocusLost = true,
    Flag = "Input1",
    Callback = function(Text)
@@ -2220,8 +2225,8 @@ game.Players.LocalPlayer.leaderstats["Total Kills"].Value = Text
 })
 
 end
-local Tab = Window:CreateTab("...") -- Title, Image
-local Label = Tab:CreateLabel("everything in this tab makes people in your game look like exploiters. If you are playing a game that has a explorer report section in their discord, you can screen record and use one of these, and the player will get banned from the game.", 4483362458, Color3.fromRGB(173,21,21), false) -- Title, Icon, Color, IgnoreTheme
+local Tab = Window:CreateTab("evil") -- Title, Image
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
@@ -2231,7 +2236,7 @@ local Teleporting = false -- Variable to track toggle state
 
 -- Toggle function
 local Toggle = Tab:CreateToggle({
-   Name = "make random player teleport around u",
+   Name = "make random player teleport around u(report)",
    CurrentValue = false,
    Flag = "SpamTeleportToggle", 
    Callback = function(Value)
