@@ -74,7 +74,7 @@ on:Play()
 
 
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "•buffed fling aura •added icons •added anim player and stopper • added no stun • "})
+local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "uh "})
  local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
