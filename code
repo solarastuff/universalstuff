@@ -27,7 +27,7 @@ local Window = Rayfield:CreateWindow({
    Name = "universalstufff",
    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "loading universalstuff",
-   LoadingSubtitle = "by solarastuff",
+   LoadingSubtitle = "by ccgvb",
    Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
 
    DisableRayfieldPrompts = false,
