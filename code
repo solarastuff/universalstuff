@@ -1327,77 +1327,7 @@ local Dropdown = Tab:CreateDropdown({
    end,
 })
 
-local Button = Tab:CreateButton({
-   Name = "Default",
-   Callback = function()
-Window.ModifyTheme('Default')
-   -- The function that takes place when the button is pressed
-   end,
-})
 
-local Button = Tab:CreateButton({
-   Name = "AmberGlow",
-   Callback = function()
-Window.ModifyTheme('AmberGlow')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Amethyst",
-   Callback = function()
-Window.ModifyTheme('Amethyst')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Bloom",
-   Callback = function()
-Window.ModifyTheme('Bloom')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "DarkBlue",
-   Callback = function()
-Window.ModifyTheme('DarkBlue')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Green",
-   Callback = function()
-Window.ModifyTheme('Green')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Light",
-   Callback = function()
-Window.ModifyTheme('Light')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Ocean",
-   Callback = function()
-Window.ModifyTheme('Ocean')
-   -- The function that takes place when the button is pressed
-   end,
-})
-
-local Button = Tab:CreateButton({
-   Name = "Serenity",
-   Callback = function()
-Window.ModifyTheme('Serenity')
-   -- The function that takes place when the button is pressed
-   end,
-})
 
 
 
