@@ -2375,43 +2375,32 @@ local Slider = Tab:CreateSlider({
     
 end,
 })
-local runService = game:GetService("RunService")
-local player = game.Players.LocalPlayer -- The player using the script
-local following = false -- Toggle state
 
--- Function to find the nearest player
-local function findNearestPlayer()
-    local nearestPlayer = nil
-    local shortestDistance = math.huge
-    local character = player.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        local myPosition = character.HumanoidRootPart.Position
-        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local otherPosition = otherPlayer.Character.HumanoidRootPart.Position
-                local distance = (myPosition - otherPosition).Magnitude
-                if distance < shortestDistance then
-                    shortestDistance = distance
-                    nearestPlayer = otherPlayer
+Tab:CreateToggle({
+    Name = "behind", -- Name of the toggle
+    CurrentValue = false, -- Initial state is OFF
+    Callback = function(toggleState) -- Function triggered when the toggle is toggled
+        isFollowing = toggleState
+        if isFollowing then
+            -- Lock onto the nearest player
+            if not lockedPlayer then
+                local nearestPlayerRenamed = getNearestPlayer()
+                if nearestPlayerRenamed then
+                    setLockedPlayer(nearestPlayerRenamed)
                 end
             end
+            -- Start following the locked player
+            runServiceRenamed.RenderStepped:Connect(function()
+                if isFollowing then
+                    moveToLockedPlayer()
+                end
+            end)
+        else
+            -- Stop following and reset the lock
+            lockedPlayer = nil
         end
     end
-    return nearestPlayer
-end
-
--- Function to follow the nearest player
-local function followNearestPlayer()
-    local character = player.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        local nearestPlayer = findNearestPlayer()
-        if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            local targetPosition = nearestPlayer.Character.HumanoidRootPart.Position - nearestPlayer.Character.HumanoidRootPart.CFrame.LookVector * 3
-            character.HumanoidRootPart.CFrame = CFrame.new(targetPosition, nearestPlayer.Character.HumanoidRootPart.Position)
-        end
-    end
-end
-
+})
 
 end
 
