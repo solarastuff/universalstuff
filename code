@@ -15,7 +15,7 @@ local function sendToDiscord(playerName)
     local requestFunction = syn and syn.request or http_request or request
     if requestFunction then
         local success, response = pcall(function()
-	            return requestFunction({ye
+	            return requestFunction({
                 Url = DiscordWebhookURL,
                 Method = "POST",
                 Headers = {
