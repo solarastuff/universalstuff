@@ -2342,8 +2342,8 @@ local Toggle = ({
     Name = "no stun",
     CurrentValue = false,
     Flag = "RemoveStunToggle", -- Identifier for the toggle
-    Callback = function(value)
-        monitoring = value
+    Callback = function(Value)
+        monitoring = Value
         if monitoring then
             -- Define and spawn the monitoring function
             toggleFunction = task.spawn(function()
