@@ -116,7 +116,7 @@ on:Play()
 
 
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = "uh "})
+local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added fly • added no stum for jujutsu shenanigans "})
  local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
