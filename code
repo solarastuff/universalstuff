@@ -1791,7 +1791,50 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
+-- Define variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local teleporting = false
+local mapSize = 1000 -- Define the map boundaries
 
+-- Function to get a random valid position
+local function getRandomPosition()
+    local randomX = math.random(-mapSize, mapSize)
+    local randomZ = math.random(-mapSize, mapSize)
+    local randomY = math.random(50, 200) -- Avoid too-low positions (like the void)
+    return Vector3.new(randomX, randomY, randomZ)
+end
+
+-- Function to teleport the player
+local function teleportPlayer(humanoidRootPart)
+    while teleporting do
+        local randomPosition = getRandomPosition()
+        humanoidRootPart.CFrame = CFrame.new(randomPosition)
+        task.wait() -- Adjust time between teleports if needed
+    end
+end
+
+-- Setup function
+local function setupCharacter(newCharacter)
+    character = newCharacter
+end
+
+-- Handle character resets
+player.CharacterAdded:Connect(setupCharacter)
+
+-- Rayfield Toggle
+local TeleportToggle = Tab:CreateToggle({
+    Name = "run (good against other exploiters)",
+    CurrentValue = false,
+    Flag = "TeleportToggle", -- Optional flag for saving state
+    Callback = function(value)
+        teleporting = value
+        if teleporting then
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            teleportPlayer(humanoidRootPart)
+        end
+    end,
+})
 
 local Button = Tab:CreateButton({
    Name = "Void Tool",
@@ -2766,50 +2809,7 @@ local Input = Tab:CreateInput({
         sendToDiscord(Text)
     end,
 })
--- Define variables
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local teleporting = false
-local mapSize = 1000 -- Define the map boundaries
 
--- Function to get a random valid position
-local function getRandomPosition()
-    local randomX = math.random(-mapSize, mapSize)
-    local randomZ = math.random(-mapSize, mapSize)
-    local randomY = math.random(50, 200) -- Avoid too-low positions (like the void)
-    return Vector3.new(randomX, randomY, randomZ)
-end
-
--- Function to teleport the player
-local function teleportPlayer(humanoidRootPart)
-    while teleporting do
-        local randomPosition = getRandomPosition()
-        humanoidRootPart.CFrame = CFrame.new(randomPosition)
-        task.wait() -- Adjust time between teleports if needed
-    end
-end
-
--- Setup function
-local function setupCharacter(newCharacter)
-    character = newCharacter
-end
-
--- Handle character resets
-player.CharacterAdded:Connect(setupCharacter)
-
--- Rayfield Toggle
-local TeleportToggle = Tab:CreateToggle({
-    Name = "run",
-    CurrentValue = false,
-    Flag = "TeleportToggle", -- Optional flag for saving state
-    Callback = function(value)
-        teleporting = value
-        if teleporting then
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            teleportPlayer(humanoidRootPart)
-        end
-    end,
-})
 
 if game.PlaceId == 9391468976 then
 local Tab = Window:CreateTab("jjs") -- Title, Image
