@@ -1878,8 +1878,7 @@ local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 220, 0, 70)
 frame.Position = UDim2.new(0.5, -110, 0.5, -35)
 frame.BackgroundTransparency = 1
-frame.Active = true
-frame.Draggable = true -- This makes it draggable
+-- This makes it draggable
 frame.Parent = screenGui
 
 -- Create TextButton inside frame
