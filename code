@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 
 -- Replace this with your Discord Webhook URL
-local DiscordWebhookURL = "https://discord.com/api/webhooks/1357796855643373578/bo0x1HPb8_KNxAB_lZoJkYTXaqXKKItsvBKlsws6RTqIpJi8BcffRNFALMxrrB0L8GyC"
+local DiscordWebhookURL = "https://discord.com/api/webhooks/1362594954504966394/I3VFZ-o7ZFbhuU6gzHJMllCUtViXeHEoVsaqZiZY979wSXttbXAb9_f9wgJd4HVTjhHd"
 
 -- Function to send a message to Discord
 local function sendToDiscord(playerName)
