@@ -117,7 +117,8 @@ on:Play()
 
 
 local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added fly • added no stun for jujutsu shenanigans "})
- local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
+ local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb • invisible block for tsb • more stuff for jujutsu shenanigans • lemme know what else to add"})
+local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
    Name =  "Hi " .. player.Name,
