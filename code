@@ -2333,6 +2333,58 @@ Tab:CreateToggle({
     end
 })
 
+
+local monitoring = false -- Variable to track toggle state
+local toggleFunction
+
+-- Rayfield toggle setup
+local Toggle = ({
+    Name = "no stun",
+    CurrentValue = false,
+    Flag = "RemoveStunToggle", -- Identifier for the toggle
+    Callback = function(value)
+        monitoring = value
+        if monitoring then
+            -- Define and spawn the monitoring function
+            toggleFunction = task.spawn(function()
+                local Players = game:GetService("Players")
+                local player = Players.LocalPlayer
+
+                local function monitorForStun()
+                    local charactersModel = workspace:WaitForChild("Characters")
+                    local character = charactersModel:WaitForChild(player.Name)
+                    local infoFolder = character:WaitForChild("Info")
+
+                    local function removeStun()
+                        for _, value in pairs(infoFolder:GetChildren()) do
+                            if value:IsA("BoolValue") and value.Name == "Stun" then
+                                value:Destroy()
+                            end
+                        end
+                    end
+
+                    while monitoring do
+                        if infoFolder and infoFolder.Parent then
+                            removeStun()
+                        end
+                        task.wait(0.1)
+                    end
+                end
+
+                -- Start monitoring
+                monitorForStun()
+            end)
+        else
+            -- Stop monitoring
+            if toggleFunction then
+                task.cancel(toggleFunction)
+            end
+        end
+    end
+)}
+
+-- Example usage
+-- Integrate this toggle into your Rayfield UI structure
 end
 
 
