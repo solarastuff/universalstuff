@@ -1892,6 +1892,9 @@ button.TextColor3 = Color3.new(1, 1, 1)
 button.Font = Enum.Font.SourceSansBold
 button.TextSize = 24
 button.Parent = frame
+button.Active = true
+button.Draggable = true -- This makes it draggable
+
 
 -- Button click behavior
 button.MouseButton1Click:Connect(function()
