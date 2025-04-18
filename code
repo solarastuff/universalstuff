@@ -2334,14 +2334,21 @@ Tab:CreateToggle({
 })
 
 
+
+
+local monitoring = false -- Variable to track toggle state
+local toggleFunction -- Variable to hold the monitoring task
+
 local Toggle = Tab:CreateToggle({
     Name = "no stun",
     CurrentValue = false,
     Flag = "RemoveStunToggle", -- Unique identifier for the toggle
     Callback = function(Value)
-        if Value then
+        monitoring = Value -- Update the monitoring state
+
+        if monitoring then
             -- Start monitoring for "Stun" removal
-            task.spawn(function()
+            toggleFunction = task.spawn(function()
                 local Players = game:GetService("Players")
                 local player = Players.LocalPlayer
 
@@ -2358,7 +2365,7 @@ local Toggle = Tab:CreateToggle({
                         end
                     end
 
-                    while Value do -- Continue monitoring while toggle is active
+                    while monitoring do -- Continue monitoring while toggle is active
                         if infoFolder and infoFolder.Parent then
                             removeStun()
                         end
@@ -2370,7 +2377,13 @@ local Toggle = Tab:CreateToggle({
             end)
         else
             -- Stop monitoring (toggle turned off)
-            -- No further action needed since the loop ends when `Value` is false
+            monitoring = false -- Ensure the loop terminates
+
+            -- Cancel the task if it is still running
+            if toggleFunction then
+                task.cancel(toggleFunction)
+                toggleFunction = nil
+            end
         end
     end,
 })
