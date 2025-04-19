@@ -1377,6 +1377,7 @@ local Input = Tab:CreateInput({
     end
 })
 
+local Divider = Tab:CreateDivider()
 
 local Button = Tab:CreateButton({
    Name = "fling everyone",
@@ -1515,6 +1516,158 @@ else
 end
    -- The function that takes place when the button is pressed
    end,
+})
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local Targets = {"All"} -- Use "All", "others", specific usernames, etc.
+local AllBool = false
+getgenv().FPDH = workspace.FallenPartsDestroyHeight
+getgenv().FlingActive = false
+
+local function GetPlayer(Name)
+	Name = Name:lower()
+	if Name == "all" or Name == "others" then
+		AllBool = true
+		return nil
+	elseif Name == "random" then
+		local GetPlayers = Players:GetPlayers()
+		if table.find(GetPlayers, Player) then table.remove(GetPlayers, table.find(GetPlayers, Player)) end
+		return GetPlayers[math.random(#GetPlayers)]
+	else
+		for _, x in next, Players:GetPlayers() do
+			if x ~= Player then
+				if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+					return x
+				end
+			end
+		end
+	end
+end
+
+local function IsSameYLevel(p1, p2)
+	return math.abs(p1.Position.Y - p2.Position.Y) <= 5
+end
+
+local function SkidFling(TargetPlayer)
+	local Character = Player.Character
+	local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Humanoid and Humanoid.RootPart
+	local TCharacter = TargetPlayer.Character
+	local THumanoid = TCharacter and TCharacter:FindFirstChildOfClass("Humanoid")
+	local TRootPart = THumanoid and THumanoid.RootPart
+	local THead = TCharacter and TCharacter:FindFirstChild("Head")
+
+	if Character and Humanoid and RootPart and TCharacter and TRootPart and IsSameYLevel(RootPart, TRootPart) then
+		if RootPart.Velocity.Magnitude < 50 then
+			getgenv().OldPos = RootPart.CFrame
+		end
+
+		if THead then
+			workspace.CurrentCamera.CameraSubject = THead
+		elseif THumanoid then
+			workspace.CurrentCamera.CameraSubject = THumanoid
+		end
+
+		local function FPos(BasePart, Pos, Ang)
+			RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+			Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+			RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+			RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+		end
+
+		local function SFBasePart(BasePart)
+			local StartTime = tick()
+			local Angle = 0
+			repeat
+				if RootPart and THumanoid then
+					if BasePart.Velocity.Magnitude < 50 then
+						Angle += 100
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+					else
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+						FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+						task.wait()
+					end
+				else
+					break
+				end
+			until BasePart.Velocity.Magnitude > 500 or tick() > StartTime + 2
+		end
+
+		workspace.FallenPartsDestroyHeight = 0/0
+		local BV = Instance.new("BodyVelocity")
+		BV.Parent = RootPart
+		BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+		if TRootPart then
+			SFBasePart(TRootPart)
+		elseif THead then
+			SFBasePart(THead)
+		end
+
+		BV:Destroy()
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+		workspace.CurrentCamera.CameraSubject = Humanoid
+
+		repeat
+			RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+			Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+			Humanoid:ChangeState("GettingUp")
+			for _, x in ipairs(Character:GetChildren()) do
+				if x:IsA("BasePart") then
+					x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+				end
+			end
+			task.wait()
+		until (RootPart.Position - getgenv().OldPos.Position).Magnitude < 25
+		workspace.FallenPartsDestroyHeight = getgenv().FPDH
+	end
+end
+
+-- Rayfield Toggle
+local Toggle = Tab:CreateToggle({
+	Name = "loop fling everyone",
+	CurrentValue = false,
+	Flag = "FlingToggle",
+	Callback = function(Value)
+		getgenv().FlingActive = Value
+
+		if Value then
+			task.spawn(function()
+				while getgenv().FlingActive do
+					task.wait(0.5)
+
+					if Targets[1] then
+						for _, x in next, Targets do GetPlayer(x) end
+					else
+						break
+					end
+
+					if AllBool then
+						for _, x in next, Players:GetPlayers() do
+							if x ~= Player then
+								SkidFling(x)
+							end
+						end
+					else
+						for _, x in next, Targets do
+							local Target = GetPlayer(x)
+							if Target and Target ~= Player then
+								SkidFling(Target)
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
 })
 local Toggle = Tab:CreateToggle({
    Name = "click fling (click on someone)",
@@ -2597,7 +2750,20 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/
    -- The function that takes place when the button is pressed
    end,
 })
-
+local Button = Tab:CreateButton({
+   Name = "trashcan man OP",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads/main/Trashcan%20Man", true))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "void garou OP",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads/main/Void%20Reaper%20Obfuscated.txt"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
 local Section = Tab:CreateSection("void stuff")
 local Button = Tab:CreateButton({
    Name = "void kill (GUI)",
