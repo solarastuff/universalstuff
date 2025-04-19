@@ -3167,16 +3167,27 @@ if game.PlaceId == 9391468976 then
 local Tab = Window:CreateTab("jjs") -- Title, Image
 local Label = Tab:CreateLabel("all of these bypass the games anti cheat", 138742395182764, Color3.fromRGB(11, 227, 184), false) -- Title, Icon, Color, IgnoreTheme
 local RunService = game:GetService("RunService")
+local Toggle = Tab:CreateToggle({
+   Name = "CFrame speed",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+tpWalking = Value
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+local RunService = game:GetService("RunService")
 
 local Slider = Tab:CreateSlider({
-    Name = "CFrame speed",
+    Name = "CFrame speed (better walkspeed)",
     Range = {0, 120},
     Increment = 1,
     Suffix = "CFrame",
     CurrentValue = 0,
     Flag = "Slider1", 
     Callback = function(Value)
-        tpWalking = true
+        
         tpWalkSpeed = Value
 
         -- Stop existing loop if already running
@@ -3198,6 +3209,7 @@ local Slider = Tab:CreateSlider({
     
 end,
 })
+
 
 Tab:CreateToggle({
     Name = "behind", -- Name of the toggle
@@ -3230,7 +3242,7 @@ Tab:CreateToggle({
 
 local monitoring = false -- Variable to track toggle state
 local toggleFunction -- Variable to hold the monitoring task
-
+local Divider = Tab:CreateDivider()
 local Toggle = Tab:CreateToggle({
     Name = "no stun",
     CurrentValue = false,
@@ -3279,6 +3291,7 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
+
 local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
    Name = "fly",
