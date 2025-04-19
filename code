@@ -3292,6 +3292,51 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
+task.spawn(function()
+    local Players = game:GetService("Players")
+    local CurrentPlayer = Players.LocalPlayer
+
+    local isInvisibleBlockActive = false
+
+    local function blockAnimationIfActive(animationTrack)
+        local currentAnimationId = animationTrack.Animation.AnimationId
+        local restrictedAnimationId = "rbxassetid://9579763957" -- Updated ID
+
+        print("Animation Played:", currentAnimationId)
+
+        if isInvisibleBlockActive and currentAnimationId == restrictedAnimationId then
+            animationTrack:Stop()
+            print("Blocked animation with ID:", currentAnimationId)
+        end
+    end
+
+    local function monitorAnimationsForCharacter(character)
+        local humanoid = character:WaitForChild("Humanoid", 5)
+        if humanoid then
+            local animator = humanoid:FindFirstChildOfClass("Animator")
+            if animator then
+                animator.AnimationPlayed:Connect(blockAnimationIfActive)
+            end
+        end
+    end
+
+    if CurrentPlayer.Character then
+        monitorAnimationsForCharacter(CurrentPlayer.Character)
+    end
+
+    CurrentPlayer.CharacterAdded:Connect(monitorAnimationsForCharacter)
+
+    Tabtsb:CreateToggle({
+        Name = "Invisible Block",
+        CurrentValue = false,
+        Flag = "Toggle1",
+        Callback = function(Value)
+            isInvisibleBlockActive = Value
+            print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
+        end,
+    })
+end)
+
 local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
    Name = "fly",
