@@ -2861,52 +2861,7 @@ local Toggle = Tabtsb:CreateToggle({
     end,
 })
 
-local GamePlayers = game:GetService("Players")
-local CurrentPlayer = GamePlayers.LocalPlayer -- Changed LocalPlayer variable name
-local CurrentCharacter = CurrentPlayer.Character or CurrentPlayer.CharacterAdded:Wait() -- Changed Character variable name
 
-local isInvisibleBlockActive = false -- Changed toggle state variable name
-
--- Function to block the animation
-local function blockAnimationIfActive(animationTrack)
-    if not isInvisibleBlockActive then
-        return -- Exit if the toggle is off
-    end
-
-    local currentAnimationId = animationTrack.Animation.AnimationId
-    local restrictedAnimationId = "rbxassetid://10470389827" -- Changed blocked animation ID variable name
-
-    if currentAnimationId == restrictedAnimationId then
-        animationTrack:Stop() -- Stop the animation
-        print("Blocked animation with ID:", currentAnimationId)
-    end
-end
-
--- Function to monitor animations for a specific character
-local function monitorAnimationsForCharacter()
-    local PlayerHumanoid = CurrentCharacter:WaitForChild("Humanoid") -- Changed Humanoid variable name
-    PlayerHumanoid.AnimationPlayed:Connect(blockAnimationIfActive)
-end
-
--- Ensure the function reinitializes when the character respawns
-CurrentPlayer.CharacterAdded:Connect(function(newCharacter)
-    CurrentCharacter = newCharacter
-    monitorAnimationsForCharacter()
-end)
-
--- Start monitoring animations for the initial character
-monitorAnimationsForCharacter()
-
--- Create the toggle for the Rayfield UI
-local InvisibleBlockToggle = Tabtsb:CreateToggle({
-    Name = "Invisible Block",
-    CurrentValue = false, -- Default toggle state
-    Flag = "UniqueInvisibleBlockFlag", -- Unique toggle flag
-    Callback = function(toggleState)
-        isInvisibleBlockActive = toggleState -- Update the toggle state
-        print("Invisible Block is now", toggleState and "ENABLED" or "DISABLED")
-    end,
-})
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
