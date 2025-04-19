@@ -2811,7 +2811,7 @@ end
 
 
 if game.PlaceId == 10449761463 then
-local Tabtsb = Window:CreateTab("tsb") -- Title, Image
+local Tab = Window:CreateTab("tsb") -- Title, Image
 local Section = Tab:CreateSection("stun")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -2842,7 +2842,7 @@ local function monitorForSlowedAccessory()
 end
 
 -- Rayfield Toggle
-local Toggle = Tabtsb:CreateToggle({
+local Toggle = Tab:CreateToggle({
     Name = "no stun",
     CurrentValue = false, -- Start with the toggle off
     Flag = "NoSlowedToggle", -- Unique identifier for the toggle
@@ -2894,7 +2894,7 @@ task.spawn(function()
 
     CurrentPlayer.CharacterAdded:Connect(monitorAnimationsForCharacter)
 
-    Tabtsb:CreateToggle({
+    Tab:CreateToggle({
         Name = "Invisible Block",
         CurrentValue = false,
         Flag = "Toggle1",
