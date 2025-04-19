@@ -116,8 +116,8 @@ on:Play()
 
 
 
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added fly • added no stun for jujutsu shenanigans "})
- local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb • invisible block for tsb • more stuff for jujutsu shenanigans • lemme know what else to add"})
+local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
+ local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb • invisible block for tsb • more stuff for jujutsu shenanigans • invisible parry for TSB and jujutsu shenanigans • lemme know what else to add"})
 local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
