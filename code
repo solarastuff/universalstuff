@@ -2860,53 +2860,55 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local PlayerCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 
-local animationBlockEnabled = false -- Variable to track if the toggle is enabled
+local isAnimationBlockEnabled = false -- Variable to track if the toggle is enabled
 
 -- Function to block the animation
-local function onAnimationPlayed(animationTrack)
-    if not animationBlockEnabled then
+local function handleAnimationPlayed(animationTrack)
+    if not isAnimationBlockEnabled then
         return -- Do nothing if the toggle is off
     end
 
-    local animationId = animationTrack.Animation.AnimationId
+    local currentAnimationId = animationTrack.Animation.AnimationId
     local blockedAnimationId = "rbxassetid://10470389827"
     
-    if animationId == blockedAnimationId then
+    if currentAnimationId == blockedAnimationId then
         -- Stop the animation if it matches the blocked animation ID
         animationTrack:Stop()
-        print("Blocked animation with ID:", animationId)
+        print("Blocked animation with ID:", currentAnimationId)
     end
 end
 
 -- Monitor animation tracks being added to the Humanoid
-local function monitorAnimations()
-    local humanoid = Character:WaitForChild("Humanoid")
-    humanoid.AnimationPlayed:Connect(onAnimationPlayed)
+local function setupAnimationMonitoring()
+    local playerHumanoid = PlayerCharacter:WaitForChild("Humanoid")
+    playerHumanoid.AnimationPlayed:Connect(handleAnimationPlayed)
 end
 
 -- Ensure the function runs even if the character respawns
 LocalPlayer.CharacterAdded:Connect(function(newCharacter)
-    Character = newCharacter
-    monitorAnimations()
+    PlayerCharacter = newCharacter
+    setupAnimationMonitoring()
 end)
 
 -- Start monitoring animations
-monitorAnimations()
+setupAnimationMonitoring()
 
 -- Create the toggle
-local Toggle = Tab:CreateToggle({
+local InvisibleBlockToggle = Tab:CreateToggle({
     Name = "Invisible Block",
     CurrentValue = false, -- Default value (off)
-    Flag = "AnimationBlockToggle", -- Unique identifier for the toggle
-    Callback = function(Value)
-        animationBlockEnabled = Value -- Enable or disable the blocking
-        print("Invisible Block is now", Value and "ON" or "OFF")
+    Flag = "InvisibleBlockToggleFlag", -- Unique identifier for the toggle
+    Callback = function(toggleState)
+        isAnimationBlockEnabled = toggleState -- Enable or disable the blocking
+        print("Invisible Block is now", toggleState and "ON" or "OFF")
     end,
 })
+
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
    Name = "death counter notifier",
