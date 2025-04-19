@@ -2862,47 +2862,50 @@ local Toggle = Tabtsb:CreateToggle({
 })
 local Players = game:GetService("Players")
 local CurrentPlayer = Players.LocalPlayer
-local CurrentCharacter = CurrentPlayer.Character or CurrentPlayer.CharacterAdded:Wait()
 
-local isInvisibleBlockActive = false -- Variable to track the toggle state
+local isInvisibleBlockActive = false -- Toggle state
 
--- Function to block the animation
+-- Function to block specific animation if the toggle is on
 local function blockAnimationIfActive(animationTrack)
-    if not isInvisibleBlockActive then
-        return -- Exit if the toggle is off
-    end
-
     local currentAnimationId = animationTrack.Animation.AnimationId
     local restrictedAnimationId = "rbxassetid://10470389827"
 
-    if currentAnimationId == restrictedAnimationId then
-        animationTrack:Stop() -- Stop the animation
+    print("Animation Played:", currentAnimationId)
+
+    if isInvisibleBlockActive and currentAnimationId == restrictedAnimationId then
+        animationTrack:Stop()
         print("Blocked animation with ID:", currentAnimationId)
     end
 end
 
 -- Function to monitor animations for a specific character
-local function monitorAnimationsForCharacter()
-    local PlayerHumanoid = CurrentCharacter:WaitForChild("Humanoid")
-    PlayerHumanoid.AnimationPlayed:Connect(blockAnimationIfActive)
+local function monitorAnimationsForCharacter(character)
+    local humanoid = character:WaitForChild("Humanoid", 5)
+    if humanoid then
+        local animator = humanoid:FindFirstChildOfClass("Animator")
+        if animator then
+            animator.AnimationPlayed:Connect(blockAnimationIfActive)
+        end
+    end
 end
 
--- Ensure the function reinitializes when the character respawns
+-- Initial character monitor
+if CurrentPlayer.Character then
+    monitorAnimationsForCharacter(CurrentPlayer.Character)
+end
+
+-- Re-setup on character respawn
 CurrentPlayer.CharacterAdded:Connect(function(newCharacter)
-    CurrentCharacter = newCharacter
-    monitorAnimationsForCharacter()
+    monitorAnimationsForCharacter(newCharacter)
 end)
 
--- Start monitoring animations for the initial character
-monitorAnimationsForCharacter()
-
--- Create the toggle
+-- Create the Rayfield toggle on the correct tab
 local Toggle = Tabtsb:CreateToggle({
     Name = "Invisible Block",
-    CurrentValue = false, -- Default state (off)
-    Flag = "Toggle1", -- Unique identifier for configuration saving
+    CurrentValue = false,
+    Flag = "Toggle1",
     Callback = function(Value)
-        isInvisibleBlockActive = Value -- Update the toggle state
+        isInvisibleBlockActive = Value
         print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
     end,
 })
