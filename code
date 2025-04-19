@@ -2861,51 +2861,50 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local PlayerCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local GamePlayers = game:GetService("Players")
+local CurrentPlayer = GamePlayers.LocalPlayer -- Changed LocalPlayer variable name
+local CurrentCharacter = CurrentPlayer.Character or CurrentPlayer.CharacterAdded:Wait() -- Changed Character variable name
 
-local isAnimationBlockEnabled = false -- Variable to track if the toggle is enabled
+local isInvisibleBlockActive = false -- Changed toggle state variable name
 
 -- Function to block the animation
-local function handleAnimationPlayed(animationTrack)
-    if not isAnimationBlockEnabled then
-        return -- Do nothing if the toggle is off
+local function blockAnimationIfActive(animationTrack)
+    if not isInvisibleBlockActive then
+        return -- Exit if the toggle is off
     end
 
     local currentAnimationId = animationTrack.Animation.AnimationId
-    local blockedAnimationId = "rbxassetid://10470389827"
-    
-    if currentAnimationId == blockedAnimationId then
-        -- Stop the animation if it matches the blocked animation ID
-        animationTrack:Stop()
+    local restrictedAnimationId = "rbxassetid://10470389827" -- Changed blocked animation ID variable name
+
+    if currentAnimationId == restrictedAnimationId then
+        animationTrack:Stop() -- Stop the animation
         print("Blocked animation with ID:", currentAnimationId)
     end
 end
 
--- Monitor animation tracks being added to the Humanoid
-local function setupAnimationMonitoring()
-    local playerHumanoid = PlayerCharacter:WaitForChild("Humanoid")
-    playerHumanoid.AnimationPlayed:Connect(handleAnimationPlayed)
+-- Function to monitor animations for a specific character
+local function monitorAnimationsForCharacter()
+    local PlayerHumanoid = CurrentCharacter:WaitForChild("Humanoid") -- Changed Humanoid variable name
+    PlayerHumanoid.AnimationPlayed:Connect(blockAnimationIfActive)
 end
 
--- Ensure the function runs even if the character respawns
-LocalPlayer.CharacterAdded:Connect(function(newCharacter)
-    PlayerCharacter = newCharacter
-    setupAnimationMonitoring()
+-- Ensure the function reinitializes when the character respawns
+CurrentPlayer.CharacterAdded:Connect(function(newCharacter)
+    CurrentCharacter = newCharacter
+    monitorAnimationsForCharacter()
 end)
 
--- Start monitoring animations
-setupAnimationMonitoring()
+-- Start monitoring animations for the initial character
+monitorAnimationsForCharacter()
 
--- Create the toggle
+-- Create the toggle for the Rayfield UI
 local InvisibleBlockToggle = Tab:CreateToggle({
     Name = "Invisible Block",
-    CurrentValue = false, -- Default value (off)
-    Flag = "InvisibleBlockToggleFlag", -- Unique identifier for the toggle
+    CurrentValue = false, -- Default toggle state
+    Flag = "UniqueInvisibleBlockFlag", -- Unique toggle flag
     Callback = function(toggleState)
-        isAnimationBlockEnabled = toggleState -- Enable or disable the blocking
-        print("Invisible Block is now", toggleState and "ON" or "OFF")
+        isInvisibleBlockActive = toggleState -- Update the toggle state
+        print("Invisible Block is now", toggleState and "ENABLED" or "DISABLED")
     end,
 })
 
