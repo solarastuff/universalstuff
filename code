@@ -2897,7 +2897,7 @@ end)
 monitorAnimationsForCharacter()
 
 -- Create the toggle
-local Toggle = Tab:CreateToggle({
+local Toggle = Tabtsb:CreateToggle({
     Name = "Invisible Block",
     CurrentValue = false, -- Default state (off)
     Flag = "Toggle1", -- Unique identifier for configuration saving
