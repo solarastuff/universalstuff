@@ -2860,7 +2860,52 @@ local Toggle = Tabtsb:CreateToggle({
         end
     end,
 })
+local Players = game:GetService("Players")
+local CurrentPlayer = Players.LocalPlayer
+local CurrentCharacter = CurrentPlayer.Character or CurrentPlayer.CharacterAdded:Wait()
 
+local isInvisibleBlockActive = false -- Variable to track the toggle state
+
+-- Function to block the animation
+local function blockAnimationIfActive(animationTrack)
+    if not isInvisibleBlockActive then
+        return -- Exit if the toggle is off
+    end
+
+    local currentAnimationId = animationTrack.Animation.AnimationId
+    local restrictedAnimationId = "rbxassetid://10470389827"
+
+    if currentAnimationId == restrictedAnimationId then
+        animationTrack:Stop() -- Stop the animation
+        print("Blocked animation with ID:", currentAnimationId)
+    end
+end
+
+-- Function to monitor animations for a specific character
+local function monitorAnimationsForCharacter()
+    local PlayerHumanoid = CurrentCharacter:WaitForChild("Humanoid")
+    PlayerHumanoid.AnimationPlayed:Connect(blockAnimationIfActive)
+end
+
+-- Ensure the function reinitializes when the character respawns
+CurrentPlayer.CharacterAdded:Connect(function(newCharacter)
+    CurrentCharacter = newCharacter
+    monitorAnimationsForCharacter()
+end)
+
+-- Start monitoring animations for the initial character
+monitorAnimationsForCharacter()
+
+-- Create the toggle
+local Toggle = Tab:CreateToggle({
+    Name = "Invisible Block",
+    CurrentValue = false, -- Default state (off)
+    Flag = "Toggle1", -- Unique identifier for configuration saving
+    Callback = function(Value)
+        isInvisibleBlockActive = Value -- Update the toggle state
+        print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
+    end,
+})
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
