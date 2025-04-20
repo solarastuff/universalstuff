@@ -2139,7 +2139,7 @@ local function updateCharacterPosition()
 end
 
 -- Rayfield toggle (inserted into existing tab)
-YourTab:CreateToggle({
+Tab:CreateToggle({
 	Name = "Stick",
 	CurrentValue = false,
 	Callback = function(Value)
