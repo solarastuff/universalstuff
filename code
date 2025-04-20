@@ -2087,6 +2087,69 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Rayfield toggle setup
+local stickEnabled = false
+
+-- RemoteEvent setup
+local stickToggleEvent = ReplicatedStorage:FindFirstChild("StickToggleEvent")
+if not stickToggleEvent then
+	stickToggleEvent = Instance.new("RemoteEvent")
+	stickToggleEvent.Name = "StickToggleEvent"
+	stickToggleEvent.Parent = ReplicatedStorage
+end
+
+-- Player/character references
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local stickOffset = Vector3.new(0, -5, 0)
+
+-- Find closest player
+local function getClosestPlayer(position)
+	local closestPlayer = nil
+	local shortestDistance = math.huge
+
+	for _, p in ipairs(Players:GetPlayers()) do
+		if p ~= player and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+			local distance = (p.Character.HumanoidRootPart.Position - position).magnitude
+			if distance < shortestDistance then
+				shortestDistance = distance
+				closestPlayer = p
+			end
+		end
+	end
+
+	return closestPlayer
+end
+
+-- Stick update logic
+local function updateCharacterPosition()
+	if stickEnabled then
+		local closestPlayer = getClosestPlayer(humanoidRootPart.Position)
+		if closestPlayer and closestPlayer.Character and closestPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			local targetPosition = closestPlayer.Character.HumanoidRootPart.Position
+			local newPosition = targetPosition + stickOffset
+			humanoidRootPart.CFrame = CFrame.new(newPosition, newPosition + Vector3.new(0, 1, 0))
+		end
+	end
+end
+
+-- Rayfield toggle (inserted into existing tab)
+YourTab:CreateToggle({
+	Name = "Stick",
+	CurrentValue = false,
+	Callback = function(Value)
+		stickEnabled = Value
+		stickToggleEvent:FireServer(stickEnabled)
+	end,
+})
+
+-- Keep position updating
+RunService.Heartbeat:Connect(updateCharacterPosition)
 
 -- Define variables
 local player = game.Players.LocalPlayer
