@@ -2087,28 +2087,15 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local stickToggleEvent = ReplicatedStorage:WaitForChild("StickToggleEvent")
 
--- Rayfield toggle setup
+-- Main logic
 local stickEnabled = false
-
--- RemoteEvent setup
-local stickToggleEvent = ReplicatedStorage:FindFirstChild("StickToggleEvent")
-if not stickToggleEvent then
-	stickToggleEvent = Instance.new("RemoteEvent")
-	stickToggleEvent.Name = "StickToggleEvent"
-	stickToggleEvent.Parent = ReplicatedStorage
-end
-
--- Player/character references
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local stickOffset = Vector3.new(0, -5, 0)
 
--- Find closest player
 local function getClosestPlayer(position)
 	local closestPlayer = nil
 	local shortestDistance = math.huge
@@ -2126,7 +2113,6 @@ local function getClosestPlayer(position)
 	return closestPlayer
 end
 
--- Stick update logic
 local function updateCharacterPosition()
 	if stickEnabled then
 		local closestPlayer = getClosestPlayer(humanoidRootPart.Position)
@@ -2138,7 +2124,7 @@ local function updateCharacterPosition()
 	end
 end
 
--- Rayfield toggle (inserted into existing tab)
+-- Create Rayfield toggle
 Tab:CreateToggle({
 	Name = "Stick",
 	CurrentValue = false,
@@ -2148,9 +2134,8 @@ Tab:CreateToggle({
 	end,
 })
 
--- Keep position updating
+-- Position update loop
 RunService.Heartbeat:Connect(updateCharacterPosition)
-
 -- Define variables
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
