@@ -105,7 +105,7 @@ local Tab = Window:CreateTab("info", "info") -- Title, Image
 Rayfield:Notify({
    Title = "ccgvb",
    Content = "universalstuff successfully loaded",
-   Duration = 4,
+   Duration = 5,
    Image = 132574161522781,
 })
 task.wait()
