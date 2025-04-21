@@ -116,8 +116,18 @@ on.Volume = 20
 on.Parent = game.Players.LocalPlayer
 
 on:Play()
-local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added invisible block for tsb and jjs • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
- local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb and jjs  • more stuff for jujutsu shenanigans • invisible parry for TSB and jujutsu shenanigans • lemme know what else to add"})
+-- local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added invisible block for tsb and jjs • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
+ local Paragraph = Tab:CreateParagraph({
+    Title = "Updates",
+    Content = 
+        "• added invisible block for tsb and jjs\n" ..
+        "• added fly\n" ..
+        "• added no stun for jujutsu shenanigans\n" ..
+        "• added two new move sets for TSB\n" ..
+        "• added looping Fling everyone\n" ..
+        "• loop User fling"
+})
+local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb and jjs  • more stuff for jujutsu shenanigans • invisible parry for TSB and jujutsu shenanigans • lemme know what else to add"})
 local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
