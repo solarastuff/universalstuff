@@ -120,16 +120,21 @@ on:Play()
  local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-        "• CHAT BYPASS\n" ..
-        "• VC UNSUSPEND\n" ..
-        "• added invisible block for tsb and jjs\n" ..
-        "• added fly\n" ..
-        "• added no stun for jujutsu shenanigans\n" ..
-        "• added two new move sets for TSB\n" ..
-        "• added looping Fling everyone\n" ..
+        "• CHAT BYPASS\n\n" ..
+        "• VC UNSUSPEND\n\n" ..
+        "• added invisible block for tsb and jjs\n\n" ..
+        "• added fly\n\n" ..
+        "• added no stun for jujutsu shenanigans\n\n" ..
+        "• added two new move sets for TSB\n\n" ..
+        "• added looping Fling everyone\n\n" ..
         "• loop User fling"
 })
-local Paragraph = Tab:CreateParagraph({Title = "upcoming features", Content = "• free emotes for tsb and jjs  • more stuff for jujutsu shenanigans • invisible parry for TSB and jujutsu shenanigans • lemme know what else to add"})
+local Paragraph = Tab:CreateParagraph({Title = "upcoming features", 
+       Content = 
+           "• auto dodge (tsb)\n\n" ..
+           "• wall combo anywhere (tsb)\n\n" ..
+           "• invisible parry for TSB and jujutsu shenanigans\n\n" ..
+})
 local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
@@ -1864,6 +1869,79 @@ end
 })
 local Tab = Window:CreateTab("fighting", "axe") -- Title, Image
 
+local runServiceRenamed = game:GetService("RunService")
+local playerRenamed = game.Players.LocalPlayer -- The player using the script
+local isFollowing = false -- Toggle state
+local lockedPlayer = nil -- The player this script is locked onto
+
+-- Function to find the nearest player
+local function getNearestPlayer()
+    local nearestPlayerRenamed = nil
+    local minDistance = math.huge
+    local playerCharacter = playerRenamed.Character
+    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
+        local playerPosition = playerCharacter.HumanoidRootPart.Position
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            if otherPlayer ~= playerRenamed and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local otherPosition = otherPlayer.Character.HumanoidRootPart.Position
+                local distance = (playerPosition - otherPosition).Magnitude
+                if distance < minDistance then
+                    minDistance = distance
+                    nearestPlayerRenamed = otherPlayer
+                end
+            end
+        end
+    end
+    return nearestPlayerRenamed
+end
+
+-- Function to follow the locked nearest player
+local function moveToLockedPlayer()
+    local playerCharacter = playerRenamed.Character
+    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") and lockedPlayer then
+        local lockedCharacter = lockedPlayer.Character
+        if lockedCharacter and lockedCharacter:FindFirstChild("HumanoidRootPart") then
+            local targetPositionRenamed = lockedCharacter.HumanoidRootPart.Position - lockedCharacter.HumanoidRootPart.CFrame.LookVector * 3
+            playerCharacter.HumanoidRootPart.CFrame = CFrame.new(targetPositionRenamed, lockedCharacter.HumanoidRootPart.Position)
+        end
+    end
+end
+
+-- Function to lock onto a player and handle respawns
+local function setLockedPlayer(targetPlayerRenamed)
+    lockedPlayer = targetPlayerRenamed
+    -- Update the locked player if they respawn
+    targetPlayerRenamed.CharacterAdded:Connect(function(newCharacter)
+        lockedPlayer.Character = newCharacter
+    end)
+end
+
+-- Create the toggle
+Tab:CreateToggle({
+    Name = "behind (pretty much bang but better)", -- Name of the toggle
+    CurrentValue = false, -- Initial state is OFF
+    Callback = function(toggleState) -- Function triggered when the toggle is toggled
+        isFollowing = toggleState
+        if isFollowing then
+            -- Lock onto the nearest player
+            if not lockedPlayer then
+                local nearestPlayerRenamed = getNearestPlayer()
+                if nearestPlayerRenamed then
+                    setLockedPlayer(nearestPlayerRenamed)
+                end
+            end
+            -- Start following the locked player
+            runServiceRenamed.RenderStepped:Connect(function()
+                if isFollowing then
+                    moveToLockedPlayer()
+                end
+            end)
+        else
+            -- Stop following and reset the lock
+            lockedPlayer = nil
+        end
+    end
+})
 
 
 local players = game:GetService("Players")
@@ -2345,6 +2423,7 @@ local Button = Tab:CreateButton({
 
 local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
+local Section = Tab:CreateSection("tools")
 local Button = Tab:CreateButton({
    Name = "jerk off",
    Callback = function()
@@ -2406,8 +2485,51 @@ end)
    end,
 })
 
+local Section = Tab:CreateSection("random")
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
+local isRotating = false -- Toggle state
+local rotatespeed = 1
+
+-- Toggle function
+local spinnybot = Tab:CreateToggle({
+   Name = "Character Rotation",
+   CurrentValue = false,
+   Flag = "ToggleRotation",
+   Callback = function(Value)
+       isRotating = Value -- Set the toggle state
+   end,
+})
+
+-- Rotation logic
+RunService.RenderStepped:Connect(function()
+    if isRotating then
+        local Character = LocalPlayer.Character
+        if Character then
+            local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+            if HumanoidRootPart then
+                HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(rotatespeed), 0)
+            end
+        end
+    end
+end)
+
+local Slider = Tab:CreateSlider({
+   Name = "spinbot speed",
+   Range = {0, 100},
+   Increment = 1,
+   Suffix = "speed",
+   CurrentValue = 1,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+rotatespeed = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
 
 
 
@@ -2441,79 +2563,7 @@ end
 })
 
 
-local runServiceRenamed = game:GetService("RunService")
-local playerRenamed = game.Players.LocalPlayer -- The player using the script
-local isFollowing = false -- Toggle state
-local lockedPlayer = nil -- The player this script is locked onto
 
--- Function to find the nearest player
-local function getNearestPlayer()
-    local nearestPlayerRenamed = nil
-    local minDistance = math.huge
-    local playerCharacter = playerRenamed.Character
-    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
-        local playerPosition = playerCharacter.HumanoidRootPart.Position
-        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-            if otherPlayer ~= playerRenamed and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                local otherPosition = otherPlayer.Character.HumanoidRootPart.Position
-                local distance = (playerPosition - otherPosition).Magnitude
-                if distance < minDistance then
-                    minDistance = distance
-                    nearestPlayerRenamed = otherPlayer
-                end
-            end
-        end
-    end
-    return nearestPlayerRenamed
-end
-
--- Function to follow the locked nearest player
-local function moveToLockedPlayer()
-    local playerCharacter = playerRenamed.Character
-    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") and lockedPlayer then
-        local lockedCharacter = lockedPlayer.Character
-        if lockedCharacter and lockedCharacter:FindFirstChild("HumanoidRootPart") then
-            local targetPositionRenamed = lockedCharacter.HumanoidRootPart.Position - lockedCharacter.HumanoidRootPart.CFrame.LookVector * 3
-            playerCharacter.HumanoidRootPart.CFrame = CFrame.new(targetPositionRenamed, lockedCharacter.HumanoidRootPart.Position)
-        end
-    end
-end
-
--- Function to lock onto a player and handle respawns
-local function setLockedPlayer(targetPlayerRenamed)
-    lockedPlayer = targetPlayerRenamed
-    -- Update the locked player if they respawn
-    targetPlayerRenamed.CharacterAdded:Connect(function(newCharacter)
-        lockedPlayer.Character = newCharacter
-    end)
-end
-
--- Create the toggle
-Tab:CreateToggle({
-    Name = "behind", -- Name of the toggle
-    CurrentValue = false, -- Initial state is OFF
-    Callback = function(toggleState) -- Function triggered when the toggle is toggled
-        isFollowing = toggleState
-        if isFollowing then
-            -- Lock onto the nearest player
-            if not lockedPlayer then
-                local nearestPlayerRenamed = getNearestPlayer()
-                if nearestPlayerRenamed then
-                    setLockedPlayer(nearestPlayerRenamed)
-                end
-            end
-            -- Start following the locked player
-            runServiceRenamed.RenderStepped:Connect(function()
-                if isFollowing then
-                    moveToLockedPlayer()
-                end
-            end)
-        else
-            -- Stop following and reset the lock
-            lockedPlayer = nil
-        end
-    end
-})
 
 local Tab = Window:CreateTab("esp", "eye") -- Title, Image
 
@@ -2590,53 +2640,9 @@ local ColorPicker = Tab:CreateColorPicker({
 updateESP()
 
 
-local Tab = Window:CreateTab("misc", "shield-question") -- Title, Image
 
 
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local RunService = game:GetService("RunService")
-
-local isRotating = false -- Toggle state
-local rotatespeed = 1
-
--- Toggle function
-local spinnybot = Tab:CreateToggle({
-   Name = "Character Rotation",
-   CurrentValue = false,
-   Flag = "ToggleRotation",
-   Callback = function(Value)
-       isRotating = Value -- Set the toggle state
-   end,
-})
-
--- Rotation logic
-RunService.RenderStepped:Connect(function()
-    if isRotating then
-        local Character = LocalPlayer.Character
-        if Character then
-            local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
-            if HumanoidRootPart then
-                HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(rotatespeed), 0)
-            end
-        end
-    end
-end)
-
-local Slider = Tab:CreateSlider({
-   Name = "spinbot speed",
-   Range = {0, 100},
-   Increment = 1,
-   Suffix = "speed",
-   CurrentValue = 1,
-   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
-rotatespeed = Value
-   -- The function that takes place when the slider changes
-   -- The variable (Value) is a number which correlates to the value the slider is currently at
-   end,
-})
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
