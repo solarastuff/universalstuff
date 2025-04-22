@@ -2214,7 +2214,7 @@ Rayfield:Notify({
    -- The function that takes place when the button is pressed
    end,
 })
-local Divider = Tab:CreateDivider()
+
 
 local Button = Tab:CreateButton({
    Name = "unsuspend vc (use after getting suspended)",
