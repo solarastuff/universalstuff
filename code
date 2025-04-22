@@ -120,6 +120,8 @@ on:Play()
  local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+        "• CHAT BYPASS/n" ..
+        "• VC UNSUSPEND/n" ..
         "• added invisible block for tsb and jjs\n" ..
         "• added fly\n" ..
         "• added no stun for jujutsu shenanigans\n" ..
@@ -2196,6 +2198,37 @@ tool.Unequipped:Connect(onToolUnequipped)
    -- The function that takes place when the button is pressed
    end,
 })
+local Tab = Window:CreateTab("chat", "bubbles") -- Title, Image
+
+
+local Button = Tab:CreateButton({
+   Name = "chat bypass",
+   Callback = function()
+loadstring(game:HttpGet("https://pastefy.app/2DyqhuTU/raw"))()
+Rayfield:Notify({
+   Title = "ccgvb",
+   Content = "tags successfully deactivated",
+   Duration = 4,
+   Image = 83984952688042,
+})
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Divider = Tab:CreateDivider()
+local Button = Tab:CreateButton({
+   Name = "unsuspend vc (use after getting suspended)",
+   Callback = function()
+game:GetService("VoiceChatService"):joinVoice()
+Rayfield:Notify({
+   Title = "ccgvb",
+   Content = "voice chat successfully reactivated",
+   Duration = 5,
+   Image = 83984952688042,
+})
+   -- The function that takes place when the button is pressed
+   end,
+})
+
 local Tab = Window:CreateTab("interface", "view") -- Title, Image
 
 local Dropdown = Tab:CreateDropdown({
@@ -2308,13 +2341,7 @@ local Button = Tab:CreateButton({
         TeleportService:TeleportToPlaceInstance(game.PlaceId, serverId, player)
     end,
 })
-local Button = Tab:CreateButton({
-   Name = "unsuspend vc (use after getting suspensed)",
-   Callback = function()
-game:GetService("VoiceChatService"):joinVoice()
-   -- The function that takes place when the button is pressed
-   end,
-})
+
 local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
 local Button = Tab:CreateButton({
