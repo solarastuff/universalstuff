@@ -120,8 +120,8 @@ on:Play()
  local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-        "• CHAT BYPASS/n" ..
-        "• VC UNSUSPEND/n" ..
+        "• CHAT BYPASS\n" ..
+        "• VC UNSUSPEND\n" ..
         "• added invisible block for tsb and jjs\n" ..
         "• added fly\n" ..
         "• added no stun for jujutsu shenanigans\n" ..
@@ -2215,6 +2215,7 @@ Rayfield:Notify({
    end,
 })
 local Divider = Tab:CreateDivider()
+
 local Button = Tab:CreateButton({
    Name = "unsuspend vc (use after getting suspended)",
    Callback = function()
