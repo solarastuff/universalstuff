@@ -3192,7 +3192,7 @@ local function sendToDiscord(message)
         Body = jsonData
     })
 end
-local Paragraph = Tab:CreateParagraph({Title = "if you want me to add something for a specific game, please say the game name", Content = "✌️✌️"})
+local Paragraph = Tab:CreateParagraph({Title = "🥀🥀", Content = "reading some of these suggestions are painful. Please make coherent sentences"})
 -- Create an Input box using Rayfield
 local Input = Tab:CreateInput({
     Name = "suggestions",
