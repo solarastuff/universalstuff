@@ -129,12 +129,13 @@ on:Play()
         "• added looping Fling everyone\n\n" ..
         "• loop User fling"
 })
-local Paragraph = Tab:CreateParagraph({
-       Title = "upcoming features", 
-       Content = 
-           "• auto dodge (tsb)\n\n" ..
-           "• wall combo anywhere (tsb)\n\n" ..
-           "• invisible parry for TSB and jujutsu shenanigans\n\n" ..
+
+local Paragraph2 = Tab:CreateParagraph({
+    Title = "upcoming features", 
+    Content = 
+        "• auto dodge (tsb)\n\n" ..
+        "• wall combo anywhere (tsb)\n\n" ..
+        "• invisible parry for TSB and jujutsu shenanigans"
 })
 local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
