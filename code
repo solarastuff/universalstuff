@@ -67,7 +67,7 @@ part.Parent = game.Workspace -- Add to game
 
 local Window = Rayfield:CreateWindow({
    Name = "universalstuff",
-   Icon = 132574161522781, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   Icon = 83984952688042, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
    LoadingTitle = "loading universalstuff",
    LoadingSubtitle = "by ccgvb",
    Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
@@ -106,7 +106,7 @@ Rayfield:Notify({
    Title = "ccgvb",
    Content = "universalstuff successfully loaded",
    Duration = 5,
-   Image = 132574161522781,
+   Image = 83984952688042,
 })
 task.wait()
 local on = Instance.new("Sound")
@@ -137,7 +137,7 @@ Rayfield:Notify({
    Title = "ohwj",
    Content = "why'd you press me?? i just wanted to say hi🥀. Also oliver fuck u ur fat",
    Duration = 3.4,
-   Image = 132574161522781,
+   Image = 83984952688042,
 })
    -- The function that takes place when the button is pressed
    end,
