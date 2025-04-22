@@ -130,7 +130,7 @@ on:Play()
         "• loop User fling"
 })
 
-local Paragraph2 = Tab:CreateParagraph({
+local Paragraph = Tab:CreateParagraph({
     Title = "upcoming features", 
     Content = 
         "• auto dodge (tsb)\n\n" ..
