@@ -8,6 +8,8 @@ frame.Size = UDim2.new(0.3, 0, 0.3, 0)
 frame.Position = UDim2.new(0.35, 0, 0.35, 0)
 frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 frame.Parent = screenGui
+frame.Active = true
+frame.Draggable = true
 
 -- Create a Title Label
 local titleLabel = Instance.new("TextLabel")
@@ -49,7 +51,7 @@ local textToCopy = "loadstring(game:HttpGet('https://raw.githubusercontent.com/s
 copyButton.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard(textToCopy) -- Copies the text to the clipboard
-        print("Text copied to clipboard!")
+        copyButton.Text = Copied!
     else
         print("Clipboard functionality is not supported on this platform.")
     end
