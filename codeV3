@@ -1,0 +1,3946 @@
+local Players = game:GetService("Players")
+
+-- Replace this with your Discord Webhook URL
+local DiscordWebhookURL = "https://discord.com/api/webhooks/1362594954504966394/I3VFZ-o7ZFbhuU6gzHJMllCUtViXeHEoVsaqZiZY979wSXttbXAb9_f9wgJd4HVTjhHd"
+
+-- Function to send a message to Discord
+local function sendToDiscord(playerName)
+    local data = {
+        ["content"] = playerName .. " executed your script!"
+    }
+
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+
+    -- Check if the executor supports HTTP requests
+    local requestFunction = syn and syn.request or http_request or request
+    if requestFunction then
+        local success, response = pcall(function()
+	            return requestFunction({
+                Url = DiscordWebhookURL,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = jsonData
+            })
+        end)
+
+        if success and response then
+            print("Message sent to Discord: " .. playerName)
+        else
+            warn("Failed to send a message to Discord: " .. tostring(response))
+        end
+    else
+        warn("HTTP requests are not supported by this executor.")
+    end
+end
+
+-- Get the local player's name and send a message to Discord
+local player = Players.LocalPlayer
+sendToDiscord(player.Name)
+
+
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local player = game.Players.LocalPlayer
+local loopSpeed = true
+loopJump = true
+floating = true
+local looptping = false
+local speedo = 16
+local heypal = false
+local tpWalking = false
+ 
+local exe = identifyexecutor()
+
+     
+
+local part = Instance.new("Part") -- Create the catch platform
+part.Size = Vector3.new(500, 5, 500) -- Huge platform to catch falling players
+part.Transparency = 0 -- Fully visible
+part.Anchored = true -- Keeps it in place
+part.CanCollide = true -- Ensures players land on it
+part.BrickColor = BrickColor.new("Bright blue") -- Color (optional)
+part.CFrame = CFrame.new(150, -500, 30) -- Position below the void
+ 
+part.Parent = game.Workspace -- Add to game
+
+
+local Window = Rayfield:CreateWindow({
+   Name = "universalstuff",
+   Icon = 83984952688042, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "loading universalstuff",
+   LoadingSubtitle = "by ccgvb",
+   Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+
+   DisableRayfieldPrompts = true,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = universalstuff, -- Create a custom folder for your hub/game
+      FileName = "config"
+   },
+
+   Discord = {
+      Enabled = true, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Key",
+      Subtitle = "only has to be done once!!!",
+      Note = "THIS IS A LIFETIME KEY!! YOU ONLY NEED TO PUT IT IN ONCE!!!", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"2"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+
+
+local Tab = Window:CreateTab("info", "info") -- Title, Image
+Rayfield:Notify({
+   Title = "ccgvb",
+   Content = "universalstuff successfully loaded",
+   Duration = 5,
+   Image = 83984952688042,
+})
+task.wait()
+local on = Instance.new("Sound")
+on.SoundId = "rbxassetid://7042767974"
+on.Looped = false
+on.Volume = 20
+on.Parent = game.Players.LocalPlayer
+
+on:Play()
+-- local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added invisible block for tsb and jjs • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
+ local Paragraph = Tab:CreateParagraph({
+    Title = "Updates",
+    Content = 
+        "• CHAT BYPASS\n\n" ..
+        "• VC UNSUSPEND\n\n" ..
+        "• added invisible block for tsb and jjs\n\n" ..
+        "• added fly\n\n" ..
+        "• added no stun for jujutsu shenanigans\n\n" ..
+        "• added two new move sets for TSB\n\n" ..
+        "• added looping Fling everyone\n\n" ..
+        "• loop User fling"
+})
+
+local Paragraph = Tab:CreateParagraph({
+    Title = "upcoming features", 
+    Content = 
+        "• auto dodge (tsb)\n\n" ..
+        "• wall combo anywhere (tsb)\n\n" ..
+        "• invisible parry for TSB and jujutsu shenanigans"
+})
+local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
+
+local Button = Tab:CreateButton({
+   Name =  "Hi " .. player.Name,
+   Callback = function()
+Rayfield:Notify({
+   Title = "ohwj",
+   Content = "why'd you press me?? i just wanted to say hi🥀. Also oliver fuck u ur fat",
+   Duration = 3.4,
+   Image = 83984952688042,
+})
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+
+
+local Tab = Window:CreateTab("local stuff", "power") -- Title, Image
+
+
+
+
+local Section = Tab:CreateSection("speed")
+
+
+
+
+local Toggle = Tab:CreateToggle({
+   Name = "WalkSpeed",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+loopSpeed = true
+while loopSpeed do
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedo
+task.wait(0.1)
+if heypal then
+break
+end
+end
+
+
+end
+
+if not Value then
+loopSpeed = false
+
+heypal = true
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+local wsl = Tab:CreateSlider({
+   Name = "walkspeed",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "speed",
+   CurrentValue = 16,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+
+speedo = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently 
+
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+
+   end,
+})
+local Divider = Tab:CreateDivider()
+
+local Toggle = Tab:CreateToggle({
+   Name = "CFrame speed",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+tpWalking = Value
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+local RunService = game:GetService("RunService")
+
+local Slider = Tab:CreateSlider({
+    Name = "CFrame speed (better walkspeed)",
+    Range = {0, 120},
+    Increment = 1,
+    Suffix = "CFrame",
+    CurrentValue = 0,
+    Flag = "Slider1", 
+    Callback = function(Value)
+        
+        tpWalkSpeed = Value
+
+        -- Stop existing loop if already running
+        if not tpWalking then return end
+        
+        -- Run movement loop in a separate thread
+        task.spawn(function()
+            local hb = RunService.Heartbeat
+            local char = game.Players.LocalPlayer.Character
+            local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+            
+            while tpWalking and char and hum and hum.Parent do
+                local delta = hb:Wait()
+                if hum.MoveDirection.Magnitude > 0 then
+                    char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
+                end
+            end
+        end)
+    
+end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "fly (GUI)",
+   Callback = function()
+local main = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local up = Instance.new("TextButton")
+local down = Instance.new("TextButton")
+local onof = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local plus = Instance.new("TextButton")
+local speed = Instance.new("TextLabel")
+local mine = Instance.new("TextButton")
+local closebutton = Instance.new("TextButton")
+local mini = Instance.new("TextButton")
+local mini2 = Instance.new("TextButton")
+
+main.Name = "main"
+main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+main.ResetOnSpawn = false
+
+Frame.Parent = main
+Frame.BackgroundColor3 = Color3.fromRGB(163, 255, 137)
+Frame.BorderColor3 = Color3.fromRGB(103, 221, 213)
+Frame.Position = UDim2.new(0.100320168, 0, 0.379746825, 0)
+Frame.Size = UDim2.new(0, 190, 0, 57)
+
+up.Name = "up"
+up.Parent = Frame
+up.BackgroundColor3 = Color3.fromRGB(79, 255, 152)
+up.Size = UDim2.new(0, 44, 0, 28)
+up.Font = Enum.Font.SourceSans
+up.Text = "UP"
+up.TextColor3 = Color3.fromRGB(0, 0, 0)
+up.TextSize = 14.000
+
+down.Name = "down"
+down.Parent = Frame
+down.BackgroundColor3 = Color3.fromRGB(215, 255, 121)
+down.Position = UDim2.new(0, 0, 0.491228074, 0)
+down.Size = UDim2.new(0, 44, 0, 28)
+down.Font = Enum.Font.SourceSans
+down.Text = "DOWN"
+down.TextColor3 = Color3.fromRGB(0, 0, 0)
+down.TextSize = 14.000
+
+onof.Name = "onof"
+onof.Parent = Frame
+onof.BackgroundColor3 = Color3.fromRGB(255, 249, 74)
+onof.Position = UDim2.new(0.702823281, 0, 0.491228074, 0)
+onof.Size = UDim2.new(0, 56, 0, 28)
+onof.Font = Enum.Font.SourceSans
+onof.Text = "fly"
+onof.TextColor3 = Color3.fromRGB(0, 0, 0)
+onof.TextSize = 14.000
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(242, 60, 255)
+TextLabel.Position = UDim2.new(0.469327301, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 100, 0, 28)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "FLY GUI V3"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+plus.Name = "plus"
+plus.Parent = Frame
+plus.BackgroundColor3 = Color3.fromRGB(133, 145, 255)
+plus.Position = UDim2.new(0.231578946, 0, 0, 0)
+plus.Size = UDim2.new(0, 45, 0, 28)
+plus.Font = Enum.Font.SourceSans
+plus.Text = "+"
+plus.TextColor3 = Color3.fromRGB(0, 0, 0)
+plus.TextScaled = true
+plus.TextSize = 14.000
+plus.TextWrapped = true
+
+speed.Name = "speed"
+speed.Parent = Frame
+speed.BackgroundColor3 = Color3.fromRGB(255, 85, 0)
+speed.Position = UDim2.new(0.468421042, 0, 0.491228074, 0)
+speed.Size = UDim2.new(0, 44, 0, 28)
+speed.Font = Enum.Font.SourceSans
+speed.Text = "1"
+speed.TextColor3 = Color3.fromRGB(0, 0, 0)
+speed.TextScaled = true
+speed.TextSize = 14.000
+speed.TextWrapped = true
+
+mine.Name = "mine"
+mine.Parent = Frame
+mine.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+mine.Position = UDim2.new(0.231578946, 0, 0.491228074, 0)
+mine.Size = UDim2.new(0, 45, 0, 29)
+mine.Font = Enum.Font.SourceSans
+mine.Text = "-"
+mine.TextColor3 = Color3.fromRGB(0, 0, 0)
+mine.TextScaled = true
+mine.TextSize = 14.000
+mine.TextWrapped = true
+
+closebutton.Name = "Close"
+closebutton.Parent = main.Frame
+closebutton.BackgroundColor3 = Color3.fromRGB(225, 25, 0)
+closebutton.Font = "SourceSans"
+closebutton.Size = UDim2.new(0, 45, 0, 28)
+closebutton.Text = "X"
+closebutton.TextSize = 30
+closebutton.Position = UDim2.new(0, 0, -1, 27)
+
+mini.Name = "minimize"
+mini.Parent = main.Frame
+mini.BackgroundColor3 = Color3.fromRGB(192, 150, 230)
+mini.Font = "SourceSans"
+mini.Size = UDim2.new(0, 45, 0, 28)
+mini.Text = "-"
+mini.TextSize = 40
+mini.Position = UDim2.new(0, 44, -1, 27)
+
+mini2.Name = "minimize2"
+mini2.Parent = main.Frame
+mini2.BackgroundColor3 = Color3.fromRGB(192, 150, 230)
+mini2.Font = "SourceSans"
+mini2.Size = UDim2.new(0, 45, 0, 28)
+mini2.Text = "+"
+mini2.TextSize = 40
+mini2.Position = UDim2.new(0, 44, -1, 57)
+mini2.Visible = false
+
+speeds = 1
+
+local speaker = game:GetService("Players").LocalPlayer
+
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+nowe = false
+
+game:GetService("StarterGui"):SetCore("SendNotification", { 
+Title = "FLY GUI V3";
+Text = "BY XNEO";
+Icon = "rbxthumb://type=Asset&id=5107182114&w=150&h=150"})
+Duration = 5;
+
+Frame.Active = true -- main = gui
+Frame.Draggable = true
+
+onof.MouseButton1Down:connect(function()
+
+if nowe == true then
+nowe = false
+
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+else 
+nowe = true
+
+
+
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+local Char = game.Players.LocalPlayer.Character
+local Hum = Char:FindFirstChildOfClass("Humanoid") or Char:FindFirstChildOfClass("AnimationController")
+
+for i,v in next, Hum:GetPlayingAnimationTracks() do
+v:AdjustSpeed(0)
+end
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+end
+
+
+
+
+if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then
+
+
+
+local plr = game.Players.LocalPlayer
+local torso = plr.Character.Torso
+local flying = true
+local deb = true
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local maxspeed = 50
+local speed = 0
+
+
+local bg = Instance.new("BodyGyro", torso)
+bg.P = 9e4
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+bg.cframe = torso.CFrame
+local bv = Instance.new("BodyVelocity", torso)
+bv.velocity = Vector3.new(0,0.1,0)
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+if nowe == true then
+plr.Character.Humanoid.PlatformStand = true
+end
+while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+game:GetService("RunService").RenderStepped:Wait()
+
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+speed = speed+.5+(speed/maxspeed)
+if speed > maxspeed then
+speed = maxspeed
+end
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+speed = speed-1
+if speed < 0 then
+speed = 0
+end
+end
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+else
+bv.velocity = Vector3.new(0,0,0)
+end
+-- game.Players.LocalPlayer.Character.Animate.Disabled = true
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+end
+ctrl = {f = 0, b = 0, l = 0, r = 0}
+lastctrl = {f = 0, b = 0, l = 0, r = 0}
+speed = 0
+bg:Destroy()
+bv:Destroy()
+plr.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+tpwalking = false
+
+
+
+
+else
+local plr = game.Players.LocalPlayer
+local UpperTorso = plr.Character.UpperTorso
+local flying = true
+local deb = true
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local maxspeed = 50
+local speed = 0
+
+
+local bg = Instance.new("BodyGyro", UpperTorso)
+bg.P = 9e4
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+bg.cframe = UpperTorso.CFrame
+local bv = Instance.new("BodyVelocity", UpperTorso)
+bv.velocity = Vector3.new(0,0.1,0)
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+if nowe == true then
+plr.Character.Humanoid.PlatformStand = true
+end
+while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+wait()
+
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+speed = speed+.5+(speed/maxspeed)
+if speed > maxspeed then
+speed = maxspeed
+end
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+speed = speed-1
+if speed < 0 then
+speed = 0
+end
+end
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+else
+bv.velocity = Vector3.new(0,0,0)
+end
+
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+end
+ctrl = {f = 0, b = 0, l = 0, r = 0}
+lastctrl = {f = 0, b = 0, l = 0, r = 0}
+speed = 0
+bg:Destroy()
+bv:Destroy()
+plr.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+tpwalking = false
+
+
+
+end
+
+
+
+
+
+end)
+
+local tis
+
+up.MouseButton1Down:connect(function()
+tis = up.MouseEnter:connect(function()
+while tis do
+wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,1,0)
+end
+end)
+end)
+
+up.MouseLeave:connect(function()
+if tis then
+tis:Disconnect()
+tis = nil
+end
+end)
+
+local dis
+
+down.MouseButton1Down:connect(function()
+dis = down.MouseEnter:connect(function()
+while dis do
+wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-1,0)
+end
+end)
+end)
+
+down.MouseLeave:connect(function()
+if dis then
+dis:Disconnect()
+dis = nil
+end
+end)
+
+
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
+wait(0.7)
+game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+
+end)
+
+
+plus.MouseButton1Down:connect(function()
+speeds = speeds + 1
+speed.Text = speeds
+if nowe == true then
+
+
+tpwalking = false
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+end
+end)
+mine.MouseButton1Down:connect(function()
+if speeds == 1 then
+speed.Text = 'cannot be less than 1'
+wait(1)
+speed.Text = speeds
+else
+speeds = speeds - 1
+speed.Text = speeds
+if nowe == true then
+tpwalking = false
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+end
+end
+end)
+
+closebutton.MouseButton1Click:Connect(function()
+main:Destroy()
+end)
+
+mini.MouseButton1Click:Connect(function()
+up.Visible = false
+down.Visible = false
+onof.Visible = false
+plus.Visible = false
+speed.Visible = false
+mine.Visible = false
+mini.Visible = false
+mini2.Visible = true
+main.Frame.BackgroundTransparency = 1
+closebutton.Position = UDim2.new(0, 0, -1, 57)
+end)
+
+mini2.MouseButton1Click:Connect(function()
+up.Visible = true
+down.Visible = true
+onof.Visible = true
+plus.Visible = true
+speed.Visible = true
+mine.Visible = true
+mini.Visible = true
+mini2.Visible = false
+main.Frame.BackgroundTransparency = 0 
+closebutton.Position = UDim2.new(0, 0, -1, 27)
+end)
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+local Section = Tab:CreateSection("jumping")
+
+local Slider = Tab:CreateSlider({
+   Name = "jump power",
+   Range = {0, 500},
+   Increment = 1,
+   Suffix = "power",
+   CurrentValue = 50,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+while loopJump do
+
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+
+task.wait(0.1)
+
+end
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+
+local Toggle = Tab:CreateToggle({
+   Name = "defualt jump power",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+loopJump = false 
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+Slider:Set(50) -- The new slider integer value
+else 
+loopJump = true
+
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+
+
+local Players = game:GetService("Players")
+
+-- Function to teleport to the player with a matching display name
+local function teleportToPlayer(playerName)
+    local matchedPlayer = nil
+    
+    -- Loop through all players to find a match based on display name
+    for _, player in ipairs(Players:GetPlayers()) do
+        if string.sub(player.DisplayName:lower(), 1, #playerName) == playerName:lower() then
+            matchedPlayer = player
+            break
+        end
+    end
+
+    -- If a player is found, teleport the local player to them
+    if matchedPlayer then
+        local character = game.Players.LocalPlayer.Character
+        if character and matchedPlayer.Character then
+            character:SetPrimaryPartCFrame(matchedPlayer.Character.HumanoidRootPart.CFrame)
+        end
+    else
+        -- If no match is found, notify the player (using a different UI element)
+        print("Player not found!")
+    end
+end
+
+-- Input component callback
+local Input = Tab:CreateInput({
+   Name = "teleport to",
+   CurrentValue = "",
+   PlaceholderText = "player name...",
+   RemoveTextAfterFocusLost = true,
+   Flag = "Input1",
+   Callback = function(Text)
+       -- When the input changes, attempt to teleport to the player
+       if Text and Text ~= "" then
+           teleportToPlayer(Text)
+       end
+   end,
+})
+local Section = Tab:CreateSection("more")
+
+local Slider = Tab:CreateSlider({
+   Name = "float",
+   Range = {-250, 300},
+   Increment = 2,
+   Suffix = "height",
+   CurrentValue = 0,
+   Flag = "sftuhhg", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+
+game.Players.LocalPlayer.Character.Humanoid.HipHeight = Value
+
+
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "stop floating",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+floating = false
+local player = game.Players.LocalPlayer -- Get the local player
+
+-- Reset HipHeight when the script runs
+local function resetHipHeight()
+    -- Wait for the player's character and humanoid to load
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    -- Check the rig type and set default hip height accordingly
+    if humanoid.RigType == Enum.HumanoidRigType.R6 then
+        humanoid.HipHeight = 0 -- Default R6 height
+    elseif humanoid.RigType == Enum.HumanoidRigType.R15 then
+        humanoid.HipHeight = 2 -- Default R15 height
+    end
+end
+
+-- Call the function to reset the hip height
+resetHipHeight()
+
+else 
+floating = true
+
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+
+
+
+local Divider = Tab:CreateDivider()
+
+
+
+local Slider = Tab:CreateSlider({
+   Name = "FOV",
+   Range = {0, 120},
+   Increment = 1,
+   Suffix = "fov",
+   CurrentValue = 70,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+local camera = workspace.CurrentCamera
+camera.FieldOfView = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "reset to default fov",
+   Callback = function()
+local camera = workspace.CurrentCamera
+camera.FieldOfView = 70
+Slider:Set(70) -- The new slider integer value
+
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Section = Tab:CreateSection("workspace")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local noClip = false
+local connection -- Stores the RunService connection
+
+-- Function to enable/disable no-clip
+local function setNoClipMode(enable)
+    if connection then connection:Disconnect() end -- Stop previous loop
+
+    if enable then
+        connection = game:GetService("RunService").Stepped:Connect(function()
+            if character and character.Parent then
+                local head = character:FindFirstChild("Head")
+                local torso = character:FindFirstChild("Torso")
+
+                if head then head.CanCollide = false end
+                if torso then torso.CanCollide = false end
+            end
+        end)
+    else
+        -- Instantly reset CanCollide when turning off no-clip
+        if character and character.Parent then
+            local head = character:FindFirstChild("Head")
+            local torso = character:FindFirstChild("Torso")
+
+            if head then head.CanCollide = true end
+            if torso then torso.CanCollide = true end
+        end
+    end
+end
+
+-- Function to handle character respawn
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    character:WaitForChild("Head")
+    character:WaitForChild("Torso")
+
+    if noClip then
+        setNoClipMode(true) -- Reapply no-clip if it was enabled before dying
+    end
+end
+
+-- Listen for character respawn
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Toggle button to control no-clip
+local Toggle = Tab:CreateToggle({
+    Name = "No-Clip",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        noClip = Value
+        setNoClipMode(noClip)
+    end,
+})
+
+local Divider = Tab:CreateDivider()
+
+local Slider = Tab:CreateSlider({
+   Name = "gravity",
+   Range = {0, 450},
+   Increment = 2,
+   Suffix = "gravity",
+   CurrentValue = 196.2,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        game.Workspace.Gravity = Value  -- Example: Reduce gravity to 50
+
+
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "default gravity",
+   Callback = function()
+game.Workspace.Gravity = 196.2
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Tab = Window:CreateTab("fling", "shell") -- Title, Image
+
+
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Ensure the detection object exists
+if not ReplicatedStorage:FindFirstChild("juisdfj0i32i0eidsuf0iok") then
+    local detection = Instance.new("Decal")
+    detection.Name = "juisdfj0i32i0eidsuf0iok"
+    detection.Parent = ReplicatedStorage
+end
+
+local running = false  -- Flag to control the running state of the fling
+
+-- Fling function
+local function fling()
+    local lp = Players.LocalPlayer
+    local c, hrp, vel, movel = nil, nil, nil, 0.1
+
+    while running do  -- Runs only if the flag is true
+        RunService.Heartbeat:Wait()
+        c = lp.Character
+        hrp = c and c:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            vel = hrp.Velocity
+            hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            hrp.Velocity = vel
+            RunService.Stepped:Wait()
+            hrp.Velocity = vel + Vector3.new(0, movel, 0)
+            movel = -movel
+        end
+    end
+end
+
+-- Toggle creation (using Rayfield UI or any other UI framework you are using)
+local Toggle = Tab:CreateToggle({
+    Name = "touch fling",
+    CurrentValue = false,
+    Flag = "Toggle1", -- This is the identifier for saving the configuration
+    Callback = function(Value)
+        if Value then
+            -- Toggle is on, start the fling function
+            print("Fling Enabled")
+            if not running then
+                running = true
+                -- Start the fling task when the toggle is on
+                task.spawn(fling)
+            end
+        else
+            -- Toggle is off, stop the fling function
+            print("Fling Disabled")
+            running = false
+            -- The fling loop will exit as running is false
+        end
+    end,
+})
+
+
+-- Initial setup of services and variables
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Ensure the detection object exists
+if not ReplicatedStorage:FindFirstChild("juisdfj0i32i0eidsuf0iok") then
+    local detection = Instance.new("Decal")
+    detection.Name = "juisdfj0i32i0eidsuf0iok"
+    detection.Parent = ReplicatedStorage
+end
+
+local running = false  -- Flag to control the running state of the code
+local flingCoroutine
+local teleportCoroutine
+
+-- Function to update the character and humanoidRootPart when the player respawns
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- If the aura was enabled before dying, restart it
+    if running then
+        flingCoroutine = task.spawn(fling)
+        teleportCoroutine = task.spawn(teleportToClosestPlayer)
+    end
+end
+
+-- Connect the respawn event
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Fling function
+local function fling()
+    local lp = Players.LocalPlayer
+    local c, hrp, vel, movel = nil, nil, nil, 0.1
+
+    while running do  -- Runs only if the flag is set to true
+        RunService.Heartbeat:Wait()
+        c = lp.Character
+        hrp = c and c:FindFirstChild("HumanoidRootPart")
+
+        if hrp then
+            vel = hrp.Velocity
+            hrp.Velocity = vel * 80000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            hrp.Velocity = vel
+            RunService.Stepped:Wait()
+            hrp.Velocity = vel + Vector3.new(0, movel, 0)
+            movel = -movel
+        end
+    end
+end
+
+-- Find closest player function
+local function findClosestPlayer()
+    local closestPlayer = nil
+    local closestDistance = 10  -- 10 studs range
+
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local otherRootPart = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if otherRootPart then
+                local distance = (humanoidRootPart.Position - otherRootPart.Position).Magnitude
+                if distance <= closestDistance then
+                    closestDistance = distance
+                    closestPlayer = otherRootPart
+                end
+            end
+        end
+    end
+
+    return closestPlayer
+end
+
+-- Teleport to closest player with anchoring
+local function teleportToClosestPlayer()
+    while running do  -- Runs only if the flag is set to true
+        local closestTarget = findClosestPlayer()
+        if closestTarget then
+            -- Anchor the character to prevent flinging
+            local character = player.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.Anchored = true
+            end
+
+            -- Teleport to the closest target
+            humanoidRootPart.CFrame = closestTarget.CFrame  -- Teleport to them
+
+            -- Unanchor after teleportation
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.Anchored = false
+            end
+        end
+        task.wait(0.1) -- Check every 0.1 seconds
+    end
+end
+
+
+
+-- // Services \\ --
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- // Variables \\ --
+local antiflingConnection = nil
+local isFlingDisabled = false -- Keeps track of the toggle state
+
+-- // Functions \\ --
+
+local function enableFlingProtection()
+    -- First Anti-Fling Script (Disabling collision on other players)
+    antiflingConnection = RunService.Stepped:Connect(function()
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                for _, v in pairs(player.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                    end
+                end
+            end
+        end
+    end)
+
+    -- Second Anti-Fling Script (Disabling collision on LocalPlayer)
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    for _, v in ipairs(Character:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.CanCollide = false
+        end
+    end
+    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
+    if PrimaryPart then
+        PrimaryPart.CanCollide = false
+    end
+end
+
+local function disableFlingProtection()
+    -- Stop the first antifling script
+    if antiflingConnection then
+        antiflingConnection:Disconnect()
+        antiflingConnection = nil
+    end
+
+    -- Restore collision on LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    for _, v in ipairs(Character:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.CanCollide = true
+        end
+    end
+    local PrimaryPart = Character:FindFirstChild("HumanoidRootPart")
+    if PrimaryPart then
+        PrimaryPart.CanCollide = true
+    end
+end
+
+-- // Toggle Implementation \\ --
+local toggle5 = Tab:CreateToggle({
+    Name = "Anti-Fling",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        if Value then
+            enableFlingProtection()
+        else
+            disableFlingProtection()
+        end
+    end,
+})
+
+-- Toggle creation
+local skibidi = Tab:CreateToggle({
+    Name = "fling aura",
+    CurrentValue = false,
+    Flag = "Toggle1", -- This is the identifier for saving the configuration
+    Callback = function(Value)
+        if Value then
+
+            -- Toggle is on, start the code
+            print("Feature Enabled")
+            if not running then
+                running = true
+toggle5:Set(true)
+                -- Start the fling and teleport tasks when the toggle is on
+                flingCoroutine = task.spawn(fling)
+                teleportCoroutine = task.spawn(teleportToClosestPlayer)
+            end
+        else
+            -- Toggle is off, stop the code
+            print("Feature Disabled")
+            running = false
+            -- Stop the tasks when the toggle is off by just setting running to false
+            -- The loops will exit since `running` will be false
+        end
+    end,
+})
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Function to find a player by partial username or display name
+local function GetPlayer(Name)
+    Name = Name:lower()
+    for _, x in next, Players:GetPlayers() do
+        if x ~= Player then
+            if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+                return x
+            end
+        end
+    end
+    return nil
+end
+
+-- Function to send notification messages
+local function Message(_Title, _Text, Time)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = _Title,
+        Text = _Text,
+        Duration = Time
+    })
+end
+
+-- Function to perform the "SkidFling" action on the target player
+local function SkidFling(TargetPlayer)
+    local Character = Player.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local RootPart = Humanoid and Humanoid.RootPart
+    local TCharacter = TargetPlayer.Character
+    local THumanoid = TCharacter and TCharacter:FindFirstChildOfClass("Humanoid")
+    local TRootPart = THumanoid and THumanoid.RootPart
+    local THead = TCharacter and TCharacter:FindFirstChild("Head")
+    local Accessory = TCharacter and TCharacter:FindFirstChildOfClass("Accessory")
+    local Handle = Accessory and Accessory:FindFirstChild("Handle")
+
+    if Character and Humanoid and RootPart then
+        if RootPart.Velocity.Magnitude < 50 then
+            getgenv().OldPos = RootPart.CFrame
+        end
+        if THumanoid and THumanoid.Sit then
+            return Message("Error Occurred", "Target is sitting", 5)
+        end
+        if THead then
+            workspace.CurrentCamera.CameraSubject = THead
+        elseif Handle then
+            workspace.CurrentCamera.CameraSubject = Handle
+        else
+            workspace.CurrentCamera.CameraSubject = THumanoid
+        end
+        if not TCharacter:FindFirstChildWhichIsA("BasePart") then return end
+
+        local function FPos(BasePart, Pos, Ang)
+            RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+            Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+            RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+            RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+        end
+
+        local function SFBasePart(BasePart)
+            local TimeToWait = 2
+            local Time = tick()
+            local Angle = 0
+            repeat
+                if RootPart and THumanoid then
+                    if BasePart.Velocity.Magnitude < 50 then
+                        Angle = Angle + 100
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                    else
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                    end
+                else
+                    break
+                end
+            until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+        end
+
+        workspace.FallenPartsDestroyHeight = 0 / 0
+        local BV = Instance.new("BodyVelocity")
+        BV.Name = "EpixVel"
+        BV.Parent = RootPart
+        BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+        BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+        if TRootPart and THead then
+            if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+                SFBasePart(THead)
+            else
+                SFBasePart(TRootPart)
+            end
+        elseif TRootPart and not THead then
+            SFBasePart(TRootPart)
+        elseif not TRootPart and THead then
+            SFBasePart(THead)
+        elseif not TRootPart and not THead and Accessory and Handle then
+            SFBasePart(Handle)
+        else
+            return Message("Error Occurred", "Target is missing everything", 5)
+        end
+
+        BV:Destroy()
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        workspace.CurrentCamera.CameraSubject = Humanoid
+
+        repeat
+            RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+            Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+            Humanoid:ChangeState("GettingUp")
+            for _, x in ipairs(Character:GetChildren()) do
+                if x:IsA("BasePart") then
+                    x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                end
+            end
+            task.wait()
+        until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+
+        workspace.FallenPartsDestroyHeight = getgenv().FPDH
+    else
+        return Message("Error Occurred", "Random error", 5)
+    end
+end
+
+-- **Rayfield Input Field** - Updated to allow partial username or display name
+local Input = Tab:CreateInput({
+    Name = "User fling",
+    CurrentValue = "",
+    PlaceholderText = "UserName/DisplayName",
+    RemoveTextAfterFocusLost = true,
+    Flag = "Input1",
+    Callback = function(Text)
+        local targetPlayer = GetPlayer(Text)
+        if targetPlayer then
+            SkidFling(targetPlayer)
+        else
+            Message("Error Occurred", "Invalid username or display name", 5)
+        end
+    end
+})
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Save original FallenPartsDestroyHeight
+getgenv().FPDH = workspace.FallenPartsDestroyHeight
+
+-- Get player by partial username or display name
+function GetPlayer(Name)
+	Name = Name:lower()
+	for _, x in next, Players:GetPlayers() do
+		if x ~= Player then
+			if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+				return x
+			end
+		end
+	end
+end
+
+-- Fling function with loop and ground check
+function SkidFling(TargetPlayer)
+	task.spawn(function()
+		while TargetPlayer and TargetPlayer.Parent == Players do
+			task.wait(0.1)
+
+			local Character = Player.Character
+			local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+			local RootPart = Humanoid and Humanoid.RootPart
+			local TCharacter = TargetPlayer.Character
+			local THumanoid = TCharacter and TCharacter:FindFirstChildOfClass("Humanoid")
+			local TRootPart = THumanoid and THumanoid.RootPart
+			local THead = TCharacter and TCharacter:FindFirstChild("Head")
+			local Accessory = TCharacter and TCharacter:FindFirstChildOfClass("Accessory")
+			local Handle = Accessory and Accessory:FindFirstChild("Handle")
+
+			if not (Character and Humanoid and RootPart and TCharacter and THumanoid and TRootPart) then
+				continue
+			end
+
+			-- Only fling if on the same level (ground check)
+			if math.abs(TRootPart.Position.Y - RootPart.Position.Y) > 5 then
+				continue
+			end
+
+			-- Save position
+			if RootPart.Velocity.Magnitude < 50 then
+				getgenv().OldPos = RootPart.CFrame
+			end
+
+			if THumanoid.Sit then
+				continue
+			end
+
+			workspace.CurrentCamera.CameraSubject = THead or Handle or THumanoid
+
+			local function FPos(BasePart, Pos, Ang)
+				RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+				Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+				RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+				RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+			end
+
+			local function SFBasePart(BasePart)
+				local TimeToWait = 2
+				local Time = tick()
+				local Angle = 0
+				repeat
+					if RootPart and THumanoid then
+						if BasePart.Velocity.Magnitude < 50 then
+							Angle += 100
+							FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+							task.wait()
+							FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+							task.wait()
+						else
+							FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+							task.wait()
+						end
+					else
+						break
+					end
+				until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TCharacter or TargetPlayer.Parent ~= Players or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+			end
+
+			workspace.FallenPartsDestroyHeight = 0 / 0
+			local BV = Instance.new("BodyVelocity")
+			BV.Name = "EpixVel"
+			BV.Parent = RootPart
+			BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+			BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+			Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+			if TRootPart and THead then
+				if (TRootPart.Position - THead.Position).Magnitude > 5 then
+					SFBasePart(THead)
+				else
+					SFBasePart(TRootPart)
+				end
+			elseif TRootPart then
+				SFBasePart(TRootPart)
+			elseif THead then
+				SFBasePart(THead)
+			elseif Handle then
+				SFBasePart(Handle)
+			end
+
+			BV:Destroy()
+			Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+			workspace.CurrentCamera.CameraSubject = Humanoid
+
+			repeat
+				RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+				Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+				Humanoid:ChangeState("GettingUp")
+				for _, x in ipairs(Character:GetChildren()) do
+					if x:IsA("BasePart") then
+						x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+					end
+				end
+				task.wait()
+			until (RootPart.Position - getgenv().OldPos.Position).Magnitude < 25
+
+			workspace.FallenPartsDestroyHeight = getgenv().FPDH
+		end
+	end)
+end
+
+-- Rayfield input field
+local Input = Tab:CreateInput({
+	Name = "loop user fling",
+	CurrentValue = "",
+	PlaceholderText = "UserName/DisplayName",
+	RemoveTextAfterFocusLost = true,
+	Flag = "Input1",
+	Callback = function(Text)
+		local targetPlayer = GetPlayer(Text)
+		if targetPlayer then
+			SkidFling(targetPlayer)
+		else
+			Message("Error Occurred", "Invalid username or display name", 5)
+		end
+	end
+})
+local Divider = Tab:CreateDivider()
+
+local Button = Tab:CreateButton({
+   Name = "fling everyone",
+   Callback = function()
+ local Targets = {"All"} -- "All", "Target Name", "arian_was_here"
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local AllBool = false
+
+local function GetPlayer(Name)
+    Name = Name:lower()
+    if Name == "all" or Name == "others" then
+        AllBool = true
+        return
+    elseif Name == "random" then
+        local GetPlayers = Players:GetPlayers()
+        if table.find(GetPlayers, Player) then table.remove(GetPlayers, table.find(GetPlayers, Player)) end
+        return GetPlayers[math.random(#GetPlayers)]
+    else
+        for _, x in next, Players:GetPlayers() do
+            if x ~= Player then
+                if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+                    return x
+                end
+            end
+        end
+    end
+end
+
+local function SkidFling(TargetPlayer)
+    local Character = Player.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local RootPart = Humanoid and Humanoid.RootPart
+
+    local TCharacter = TargetPlayer.Character
+    local THumanoid = TCharacter and TCharacter:FindFirstChildOfClass("Humanoid")
+    local TRootPart = THumanoid and THumanoid.RootPart
+    local THead = TCharacter and TCharacter:FindFirstChild("Head")
+
+    if Character and Humanoid and RootPart and TCharacter and TRootPart then
+        if RootPart.Velocity.Magnitude < 50 then
+            getgenv().OldPos = RootPart.CFrame
+        end
+
+        if THead then
+            workspace.CurrentCamera.CameraSubject = THead
+        elseif THumanoid then
+            workspace.CurrentCamera.CameraSubject = THumanoid
+        end
+
+        local function FPos(BasePart, Pos, Ang)
+            RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+            Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+            RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+            RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+        end
+
+        local function SFBasePart(BasePart)
+            local TimeToWait = 2
+            local StartTime = tick()
+            local Angle = 0
+
+            repeat
+                if RootPart and THumanoid then
+                    if BasePart.Velocity.Magnitude < 50 then
+                        Angle = Angle + 100
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                    else
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                        FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+                        task.wait()
+                    end
+                else
+                    break
+                end
+            until BasePart.Velocity.Magnitude > 500 or tick() > StartTime + TimeToWait
+        end
+
+        workspace.FallenPartsDestroyHeight = 0/0
+
+        local BV = Instance.new("BodyVelocity")
+        BV.Parent = RootPart
+        BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+        BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+        if TRootPart then
+            SFBasePart(TRootPart)
+        elseif THead then
+            SFBasePart(THead)
+        end
+
+        BV:Destroy()
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        workspace.CurrentCamera.CameraSubject = Humanoid
+
+        repeat
+            RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+            Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+            Humanoid:ChangeState("GettingUp")
+            for _, x in pairs(Character:GetChildren()) do
+                if x:IsA("BasePart") then
+                    x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                end
+            end
+            task.wait()
+        until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+        workspace.FallenPartsDestroyHeight = getgenv().FPDH
+    end
+end
+
+if Targets[1] then
+    for _, x in next, Targets do GetPlayer(x) end
+else
+    return
+end
+
+if AllBool then
+    for _, x in next, Players:GetPlayers() do
+        SkidFling(x)
+    end
+else
+    for _, x in next, Targets do
+        local Target = GetPlayer(x)
+        if Target and Target ~= Player then
+            SkidFling(Target)
+        end
+    end
+end
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local Targets = {"All"} -- Use "All", "others", specific usernames, etc.
+local AllBool = false
+getgenv().FPDH = workspace.FallenPartsDestroyHeight
+getgenv().FlingActive = false
+
+local function GetPlayer(Name)
+	Name = Name:lower()
+	if Name == "all" or Name == "others" then
+		AllBool = true
+		return nil
+	elseif Name == "random" then
+		local GetPlayers = Players:GetPlayers()
+		if table.find(GetPlayers, Player) then table.remove(GetPlayers, table.find(GetPlayers, Player)) end
+		return GetPlayers[math.random(#GetPlayers)]
+	else
+		for _, x in next, Players:GetPlayers() do
+			if x ~= Player then
+				if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+					return x
+				end
+			end
+		end
+	end
+end
+
+local function IsSameYLevel(p1, p2)
+	return math.abs(p1.Position.Y - p2.Position.Y) <= 5
+end
+
+local function SkidFling(TargetPlayer)
+	local Character = Player.Character
+	local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Humanoid and Humanoid.RootPart
+	local TCharacter = TargetPlayer.Character
+	local THumanoid = TCharacter and TCharacter:FindFirstChildOfClass("Humanoid")
+	local TRootPart = THumanoid and THumanoid.RootPart
+	local THead = TCharacter and TCharacter:FindFirstChild("Head")
+
+	if Character and Humanoid and RootPart and TCharacter and TRootPart and IsSameYLevel(RootPart, TRootPart) then
+		if RootPart.Velocity.Magnitude < 50 then
+			getgenv().OldPos = RootPart.CFrame
+		end
+
+		if THead then
+			workspace.CurrentCamera.CameraSubject = THead
+		elseif THumanoid then
+			workspace.CurrentCamera.CameraSubject = THumanoid
+		end
+
+		local function FPos(BasePart, Pos, Ang)
+			RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+			Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+			RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+			RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+		end
+
+		local function SFBasePart(BasePart)
+			local StartTime = tick()
+			local Angle = 0
+			repeat
+				if RootPart and THumanoid then
+					if BasePart.Velocity.Magnitude < 50 then
+						Angle += 100
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+					else
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+						FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+						task.wait()
+					end
+				else
+					break
+				end
+			until BasePart.Velocity.Magnitude > 500 or tick() > StartTime + 2
+		end
+
+		workspace.FallenPartsDestroyHeight = 0/0
+		local BV = Instance.new("BodyVelocity")
+		BV.Parent = RootPart
+		BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+		if TRootPart then
+			SFBasePart(TRootPart)
+		elseif THead then
+			SFBasePart(THead)
+		end
+
+		BV:Destroy()
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+		workspace.CurrentCamera.CameraSubject = Humanoid
+
+		repeat
+			RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+			Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+			Humanoid:ChangeState("GettingUp")
+			for _, x in ipairs(Character:GetChildren()) do
+				if x:IsA("BasePart") then
+					x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+				end
+			end
+			task.wait()
+		until (RootPart.Position - getgenv().OldPos.Position).Magnitude < 25
+		workspace.FallenPartsDestroyHeight = getgenv().FPDH
+	end
+end
+
+-- Rayfield Toggle
+local Toggle = Tab:CreateToggle({
+	Name = "loop fling everyone",
+	CurrentValue = false,
+	Flag = "FlingToggle",
+	Callback = function(Value)
+		getgenv().FlingActive = Value
+
+		if Value then
+			task.spawn(function()
+				while getgenv().FlingActive do
+					task.wait(0.5)
+
+					if Targets[1] then
+						for _, x in next, Targets do GetPlayer(x) end
+					else
+						break
+					end
+
+					if AllBool then
+						for _, x in next, Players:GetPlayers() do
+							if x ~= Player then
+								SkidFling(x)
+							end
+						end
+					else
+						for _, x in next, Targets do
+							local Target = GetPlayer(x)
+							if Target and Target ~= Player then
+								SkidFling(Target)
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+})
+local Toggle = Tab:CreateToggle({
+   Name = "click fling (click on someone)",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+skibidi:Set(true)
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+
+mouse.Button1Down:Connect(function()
+    local target = mouse.Target
+    if target then
+        -- Try to get the character from the clicked part's parent
+        local character = target:FindFirstAncestorOfClass("Model")
+        local clickedPlayer = game.Players:GetPlayerFromCharacter(character)
+        if clickedPlayer and clickedPlayer ~= player then
+            local targetRoot = character:FindFirstChild("HumanoidRootPart")
+            if targetRoot and player.Character then
+                -- Teleport your character to the target player's position
+                player.Character:MoveTo(targetRoot.Position)
+            end
+        end
+    end
+end)
+else 
+skibidi:Set(false)
+targetRoot = nil
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+local Tab = Window:CreateTab("fighting", "axe") -- Title, Image
+
+local runServiceRenamed = game:GetService("RunService")
+local playerRenamed = game.Players.LocalPlayer -- The player using the script
+local isFollowing = false -- Toggle state
+local lockedPlayer = nil -- The player this script is locked onto
+
+-- Function to find the nearest player
+local function getNearestPlayer()
+    local nearestPlayerRenamed = nil
+    local minDistance = math.huge
+    local playerCharacter = playerRenamed.Character
+    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
+        local playerPosition = playerCharacter.HumanoidRootPart.Position
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            if otherPlayer ~= playerRenamed and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local otherPosition = otherPlayer.Character.HumanoidRootPart.Position
+                local distance = (playerPosition - otherPosition).Magnitude
+                if distance < minDistance then
+                    minDistance = distance
+                    nearestPlayerRenamed = otherPlayer
+                end
+            end
+        end
+    end
+    return nearestPlayerRenamed
+end
+
+-- Function to follow the locked nearest player
+local function moveToLockedPlayer()
+    local playerCharacter = playerRenamed.Character
+    if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") and lockedPlayer then
+        local lockedCharacter = lockedPlayer.Character
+        if lockedCharacter and lockedCharacter:FindFirstChild("HumanoidRootPart") then
+            local targetPositionRenamed = lockedCharacter.HumanoidRootPart.Position - lockedCharacter.HumanoidRootPart.CFrame.LookVector * 3
+            playerCharacter.HumanoidRootPart.CFrame = CFrame.new(targetPositionRenamed, lockedCharacter.HumanoidRootPart.Position)
+        end
+    end
+end
+
+-- Function to lock onto a player and handle respawns
+local function setLockedPlayer(targetPlayerRenamed)
+    lockedPlayer = targetPlayerRenamed
+    -- Update the locked player if they respawn
+    targetPlayerRenamed.CharacterAdded:Connect(function(newCharacter)
+        lockedPlayer.Character = newCharacter
+    end)
+end
+
+-- Create the toggle
+Tab:CreateToggle({
+    Name = "behind (pretty much bang but better)", -- Name of the toggle
+    CurrentValue = false, -- Initial state is OFF
+    Callback = function(toggleState) -- Function triggered when the toggle is toggled
+        isFollowing = toggleState
+        if isFollowing then
+            -- Lock onto the nearest player
+            if not lockedPlayer then
+                local nearestPlayerRenamed = getNearestPlayer()
+                if nearestPlayerRenamed then
+                    setLockedPlayer(nearestPlayerRenamed)
+                end
+            end
+            -- Start following the locked player
+            runServiceRenamed.RenderStepped:Connect(function()
+                if isFollowing then
+                    moveToLockedPlayer()
+                end
+            end)
+        else
+            -- Stop following and reset the lock
+            lockedPlayer = nil
+        end
+    end
+})
+
+
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+local runService = game:GetService("RunService")
+local userInputService = game:GetService("UserInputService")
+
+local lockOn = false
+local target = nil
+
+-- Function to get the closest player
+local function getClosestPlayer()
+    local character = localPlayer.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return nil end
+
+    local root = character.HumanoidRootPart
+    local closestDistance = math.huge
+    local closestPlayer = nil
+
+    for _, player in pairs(players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local targetRoot = player.Character.HumanoidRootPart
+            local distance = (root.Position - targetRoot.Position).Magnitude
+
+            if distance < closestDistance then
+                closestDistance = distance
+                closestPlayer = targetRoot
+            end
+        end
+    end
+
+    return closestPlayer
+end
+
+-- Enable Lock-On (Aimbot Mode)
+local function enableLockOn()
+    target = getClosestPlayer()
+    if target then
+        lockOn = true
+    end
+end
+
+-- Disable Lock-On
+local function disableLockOn()
+    lockOn = false
+    target = nil
+end
+
+-- Toggle Lock-On when the toggle is pressed
+local Toggle = Tab:CreateToggle({
+    Name = "Lock On Toggle",
+    CurrentValue = false,
+    Flag = "LockOnToggle",
+    Callback = function(Value)
+        if Value then
+            enableLockOn()
+        else
+            disableLockOn()
+        end
+    end,
+})
+
+-- Update camera and character rotation while locked on
+runService.RenderStepped:Connect(function()
+    if lockOn and target then
+        local character = localPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local root = character.HumanoidRootPart
+
+            -- Aim character and camera towards the target
+            local direction = (target.Position - root.Position).unit
+            local newCFrame = CFrame.lookAt(root.Position, target.Position)
+
+            -- Rotate character and camera
+            root.CFrame = CFrame.new(root.Position) * CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+            camera.CFrame = CFrame.new(camera.CFrame.Position, target.Position)
+        end
+    end
+end)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local camera = workspace.CurrentCamera
+ 
+local orbitRadius = 4.9  -- Closer orbit
+local orbitSpeed = 15     -- Speed of orbiting
+
+local targetRootPart = nil
+local isOrbiting = false
+local orbitEnabled = false -- Track toggle state
+
+-- Function to update the character and humanoid root part on respawn
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- If the orbit was enabled before dying, re-enable it
+    if orbitEnabled then
+        targetRootPart = findNearestPlayer()
+        if targetRootPart then
+            isOrbiting = true
+        end
+    end
+end
+
+-- Connect the character respawn event
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Function to find the nearest player
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge  -- Start with a very large distance
+
+    for _, plr in pairs(Players:GetPlayers()) do
+        if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local target = plr.Character:FindFirstChild("HumanoidRootPart")
+            local distance = (target.Position - humanoidRootPart.Position).Magnitude
+
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = target
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+-- Prevent camera from rotating with player
+local function lockCamera()
+    camera.CameraSubject = humanoidRootPart  -- Keep normal third-person view
+    UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+end
+
+-- Orbit logic
+local angle = 0
+RunService.RenderStepped:Connect(function(deltaTime)
+    if orbitEnabled and isOrbiting and targetRootPart and humanoidRootPart then
+        angle = angle + orbitSpeed * deltaTime
+
+        -- Calculate new position (same Y level as target)
+        local offsetX = math.cos(angle) * orbitRadius
+        local offsetZ = math.sin(angle) * orbitRadius
+        local newPosition = targetRootPart.Position + Vector3.new(offsetX, 0, offsetZ)
+
+        -- Set position smoothly without affecting camera movement
+        humanoidRootPart.CFrame = CFrame.new(newPosition) * CFrame.Angles(0, math.rad(angle * 10), 0)
+
+        -- Lock the camera to prevent jerky movement
+        lockCamera()
+    end
+end)
+
+-- Toggle integration
+local Toggle = Tab:CreateToggle({
+   Name = "orbit",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       orbitEnabled = Value -- Enable or disable orbiting based on toggle
+       
+       if orbitEnabled then
+           -- Find the nearest player when toggling on
+           targetRootPart = findNearestPlayer()
+           if targetRootPart then
+               isOrbiting = true -- Start orbiting the nearest player
+           end
+       else
+           isOrbiting = false -- Stop orbiting
+           targetRootPart = nil -- Remove target
+           
+           -- Reset the camera to normal Roblox controls
+           camera.CameraSubject = player.Character:FindFirstChild("Humanoid") or humanoidRootPart
+           UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+       end
+   end,
+})
+local Slider = Tab:CreateSlider({
+   Name = "orbit speed",
+   Range = {0, 100},
+   Increment = 2,
+   Suffix = "speed",
+   CurrentValue = 15,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+orbitSpeed = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+    Name = "glue",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        isToggled = Value  -- Update toggle state
+
+        if isToggled then
+            task.spawn(function()  -- Run in a separate thread
+                while isToggled do
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character
+                    local root = character and character:FindFirstChild("HumanoidRootPart")
+
+                    if root then
+                        local nearestPlayer = nil
+                        local shortestDistance = math.huge
+
+                        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+                            if otherPlayer ~= player and otherPlayer.Character then
+                                local otherRoot = otherPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                if otherRoot then
+                                    local distance = (root.Position - otherRoot.Position).Magnitude
+                                    if distance < shortestDistance then
+                                        shortestDistance = distance
+                                        nearestPlayer = otherRoot
+                                    end
+                                end
+                            end
+                        end
+
+                        -- Continuously teleport to the nearest player while toggled on
+                        if nearestPlayer then
+                            root.CFrame = nearestPlayer.CFrame
+                        end
+                    end
+                    
+                    task.wait()  -- Prevent excessive looping
+                end
+            end)
+        end
+    end,
+})
+
+-- Define variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local teleporting = false
+local mapSize = 1000 -- Define the map boundaries
+
+-- Function to get a random valid position
+local function getRandomPosition()
+    local randomX = math.random(-mapSize, mapSize)
+    local randomZ = math.random(-mapSize, mapSize)
+    local randomY = math.random(50, 200) -- Avoid too-low positions (like the void)
+    return Vector3.new(randomX, randomY, randomZ)
+end
+
+-- Function to teleport the player
+local function teleportPlayer(humanoidRootPart)
+    while teleporting do
+        local randomPosition = getRandomPosition()
+        humanoidRootPart.CFrame = CFrame.new(randomPosition)
+        task.wait() -- Adjust time between teleports if needed
+    end
+end
+
+-- Setup function
+local function setupCharacter(newCharacter)
+    character = newCharacter
+end
+
+-- Handle character resets
+player.CharacterAdded:Connect(setupCharacter)
+
+-- Rayfield Toggle
+local TeleportToggle = Tab:CreateToggle({
+    Name = "run (good against other exploiters)",
+    CurrentValue = false,
+    Flag = "TeleportToggle", -- Optional flag for saving state
+    Callback = function(value)
+        teleporting = value
+        if teleporting then
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            teleportPlayer(humanoidRootPart)
+        end
+    end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Void Tool",
+   Callback = function()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create the Tool
+local tool = Instance.new("Tool")
+tool.Name = "Void Tool"
+tool.RequiresHandle = false -- No handle needed
+tool.Parent = player.Backpack -- Add tool to the player's backpack
+
+local lastPosition = nil -- Variable to store last position
+
+-- Function to teleport when the tool is equipped
+local function onToolEquipped()
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            lastPosition = humanoidRootPart.Position -- Save last position
+            humanoidRootPart.CFrame = CFrame.new(0, -100, 0) -- Teleport into the void
+        end
+    end
+end
+
+-- Function to teleport back when the tool is unequipped
+local function onToolUnequipped()
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart and lastPosition then
+            task.wait(0.1) -- Small delay to ensure smooth teleporting
+            humanoidRootPart.CFrame = CFrame.new(lastPosition) -- Teleport back
+        end
+    end
+end
+
+-- Connect the functions to the tool's events
+tool.Equipped:Connect(onToolEquipped)
+tool.Unequipped:Connect(onToolUnequipped)
+
+
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Tab = Window:CreateTab("chat", "messages-square") -- Title, Image
+
+
+local Button = Tab:CreateButton({
+   Name = "chat bypass",
+   Callback = function()
+loadstring(game:HttpGet("https://pastefy.app/2DyqhuTU/raw"))()
+Rayfield:Notify({
+   Title = "ccgvb",
+   Content = "tags successfully deactivated",
+   Duration = 4,
+   Image = 83984952688042,
+})
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+local Button = Tab:CreateButton({
+   Name = "unsuspend vc (use after getting suspended)",
+   Callback = function()
+game:GetService("VoiceChatService"):joinVoice()
+Rayfield:Notify({
+   Title = "ccgvb",
+   Content = "voice chat successfully reactivated",
+   Duration = 5,
+   Image = 83984952688042,
+})
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Tab = Window:CreateTab("interface", "view") -- Title, Image
+
+local Dropdown = Tab:CreateDropdown({
+   Name = "Select Theme",
+   Options = {"Default", "AmberGlow", "Amethyst", "Bloom", "DarkBlue", "Green", "Light", "Ocean", "Serenity"},
+   CurrentOption = {"Default"}, -- The default selected option
+   MultipleOptions = false, -- Set to false since only one theme can be selected at a time
+   Flag = "ThemeDropdown", -- A unique identifier for the dropdown
+   Callback = function(Options)
+       -- Change the theme of the window
+       Window.ModifyTheme(Options[1]) -- Access the first (and only) selected option
+       print("Theme changed to: " .. Options[1])
+   end,
+})
+
+
+local Button = Tab:CreateButton({
+   Name = "anti bang/follow(use if a exploiter if following u)",
+   Callback = function()
+local player = game.Players.LocalPlayer
+local teleportCFrame = CFrame.new(
+    2.71699474e+26, 3.27617201e+36, 2.74425276e+23,
+    -0.710627139, 8.7885127e-10, -0.703568757,
+    5.95334004e-10, 1, 6.47826848e-10,
+    0.703568757, 4.15049314e-11, -0.710627139
+)
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TeleportGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create draggable Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 220, 0, 70)
+frame.Position = UDim2.new(0.5, -110, 0.5, -35)
+frame.BackgroundTransparency = 1
+-- This makes it draggable
+frame.Parent = screenGui
+
+-- Create TextButton inside frame
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0, 10, 0, 10)
+button.Text = "Teleport"
+button.BackgroundColor3 = Color3.fromRGB(50, 50, 200)
+button.TextColor3 = Color3.new(1, 1, 1)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 24
+button.Parent = frame
+button.Active = true
+button.Draggable = true -- This makes it draggable
+
+
+-- Button click behavior
+button.MouseButton1Click:Connect(function()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local hrp = character:WaitForChild("HumanoidRootPart")
+	
+	local originalCFrame = hrp.CFrame
+	
+	-- Teleport
+	hrp.CFrame = teleportCFrame
+	
+	task.wait(5) -- Stay there for 5 seconds
+	
+	-- Return to original spot
+	hrp.CFrame = originalCFrame
+end)
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+local Tab = Window:CreateTab("server", "server-cog") -- Title, Image
+
+
+
+local Button = Tab:CreateButton({
+   Name = "reset(bypasses combat/cooldown",
+   Callback = function()
+local player = game:GetService("Players").LocalPlayer
+
+local function resetCharacter()
+    local character = player.Character
+    if character and character:FindFirstChild("Humanoid") then
+        character.Humanoid.Health = 0  -- This will cause the character to die
+    end
+end
+
+resetCharacter()
+
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+local Button = Tab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+
+        -- Get the player's current server ID
+        local serverId = game.JobId 
+
+        -- Rejoin the exact same server
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, serverId, player)
+    end,
+})
+
+local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
+
+local Section = Tab:CreateSection("tools")
+local Button = Tab:CreateButton({
+   Name = "jerk off",
+   Callback = function()
+loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))("Spider Script")
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+
+
+
+
+local Button = Tab:CreateButton({
+   Name = "tpTool",
+   Callback = function()
+local player = game.Players.LocalPlayer
+
+-- Check if the tool has already been given
+local toolGiven = false
+
+local function giveTeleportTool()
+    if toolGiven then return end -- Prevent giving the tool again
+
+    -- Create the tool
+    local tool = Instance.new("Tool")
+    tool.Name = "TeleportTool"
+    tool.RequiresHandle = false -- No need for a physical handle
+
+    -- Tool activation event
+    tool.Activated:Connect(function()
+        local character = player.Character
+        if not character then return end
+
+        local mouse = player:GetMouse()
+        local targetPosition = mouse.Hit.p
+
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            -- Teleport slightly above the clicked position
+            humanoidRootPart.CFrame = CFrame.new(targetPosition + Vector3.new(0, 5, 0))
+        end
+    end)
+
+    -- Give the tool to the player
+    tool.Parent = player.Backpack
+    toolGiven = true -- Mark that the tool has been given
+end
+
+-- Give the tool when the player spawns for the first time
+if player.Character then
+    giveTeleportTool()
+end
+player.CharacterAdded:Connect(function()
+    giveTeleportTool() -- Only runs the first time
+end)
+
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Section = Tab:CreateSection("random")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local isRotating = false -- Toggle state
+local rotatespeed = 1
+
+-- Toggle function
+local spinnybot = Tab:CreateToggle({
+   Name = "Character Rotation",
+   CurrentValue = false,
+   Flag = "ToggleRotation",
+   Callback = function(Value)
+       isRotating = Value -- Set the toggle state
+   end,
+})
+
+-- Rotation logic
+RunService.RenderStepped:Connect(function()
+    if isRotating then
+        local Character = LocalPlayer.Character
+        if Character then
+            local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+            if HumanoidRootPart then
+                HumanoidRootPart.CFrame = HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(rotatespeed), 0)
+            end
+        end
+    end
+end)
+
+local Slider = Tab:CreateSlider({
+   Name = "spinbot speed",
+   Range = {0, 100},
+   Increment = 1,
+   Suffix = "speed",
+   CurrentValue = 1,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+rotatespeed = Value
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+
+
+local Toggle = Tab:CreateToggle({
+   Name = "tp to all loop",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if Value then
+looptping = true
+else 
+looptping = false 
+end
+local players = game:GetService("Players")
+local player = players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+while looptping do
+    for _, targetPlayer in pairs(players:GetPlayers()) do
+        if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local targetHRP = targetPlayer.Character.HumanoidRootPart
+            humanoidRootPart.CFrame = targetHRP.CFrame
+        end
+        task.wait()
+    end
+end
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+
+
+
+
+local Tab = Window:CreateTab("esp", "eye") -- Title, Image
+
+
+
+
+
+local Players = game:GetService("Players")
+local ESPEnabled = false
+local ESPColor = Color3.new(1, 0, 0) -- Default color (red)
+local Highlights = {} -- Store highlights to manage toggling
+
+-- Function to add/remove highlight effect
+local function updateESP()
+    if ESPEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player.Character then
+                if not Highlights[player] then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Parent = player.Character
+                    highlight.FillColor = ESPColor
+                    Highlights[player] = highlight
+                else
+                    Highlights[player].FillColor = ESPColor
+                end
+            end
+        end
+    else
+        -- Remove all highlights
+        for _, highlight in pairs(Highlights) do
+            if highlight then
+                highlight:Destroy()
+            end
+        end
+        Highlights = {}
+    end
+end
+
+-- Monitor new players joining
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        if ESPEnabled then
+            local highlight = Instance.new("Highlight")
+            highlight.Parent = character
+            highlight.FillColor = ESPColor
+            Highlights[player] = highlight
+        end
+    end)
+end)
+
+-- Toggle Button
+local Toggle = Tab:CreateToggle({
+   Name = "ESP",
+   CurrentValue = false,
+   Flag = "ToggleESP",
+   Callback = function(Value)
+       ESPEnabled = Value
+       updateESP()
+   end,
+})
+
+-- Color Picker
+local ColorPicker = Tab:CreateColorPicker({
+    Name = "ESP Color",
+    Color = Color3.fromRGB(255, 0, 0),
+    Flag = "ESPColorPicker",
+    Callback = function(Value)
+        ESPColor = Value
+        updateESP()
+    end
+})
+
+-- Initialize ESP for existing players if enabled
+updateESP()
+
+
+
+
+
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+if player.Name == "sigmaguypie" or player.Name == "hashtag_hashtagcoma8" then
+local Tab = Window:CreateTab("jojos") -- Title, Image
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local root = character:WaitForChild("HumanoidRootPart")
+local runService = game:GetService("RunService")
+
+local radius = 10  -- Radius of the circle
+local speed = 20   -- Speed of the teleportation (higher is faster)
+local angle = 0    -- Starting angle
+local running = false -- Toggle state
+
+local function audio()
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://4650379787"
+sound.Looped = false
+sound.Volume = 15
+sound.Parent = game.Players.LocalPlayer
+
+sound:Play()
+task.wait(3.3)
+local soundo = Instance.new("Sound")
+soundo.SoundId = "rbxassetid://8753555979"
+soundo.Looped = false
+soundo.Volume = 15
+soundo.Parent = game.Players.LocalPlayer
+
+soundo:Play()
+end
+
+local Toggle = Tab:CreateToggle({
+    Name = "Made In Heaven ",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        running = Value -- Update toggle state
+        if running then
+audio()
+
+
+            -- Start teleporting loop
+            while running do
+                angle = angle + speed * task.wait() -- Increases the angle
+                local x = math.cos(angle) * radius
+                local z = math.sin(angle) * radius
+                root.CFrame = CFrame.new(root.Position) * CFrame.new(x, 0, z)
+            end
+        end
+    end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "za warudo",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      local Players = game:GetService("Players")
+      local LocalPlayer = Players.LocalPlayer
+
+      -- Function to set anchor state for all parts of a character
+      local function setAnchorState(character, anchor)
+          for _, part in ipairs(character:GetDescendants()) do
+              if part:IsA("BasePart") then
+                  part.Anchored = anchor
+              end
+          end
+      end
+
+      -- Function to anchor all players except the local player
+      local function anchorAllOthers()
+          for _, player in ipairs(Players:GetPlayers()) do
+              if player ~= LocalPlayer and player.Character then
+                  setAnchorState(player.Character, true)
+              end
+          end
+      end
+
+      -- Function to unanchor all players
+      local function unanchorAllOthers()
+          for _, player in ipairs(Players:GetPlayers()) do
+              if player ~= LocalPlayer and player.Character then
+                  setAnchorState(player.Character, false)
+              end
+          end
+      end
+
+      if Value then
+          -- Play sound when toggle is enabled
+          local sund = Instance.new("Sound")
+          sund.SoundId = "rbxassetid://108032941696005"
+          sund.Volume = 15
+          sund.Looped = false
+          sund.Parent = game.Players.LocalPlayer
+          sund:Play()
+          
+          wait(0.5)
+          
+          -- Apply anchoring
+          anchorAllOthers()
+
+          -- Listen for new players and anchor them when they spawn
+          Players.PlayerAdded:Connect(function(player)
+              if player ~= LocalPlayer then
+                  player.CharacterAdded:Connect(function(character)
+                      setAnchorState(character, true)
+                  end)
+              end
+          end)
+      else
+          -- Unanchor all players when the toggle is turned off
+          unanchorAllOthers()
+      end
+   end,
+})
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+local animator = character:FindFirstChildWhichIsA("Animator", true)
+
+-- Function to enable or disable the effect
+local function toggleAnchorAndAnimations(Value)
+    if humanoidRootPart then
+        humanoidRootPart.Anchored = Value -- Anchor when true, unanchor when false
+    end
+
+    
+end
+
+
+
+-- Toggle UI Button Integration
+local Toggle = Tab:CreateToggle({
+   Name = "get za warudoded",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+if Value then
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://9058393493"
+sound.Looped = false
+sound.Volume = 20
+sound.Parent = game.Players.LocalPlayer
+
+sound:Play()
+end
+
+       toggleAnchorAndAnimations(Value)
+
+
+
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "stand",
+   Callback = function()
+-- LocalScript placed in StarterPlayer -> StarterPlayerScripts
+
+local player = game.Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+-- Wait for the character to load
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Clone the character and remove scripts so the clone doesn't run any code or interfere
+local clone = character:Clone()
+clone.Name = character.Name .. "_Clone"
+clone.Parent = workspace
+
+-- Optionally remove any LocalScripts or Scripts from the clone so it just acts as a dummy
+for _, descendant in ipairs(clone:GetDescendants()) do
+    if descendant:IsA("LocalScript") or descendant:IsA("Script") then
+        descendant:Destroy()
+    end
+end
+
+-- Define the offset from the original character (adjust as needed)
+local offsetVector = Vector3.new(5, 0, 0)
+
+-- Ensure both models have a PrimaryPart set (Roblox sets HumanoidRootPart by default)
+if not character.PrimaryPart then
+    character.PrimaryPart = character:FindFirstChild("HumanoidRootPart")
+end
+if not clone.PrimaryPart then
+    clone.PrimaryPart = clone:FindFirstChild("HumanoidRootPart")
+end
+
+-- Function to update the clone's parts so that it mimics the player's character
+local function updateClone()
+    -- Iterate over each part in the player's character
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            -- Try to find a matching part in the clone
+            local clonePart = clone:FindFirstChild(part.Name, true)
+            if clonePart and clonePart:IsA("BasePart") then
+                -- Copy the CFrame with the offset applied
+                clonePart.CFrame = part.CFrame * CFrame.new(offsetVector)
+            end
+        end
+    end
+end
+
+-- Update the clone every frame
+RunService.RenderStepped:Connect(updateClone)
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+end
+
+
+
+
+if game.PlaceId == 10449761463 then
+local Tab = Window:CreateTab("tsb") -- Title, Image
+local Section = Tab:CreateSection("stun")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local monitoring = false -- State to track if the monitoring is active
+local monitoringTask -- Variable to store the monitoring task
+
+-- Function to continuously monitor and remove the "Slowed" accessory
+local function monitorForSlowedAccessory()
+    -- Wait for the character to load
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Function to remove the "Slowed" accessory if it's found
+    local function removeSlowed()
+        for _, accessory in pairs(character:GetChildren()) do
+            if accessory:IsA("Accessory") and accessory.Name == "Slowed" then
+                accessory:Destroy()
+            end
+        end
+    end
+
+    -- Continuously check for the "Slowed" accessory
+    while monitoring do
+        if character and character.Parent then
+            removeSlowed()
+        end
+        task.wait(0.1) -- Check every 0.1 seconds
+    end
+end
+
+-- Rayfield Toggle
+local Toggle = Tab:CreateToggle({
+    Name = "no stun",
+    CurrentValue = false, -- Start with the toggle off
+    Flag = "NoSlowedToggle", -- Unique identifier for the toggle
+    Callback = function(Value)
+        monitoring = Value -- Set monitoring state based on toggle
+        if monitoring then
+            -- Start monitoring if toggle is enabled
+            monitoringTask = task.spawn(monitorForSlowedAccessory)
+        else
+            -- Stop monitoring if toggle is disabled
+            if monitoringTask then
+                task.cancel(monitoringTask)
+                monitoringTask = nil
+            end
+        end
+    end,
+})
+task.spawn(function()
+    local Players = game:GetService("Players")
+    local CurrentPlayer = Players.LocalPlayer
+
+    local isInvisibleBlockActive = false
+
+    local function blockAnimationIfActive(animationTrack)
+        local currentAnimationId = animationTrack.Animation.AnimationId
+        local restrictedAnimationId = "rbxassetid://10470389827"
+
+        print("Animation Played:", currentAnimationId)
+
+        if isInvisibleBlockActive and currentAnimationId == restrictedAnimationId then
+            animationTrack:Stop()
+            print("Blocked animation with ID:", currentAnimationId)
+        end
+    end
+
+    local function monitorAnimationsForCharacter(character)
+        local humanoid = character:WaitForChild("Humanoid", 5)
+        if humanoid then
+            local animator = humanoid:FindFirstChildOfClass("Animator")
+            if animator then
+                animator.AnimationPlayed:Connect(blockAnimationIfActive)
+            end
+        end
+    end
+
+    if CurrentPlayer.Character then
+        monitorAnimationsForCharacter(CurrentPlayer.Character)
+    end
+
+    CurrentPlayer.CharacterAdded:Connect(monitorAnimationsForCharacter)
+
+    Tab:CreateToggle({
+        Name = "Invisible Block",
+        CurrentValue = false,
+        Flag = "Toggle1",
+        Callback = function(Value)
+            isInvisibleBlockActive = Value
+            print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
+        end,
+    })
+end)
+
+local Section = Tab:CreateSection("death counter")
+local Button = Tab:CreateButton({
+   Name = "death counter notifier",
+   Callback = function()
+-- Made by ItsLouisPlayz AKA 1ml3g1t
+loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/TSB%20Death%20Counter%20Identifier.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "character lock on",
+   Callback = function()
+
+
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/refs/heads/main/Lock%20On.lua"))()
+
+    
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+local Section = Tab:CreateSection("movesets")
+local Button = Tab:CreateButton({
+   Name = "gojo moveset (saitama)",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibiditoiletfan2007/BaldyToSorcerer/refs/heads/main/LatestV2.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "trashcan man OP",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads/main/Trashcan%20Man", true))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Button = Tab:CreateButton({
+   Name = "void garou OP",
+   Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads/main/Void%20Reaper%20Obfuscated.txt"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Section = Tab:CreateSection("void stuff")
+local Button = Tab:CreateButton({
+   Name = "void kill (GUI)",
+   Callback = function()
+-- VOID V2! MADE BY ItsLouisPlayz AKA 1ml3g1t
+-- Press R to teleport to the void, For mobile there will be a button for it
+-- Yes this does gives u kills :)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/VOID%20V2%20TSB.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+
+-- Variable to track toggle state
+local voidKillEnabled = false
+
+-- Function to enable or disable the void teleport
+local function toggleVoidKill(enabled)
+    if enabled then
+        -- Prevent the game from deleting parts below the void
+        workspace.FallenPartsDestroyHeight = 0/0
+
+        -- If there's already a loop running, stop it
+        if getgenv().loop then
+            coroutine.close(getgenv().loop)
+            getgenv().loop = nil
+        end
+
+        -- Define animations that trigger the void teleport
+        local animations = {
+            ["rbxassetid://12273188754"] = 1.311,
+            ["rbxassetid://12296113986"] = 1.2,
+        }
+
+        -- Function to check if animation exists in the list
+        local function ifind(t, a)
+            for i, v in pairs(t) do
+                if i == a then
+                    return i
+                end
+            end
+            return false
+        end
+
+        local plr = game.Players.LocalPlayer
+
+        -- Start the teleport loop
+        getgenv().loop = coroutine.create(function()
+            local dothetech = false
+            local lastcf
+
+            while task.wait() do 
+                if not voidKillEnabled then break end  -- Stop if toggle is disabled
+
+                local character = plr.Character
+                if not character or not character:FindFirstChild("HumanoidRootPart") then continue end
+
+                local animate = character.Humanoid:FindFirstChild("Animator")
+                if not animate then continue end
+
+                for i, v in pairs(animate:GetPlayingAnimationTracks()) do
+                    if ifind(animations, v.Animation.AnimationId) then
+                        task.wait(animations[v.Animation.AnimationId])
+                        dothetech = true
+                        lastcf = character.HumanoidRootPart.CFrame
+
+                        v.Stopped:Connect(function()
+                            dothetech = false
+                        end)
+
+                        repeat
+                            task.wait()
+                            workspace.Camera.CameraType = Enum.CameraType.Scriptable
+                            character.HumanoidRootPart.CFrame = CFrame.new(-1200, -460, 67)
+                            character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+                            character.HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+                        until not dothetech or not voidKillEnabled  -- Stop if toggle is disabled
+
+                        task.wait(0.1)
+                        if voidKillEnabled then
+                            character.HumanoidRootPart.CFrame = lastcf
+                        end
+                        workspace.Camera.CameraType = Enum.CameraType.Custom
+                        workspace.Camera.CameraSubject = character.Humanoid
+                        task.wait(1)
+                    end
+                end
+            end
+        end)
+
+        coroutine.resume(getgenv().loop)
+    else
+        -- Disable the void teleport
+        voidKillEnabled = false
+        if getgenv().loop then
+            coroutine.close(getgenv().loop)
+            getgenv().loop = nil
+        end
+    end
+end
+
+-- Toggle Button
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Void Kill(garou)",
+    CurrentValue = false,
+    Flag = "VoidKillToggle", -- Unique identifier for config saving
+    Callback = function(Value)
+        voidKillEnabled = Value
+        toggleVoidKill(Value)
+    end,
+})
+local Section = Tab:CreateSection("clientstuff")
+local Input = Tab:CreateInput({
+   Name = "total kills (CLIENT)",
+   CurrentValue = "",
+   PlaceholderText = "how many kills u want...",
+   RemoveTextAfterFocusLost = true,
+   Flag = "Input1",
+   Callback = function(Text)
+game.Players.LocalPlayer.leaderstats["Total Kills"].Value = Text
+   -- The function that takes place when the input is changed
+   -- The variable (Text) is a string for the value in the text box
+   end,
+})
+
+end
+local Tab = Window:CreateTab("evil") -- Title, Image
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+local Teleporting = false -- Variable to track toggle state
+
+-- Toggle function
+local Toggle = Tab:CreateToggle({
+   Name = "make random player teleport around u(report)",
+   CurrentValue = false,
+   Flag = "SpamTeleportToggle", 
+   Callback = function(Value)
+       Teleporting = Value -- Set Teleporting to true/false based on toggle state
+   end,
+})
+
+-- Function to find the nearest player
+local function getNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+    local myPosition = Character.PrimaryPart.Position
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character.PrimaryPart then
+            local distance = (player.Character.PrimaryPart.Position - myPosition).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestPlayer = player
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+-- Teleport loop (runs only when toggle is ON)
+RunService.RenderStepped:Connect(function()
+    if Teleporting then
+        local nearestPlayer = getNearestPlayer()
+        
+        if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character.PrimaryPart then
+            local randomOffset = Vector3.new(
+                math.random(-10, 10),
+                math.random(1, 5),
+                math.random(-10, 10)
+            )
+            nearestPlayer.Character.PrimaryPart.CFrame = Character.PrimaryPart.CFrame * CFrame.new(randomOffset)
+        end
+    end
+end)
+local Tab = Window:CreateTab("suggestions🥀") -- Title, Image
+-- Function to send a message to the Discord webhook
+local function sendToDiscord(message)
+    local url = "https://discord.com/api/webhooks/1357796855643373578/bo0x1HPb8_KNxAB_lZoJkYTXaqXKKItsvBKlsws6RTqIpJi8BcffRNFALMxrrB0L8GyC" -- Your webhook URL
+    local data = {
+        ["content"] = message
+    }
+    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+    
+    -- Use the executor's http_request function to send the POST request
+    http_request({
+        Url = url,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
+local Paragraph = Tab:CreateParagraph({Title = "🥀🥀", Content = "reading some of these suggestions are painful. Please make coherent sentences"})
+-- Create an Input box using Rayfield
+local Input = Tab:CreateInput({
+    Name = "suggestions",
+    CurrentValue = "",
+    PlaceholderText = "what should i add...",
+    RemoveTextAfterFocusLost = true,
+    Flag = "Input1",
+    Callback = function(Text)
+        -- The function that takes place when the input is changed
+        -- The variable (Text) is a string for the value in the text box
+        sendToDiscord(Text)
+    end,
+})
+
+
+if game.PlaceId == 9391468976 then
+local Tab = Window:CreateTab("jjs") -- Title, Image
+local Label = Tab:CreateLabel("all of these bypass the games anti cheat", 138742395182764, Color3.fromRGB(11, 227, 184), false) -- Title, Icon, Color, IgnoreTheme
+local RunService = game:GetService("RunService")
+local Toggle = Tab:CreateToggle({
+   Name = "CFrame speed",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+tpWalking = Value
+   -- The function that takes place when the toggle is pressed
+   -- The variable (Value) is a boolean on whether the toggle is true or false
+   end,
+})
+local RunService = game:GetService("RunService")
+
+local Slider = Tab:CreateSlider({
+    Name = "CFrame speed (better walkspeed)",
+    Range = {0, 120},
+    Increment = 1,
+    Suffix = "CFrame",
+    CurrentValue = 0,
+    Flag = "Slider1", 
+    Callback = function(Value)
+        
+        tpWalkSpeed = Value
+
+        -- Stop existing loop if already running
+        if not tpWalking then return end
+        
+        -- Run movement loop in a separate thread
+        task.spawn(function()
+            local hb = RunService.Heartbeat
+            local char = game.Players.LocalPlayer.Character
+            local hum = char and char:FindFirstChildWhichIsA("Humanoid")
+            
+            while tpWalking and char and hum and hum.Parent do
+                local delta = hb:Wait()
+                if hum.MoveDirection.Magnitude > 0 then
+                    char:TranslateBy(hum.MoveDirection * delta * tpWalkSpeed)
+                end
+            end
+        end)
+    
+end,
+})
+
+
+Tab:CreateToggle({
+    Name = "behind", -- Name of the toggle
+    CurrentValue = false, -- Initial state is OFF
+    Callback = function(toggleState) -- Function triggered when the toggle is toggled
+        isFollowing = toggleState
+        if isFollowing then
+            -- Lock onto the nearest player
+            if not lockedPlayer then
+                local nearestPlayerRenamed = getNearestPlayer()
+                if nearestPlayerRenamed then
+                    setLockedPlayer(nearestPlayerRenamed)
+                end
+            end
+            -- Start following the locked player
+            runServiceRenamed.RenderStepped:Connect(function()
+                if isFollowing then
+                    moveToLockedPlayer()
+                end
+            end)
+        else
+            -- Stop following and reset the lock
+            lockedPlayer = nil
+        end
+    end
+})
+
+
+
+
+local monitoring = false -- Variable to track toggle state
+local toggleFunction -- Variable to hold the monitoring task
+local Divider = Tab:CreateDivider()
+local Toggle = Tab:CreateToggle({
+    Name = "no stun",
+    CurrentValue = false,
+    Flag = "RemoveStunToggle", -- Unique identifier for the toggle
+    Callback = function(Value)
+        monitoring = Value -- Update the monitoring state
+
+        if monitoring then
+            -- Start monitoring for "Stun" removal
+            toggleFunction = task.spawn(function()
+                local Players = game:GetService("Players")
+                local player = Players.LocalPlayer
+
+                local function monitorForStun()
+                    local charactersModel = workspace:WaitForChild("Characters")
+                    local character = charactersModel:WaitForChild(player.Name)
+                    local infoFolder = character:WaitForChild("Info")
+
+                    local function removeStun()
+                        for _, value in pairs(infoFolder:GetChildren()) do
+                            if value:IsA("BoolValue") and value.Name == "Stun" then
+                                value:Destroy()
+                            end
+                        end
+                    end
+
+                    while monitoring do -- Continue monitoring while toggle is active
+                        if infoFolder and infoFolder.Parent then
+                            removeStun()
+                        end
+                        task.wait(0.1)
+                    end
+                end
+
+                monitorForStun()
+            end)
+        else
+            -- Stop monitoring (toggle turned off)
+            monitoring = false -- Ensure the loop terminates
+
+            -- Cancel the task if it is still running
+            if toggleFunction then
+                task.cancel(toggleFunction)
+                toggleFunction = nil
+            end
+        end
+    end,
+})
+
+task.spawn(function()
+    local Players = game:GetService("Players")
+    local CurrentPlayer = Players.LocalPlayer
+
+    local isInvisibleBlockActive = false
+
+    local function blockAnimationIfActive(animationTrack)
+        local currentAnimationId = animationTrack.Animation.AnimationId
+        local restrictedAnimationId = "rbxassetid://9579763957" -- Updated ID
+
+        print("Animation Played:", currentAnimationId)
+
+        if isInvisibleBlockActive and currentAnimationId == restrictedAnimationId then
+            animationTrack:Stop()
+            print("Blocked animation with ID:", currentAnimationId)
+        end
+    end
+
+    local function monitorAnimationsForCharacter(character)
+        local humanoid = character:WaitForChild("Humanoid", 5)
+        if humanoid then
+            local animator = humanoid:FindFirstChildOfClass("Animator")
+            if animator then
+                animator.AnimationPlayed:Connect(blockAnimationIfActive)
+            end
+        end
+    end
+
+    if CurrentPlayer.Character then
+        monitorAnimationsForCharacter(CurrentPlayer.Character)
+    end
+
+    CurrentPlayer.CharacterAdded:Connect(monitorAnimationsForCharacter)
+
+    Tab:CreateToggle({
+        Name = "Invisible Block",
+        CurrentValue = false,
+        Flag = "Toggle1",
+        Callback = function(Value)
+            isInvisibleBlockActive = Value
+            print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
+        end,
+    })
+end)
+
+local Divider = Tab:CreateDivider()
+local Button = Tab:CreateButton({
+   Name = "fly",
+   Callback = function()
+local main = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local up = Instance.new("TextButton")
+local down = Instance.new("TextButton")
+local onof = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local plus = Instance.new("TextButton")
+local speed = Instance.new("TextLabel")
+local mine = Instance.new("TextButton")
+local closebutton = Instance.new("TextButton")
+local mini = Instance.new("TextButton")
+local mini2 = Instance.new("TextButton")
+
+main.Name = "main"
+main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+main.ResetOnSpawn = false
+
+Frame.Parent = main
+Frame.BackgroundColor3 = Color3.fromRGB(163, 255, 137)
+Frame.BorderColor3 = Color3.fromRGB(103, 221, 213)
+Frame.Position = UDim2.new(0.100320168, 0, 0.379746825, 0)
+Frame.Size = UDim2.new(0, 190, 0, 57)
+
+up.Name = "up"
+up.Parent = Frame
+up.BackgroundColor3 = Color3.fromRGB(79, 255, 152)
+up.Size = UDim2.new(0, 44, 0, 28)
+up.Font = Enum.Font.SourceSans
+up.Text = "UP"
+up.TextColor3 = Color3.fromRGB(0, 0, 0)
+up.TextSize = 14.000
+
+down.Name = "down"
+down.Parent = Frame
+down.BackgroundColor3 = Color3.fromRGB(215, 255, 121)
+down.Position = UDim2.new(0, 0, 0.491228074, 0)
+down.Size = UDim2.new(0, 44, 0, 28)
+down.Font = Enum.Font.SourceSans
+down.Text = "DOWN"
+down.TextColor3 = Color3.fromRGB(0, 0, 0)
+down.TextSize = 14.000
+
+onof.Name = "onof"
+onof.Parent = Frame
+onof.BackgroundColor3 = Color3.fromRGB(255, 249, 74)
+onof.Position = UDim2.new(0.702823281, 0, 0.491228074, 0)
+onof.Size = UDim2.new(0, 56, 0, 28)
+onof.Font = Enum.Font.SourceSans
+onof.Text = "fly"
+onof.TextColor3 = Color3.fromRGB(0, 0, 0)
+onof.TextSize = 14.000
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(242, 60, 255)
+TextLabel.Position = UDim2.new(0.469327301, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 100, 0, 28)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "FLY GUI V3"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+plus.Name = "plus"
+plus.Parent = Frame
+plus.BackgroundColor3 = Color3.fromRGB(133, 145, 255)
+plus.Position = UDim2.new(0.231578946, 0, 0, 0)
+plus.Size = UDim2.new(0, 45, 0, 28)
+plus.Font = Enum.Font.SourceSans
+plus.Text = "+"
+plus.TextColor3 = Color3.fromRGB(0, 0, 0)
+plus.TextScaled = true
+plus.TextSize = 14.000
+plus.TextWrapped = true
+
+speed.Name = "speed"
+speed.Parent = Frame
+speed.BackgroundColor3 = Color3.fromRGB(255, 85, 0)
+speed.Position = UDim2.new(0.468421042, 0, 0.491228074, 0)
+speed.Size = UDim2.new(0, 44, 0, 28)
+speed.Font = Enum.Font.SourceSans
+speed.Text = "1"
+speed.TextColor3 = Color3.fromRGB(0, 0, 0)
+speed.TextScaled = true
+speed.TextSize = 14.000
+speed.TextWrapped = true
+
+mine.Name = "mine"
+mine.Parent = Frame
+mine.BackgroundColor3 = Color3.fromRGB(123, 255, 247)
+mine.Position = UDim2.new(0.231578946, 0, 0.491228074, 0)
+mine.Size = UDim2.new(0, 45, 0, 29)
+mine.Font = Enum.Font.SourceSans
+mine.Text = "-"
+mine.TextColor3 = Color3.fromRGB(0, 0, 0)
+mine.TextScaled = true
+mine.TextSize = 14.000
+mine.TextWrapped = true
+
+closebutton.Name = "Close"
+closebutton.Parent = main.Frame
+closebutton.BackgroundColor3 = Color3.fromRGB(225, 25, 0)
+closebutton.Font = "SourceSans"
+closebutton.Size = UDim2.new(0, 45, 0, 28)
+closebutton.Text = "X"
+closebutton.TextSize = 30
+closebutton.Position = UDim2.new(0, 0, -1, 27)
+
+mini.Name = "minimize"
+mini.Parent = main.Frame
+mini.BackgroundColor3 = Color3.fromRGB(192, 150, 230)
+mini.Font = "SourceSans"
+mini.Size = UDim2.new(0, 45, 0, 28)
+mini.Text = "-"
+mini.TextSize = 40
+mini.Position = UDim2.new(0, 44, -1, 27)
+
+mini2.Name = "minimize2"
+mini2.Parent = main.Frame
+mini2.BackgroundColor3 = Color3.fromRGB(192, 150, 230)
+mini2.Font = "SourceSans"
+mini2.Size = UDim2.new(0, 45, 0, 28)
+mini2.Text = "+"
+mini2.TextSize = 40
+mini2.Position = UDim2.new(0, 44, -1, 57)
+mini2.Visible = false
+
+speeds = 1
+
+local speaker = game:GetService("Players").LocalPlayer
+
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+nowe = false
+
+game:GetService("StarterGui"):SetCore("SendNotification", { 
+Title = "FLY GUI V3";
+Text = "BY XNEO";
+Icon = "rbxthumb://type=Asset&id=5107182114&w=150&h=150"})
+Duration = 5;
+
+Frame.Active = true -- main = gui
+Frame.Draggable = true
+
+onof.MouseButton1Down:connect(function()
+
+if nowe == true then
+nowe = false
+
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+else 
+nowe = true
+
+
+
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+local Char = game.Players.LocalPlayer.Character
+local Hum = Char:FindFirstChildOfClass("Humanoid") or Char:FindFirstChildOfClass("AnimationController")
+
+for i,v in next, Hum:GetPlayingAnimationTracks() do
+v:AdjustSpeed(0)
+end
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+end
+
+
+
+
+if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then
+
+
+
+local plr = game.Players.LocalPlayer
+local torso = plr.Character.Torso
+local flying = true
+local deb = true
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local maxspeed = 50
+local speed = 0
+
+
+local bg = Instance.new("BodyGyro", torso)
+bg.P = 9e4
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+bg.cframe = torso.CFrame
+local bv = Instance.new("BodyVelocity", torso)
+bv.velocity = Vector3.new(0,0.1,0)
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+if nowe == true then
+plr.Character.Humanoid.PlatformStand = true
+end
+while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+game:GetService("RunService").RenderStepped:Wait()
+
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+speed = speed+.5+(speed/maxspeed)
+if speed > maxspeed then
+speed = maxspeed
+end
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+speed = speed-1
+if speed < 0 then
+speed = 0
+end
+end
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+else
+bv.velocity = Vector3.new(0,0,0)
+end
+-- game.Players.LocalPlayer.Character.Animate.Disabled = true
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+end
+ctrl = {f = 0, b = 0, l = 0, r = 0}
+lastctrl = {f = 0, b = 0, l = 0, r = 0}
+speed = 0
+bg:Destroy()
+bv:Destroy()
+plr.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+tpwalking = false
+
+
+
+
+else
+local plr = game.Players.LocalPlayer
+local UpperTorso = plr.Character.UpperTorso
+local flying = true
+local deb = true
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local maxspeed = 50
+local speed = 0
+
+
+local bg = Instance.new("BodyGyro", UpperTorso)
+bg.P = 9e4
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+bg.cframe = UpperTorso.CFrame
+local bv = Instance.new("BodyVelocity", UpperTorso)
+bv.velocity = Vector3.new(0,0.1,0)
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+if nowe == true then
+plr.Character.Humanoid.PlatformStand = true
+end
+while nowe == true or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0 do
+wait()
+
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+speed = speed+.5+(speed/maxspeed)
+if speed > maxspeed then
+speed = maxspeed
+end
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then
+speed = speed-1
+if speed < 0 then
+speed = 0
+end
+end
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
+else
+bv.velocity = Vector3.new(0,0,0)
+end
+
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0)
+end
+ctrl = {f = 0, b = 0, l = 0, r = 0}
+lastctrl = {f = 0, b = 0, l = 0, r = 0}
+speed = 0
+bg:Destroy()
+bv:Destroy()
+plr.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+tpwalking = false
+
+
+
+end
+
+
+
+
+
+end)
+
+local tis
+
+up.MouseButton1Down:connect(function()
+tis = up.MouseEnter:connect(function()
+while tis do
+wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,1,0)
+end
+end)
+end)
+
+up.MouseLeave:connect(function()
+if tis then
+tis:Disconnect()
+tis = nil
+end
+end)
+
+local dis
+
+down.MouseButton1Down:connect(function()
+dis = down.MouseEnter:connect(function()
+while dis do
+wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,-1,0)
+end
+end)
+end)
+
+down.MouseLeave:connect(function()
+if dis then
+dis:Disconnect()
+dis = nil
+end
+end)
+
+
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(char)
+wait(0.7)
+game.Players.LocalPlayer.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+
+end)
+
+
+plus.MouseButton1Down:connect(function()
+speeds = speeds + 1
+speed.Text = speeds
+if nowe == true then
+
+
+tpwalking = false
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+end
+end)
+mine.MouseButton1Down:connect(function()
+if speeds == 1 then
+speed.Text = 'cannot be less than 1'
+wait(1)
+speed.Text = speeds
+else
+speeds = speeds - 1
+speed.Text = speeds
+if nowe == true then
+tpwalking = false
+for i = 1, speeds do
+spawn(function()
+
+local hb = game:GetService("RunService").Heartbeat 
+
+
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+
+end)
+end
+end
+end
+end)
+
+closebutton.MouseButton1Click:Connect(function()
+main:Destroy()
+end)
+
+mini.MouseButton1Click:Connect(function()
+up.Visible = false
+down.Visible = false
+onof.Visible = false
+plus.Visible = false
+speed.Visible = false
+mine.Visible = false
+mini.Visible = false
+mini2.Visible = true
+main.Frame.BackgroundTransparency = 1
+closebutton.Position = UDim2.new(0, 0, -1, 57)
+end)
+
+mini2.MouseButton1Click:Connect(function()
+up.Visible = true
+down.Visible = true
+onof.Visible = true
+plus.Visible = true
+speed.Visible = true
+mine.Visible = true
+mini.Visible = true
+mini2.Visible = false
+main.Frame.BackgroundTransparency = 0 
+closebutton.Position = UDim2.new(0, 0, -1, 27)
+end)
+   -- The function that takes place when the button is pressed
+   end,
+})
+end
+
+
+
+local Tab = Window:CreateTab("fun", "laugh") -- Title, Image
+
+
+
+-- Declare the variable to store the currently playing animation track
+local currentAnimationTrack = nil
+
+-- Create a Rayfield text input for animation playback
+Tab:CreateInput({
+    Name = "Animations",
+    PlaceholderText = "Enter Animation ID Here",
+    RemoveTextAfterFocusLost = true,
+    Callback = function(AnimationID)
+        -- Ensure the AnimationID is valid
+        if tonumber(AnimationID) then
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoid = character:FindFirstChild("Humanoid")
+
+            if humanoid then
+                local animator = humanoid:FindFirstChild("Animator") or humanoid:WaitForChild("Animator")
+                local animation = Instance.new("Animation")
+                animation.AnimationId = "rbxassetid://" .. AnimationID
+
+                -- Stop the currently playing animation (if any) before playing a new one
+                if currentAnimationTrack then
+                    currentAnimationTrack:Stop()
+                end
+
+                -- Load and play the new animation
+                currentAnimationTrack = animator:LoadAnimation(animation)
+                currentAnimationTrack:Play()
+            else
+                warn("Humanoid not found in character")
+            end
+        else
+            warn("Invalid Animation ID entered")
+        end
+    end,
+})
+
+-- Create a Rayfield button to stop the currently playing animation
+Tab:CreateButton({
+    Name = "Stop Animation",
+    Callback = function()
+        if currentAnimationTrack then
+            currentAnimationTrack:Stop()
+            currentAnimationTrack = nil
+        else
+            warn("No animation is currently playing")
+        end
+    end,
+})
+local Input = Tab:CreateInput({
+   Name = "print",
+   CurrentValue = "",
+   PlaceholderText = "print...",
+   RemoveTextAfterFocusLost = true,
+   Flag = "Input1",
+   Callback = function(Text)
+print(Text)
+   -- The function that takes place when the input is changed
+   -- The variable (Text) is a string for the value in the text box
+   end,
+})
+
+
+
