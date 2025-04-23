@@ -3051,6 +3051,7 @@ TELEPORT_DISTANCE = Value
    end,
 })
 local Divider = Tab:CreateDivider()
+
 task.spawn(function()
     local Players = game:GetService("Players")
     local CurrentPlayer = Players.LocalPlayer
@@ -3095,6 +3096,7 @@ task.spawn(function()
         end,
     })
 end)
+
 local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
    Name = "character lock on",
@@ -3136,7 +3138,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads
    -- The function that takes place when the button is pressed
    end,
 })
-local Divider = Tab:CreateDivider()
+
 local Button = Tab:CreateButton({
    Name = "void garou OP",
    Callback = function()
