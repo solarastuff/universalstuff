@@ -1,4 +1,6 @@
- spawn
+
+
+--[[ spawn
 player.CharacterAdded:Connect(onCharacterAdded)
 
 -- Toggle button to control no-clip
@@ -2553,3 +2555,5 @@ elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then
 bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed
 else
 bv.velocity =then
+
+]]
