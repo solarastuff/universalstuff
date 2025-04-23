@@ -1,4 +1,59 @@
+-- Create a ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+-- Create a Frame for the GUI
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0.3, 0, 0.3, 0)
+frame.Position = UDim2.new(0.35, 0, 0.35, 0)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.Parent = screenGui
+
+-- Create a Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0.3, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Text = "Error"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextScaled = true
+titleLabel.Parent = frame
+
+-- Create a Content Label
+local contentLabel = Instance.new("TextLabel")
+contentLabel.Size = UDim2.new(1, 0, 0.4, 0)
+contentLabel.Position = UDim2.new(0, 0, 0.3, 0)
+contentLabel.Text = "script got really bugged for sum reason click the button for the new load string"
+contentLabel.TextColor3 = Color3.new(1, 1, 1)
+contentLabel.BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+contentLabel.Font = Enum.Font.SourceSans
+contentLabel.TextScaled = true
+contentLabel.Parent = frame
+
+-- Create a Button
+local copyButton = Instance.new("TextButton")
+copyButton.Size = UDim2.new(0.6, 0, 0.2, 0)
+copyButton.Position = UDim2.new(0.2, 0, 0.75, 0)
+copyButton.Text = "Copy to Clipboard"
+copyButton.TextColor3 = Color3.new(1, 1, 1)
+copyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 200)
+copyButton.Font = Enum.Font.SourceSansBold
+copyButton.TextScaled = true
+copyButton.Parent = frame
+
+-- Text to be copied
+local textToCopy = "loadstring(game:HttpGet('https://raw.githubusercontent.com/solarastuff/universalstuff/refs/heads/main/codeV3'))()"
+
+-- Button functionality to copy text to clipboard
+copyButton.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(textToCopy) -- Copies the text to the clipboard
+        print("Text copied to clipboard!")
+    else
+        print("Clipboard functionality is not supported on this platform.")
+    end
+end)
 
 --[[ spawn
 player.CharacterAdded:Connect(onCharacterAdded)
