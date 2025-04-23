@@ -51,7 +51,7 @@ local textToCopy = "loadstring(game:HttpGet('https://raw.githubusercontent.com/s
 copyButton.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard(textToCopy) -- Copies the text to the clipboard
-        copyButton.Text = Copied!
+        copyButton.Text = "Copied!"
     else
         print("Clipboard functionality is not supported on this platform.")
     end
