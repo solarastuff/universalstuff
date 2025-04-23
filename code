@@ -3034,22 +3034,7 @@ local Toggle = Tab:CreateToggle({
     end,
 })
 
-local Slider = Tab:CreateSlider({
-   Name = "teleport distance",
-   Range = {0, 30},
-   Increment = 2,
-   Suffix = "feet",
-   CurrentValue = 4.5,
-   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Value)
 
-
-TELEPORT_DISTANCE = Value
-
-   -- The function that takes place when the slider changes
-   -- The variable (Value) is a number which correlates to the value the slider is currently at
-   end,
-})
 local Divider = Tab:CreateDivider()
 
 task.spawn(function()
