@@ -2960,7 +2960,7 @@ task.spawn(function()
         end,
     })
 end)
-local Divider = Tab:CreateDivider()
+
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
