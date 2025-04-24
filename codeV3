@@ -2915,7 +2915,7 @@ local Toggle = Tab:CreateToggle({
         end
     end,
 })
-local Divider = Tab:CreateDivider()
+
 task.spawn(function()
     local Players = game:GetService("Players")
     local CurrentPlayer = Players.LocalPlayer
