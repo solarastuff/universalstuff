@@ -3031,7 +3031,7 @@ end)
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
-    Name = "Enable Hitbox and Teleport (Accessory Check)",
+    Name = "auto dodge (M1's)",
     CurrentValue = false, -- Default state of the toggle
     Flag = "HitboxTeleportAccessoryToggle", -- Unique identifier for configuration saving
     Callback = function(Value)
