@@ -2866,7 +2866,7 @@ end
 
 if game.PlaceId == 10449761463 then
 local Tab = Window:CreateTab("tsb") -- Title, Image
-local Section = Tab:CreateSection("stun")
+local Section = Tab:CreateSection("fighting")
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
