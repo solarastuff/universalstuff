@@ -2866,35 +2866,11 @@ end
 
 if game.PlaceId == 10449761463 then
 local Tab = Window:CreateTab("tsb") -- Title, Image
---[[local Section = Tab:CreateSection("fighting")
+local Section = Tab:CreateSection("fighting")
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local monitoring = false -- State to track if the monitoring is active
-local monitoringTask -- Variable to store the monitoring task
-
--- Function to continuously monitor and remove the "Slowed" accessory
-local function monitorForSlowedAccessory()
-    -- Wait for the character to load
-    local character = player.Character or player.CharacterAdded:Wait()
-
-    -- Function to remove the "Slowed" accessory if it's found
-    local function removeSlowed()
-        for _, accessory in pairs(character:GetChildren()) do
-            if accessory:IsA("Accessory") and accessory.Name == "Slowed" then
-                accessory:Destroy()
-            end
-        end
-    end
-
-    -- Continuously check for the "Slowed" accessory
-    while monitoring do
-        if character and character.Parent then
-            removeSlowed()
-        end
-        task.wait(0.1) -- Check every 0.1 seconds
-    end
-end
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
@@ -2904,14 +2880,36 @@ local Toggle = Tab:CreateToggle({
     Callback = function(Value)
         monitoring = Value -- Set monitoring state based on toggle
         if monitoring then
-            -- Start monitoring if toggle is enabled
-            monitoringTask = task.spawn(monitorForSlowedAccessory)
+            -- Start monitoring in a new task
+            task.spawn(function()
+                -- Variables and logic inside the task.spawn are isolated
+                local function monitorForSlowedAccessory()
+                    -- Wait for the character to load
+                    local character = player.Character or player.CharacterAdded:Wait()
+
+                    -- Function to remove the "Slowed" accessory if it's found
+                    local function removeSlowed()
+                        for _, accessory in pairs(character:GetChildren()) do
+                            if accessory:IsA("Accessory") and accessory.Name == "Slowed" then
+                                accessory:Destroy()
+                            end
+                        end
+                    end
+
+                    -- Continuously check for the "Slowed" accessory
+                    while monitoring do
+                        if character and character.Parent then
+                            removeSlowed()
+                        end
+                        task.wait(0.1) -- Check every 0.1 seconds
+                    end
+                end
+
+                -- Call the monitoring function
+                monitorForSlowedAccessory()
+            end)
         else
-            -- Stop monitoring if toggle is disabled
-            if monitoringTask then
-                task.cancel(monitoringTask)
-                monitoringTask = nil
-            end
+            -- Stop monitoring (the `while` loop in the task will exit because `monitoring` is false)
         end
     end,
 })
@@ -2960,7 +2958,7 @@ task.spawn(function()
         end,
     })
 end)
-]]
+
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
@@ -3086,7 +3084,7 @@ end
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
-    Name = "Enable Hitbox and Teleport (Accessory Check)",
+    Name = "auto dodge (M1's)",
     CurrentValue = false, -- Default state of the toggle
     Flag = "HitboxTeleportAccessoryToggle", -- Unique identifier for configuration saving
     Callback = function(Value)
