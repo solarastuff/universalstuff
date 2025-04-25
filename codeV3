@@ -2290,7 +2290,7 @@ local Button = Tab:CreateButton({
 loadstring(game:HttpGet("https://pastefy.app/2DyqhuTU/raw"))()
 Rayfield:Notify({
    Title = "ccgvb",
-   Content = "tags successfully deactivated",
+   Content = "bye bye tags✌️✌️",
    Duration = 4,
    Image = 83984952688042,
 })
