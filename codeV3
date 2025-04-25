@@ -120,6 +120,7 @@ on:Play()
  local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+        "• auto dodge finally added (tsb) ❤️‍🩹🌹\n\n" ..
         "• CHAT BYPASS\n\n" ..
         "• VC UNSUSPEND\n\n" ..
         "• added invisible block for tsb and jjs\n\n" ..
