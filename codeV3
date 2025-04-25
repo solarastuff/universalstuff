@@ -2966,15 +2966,7 @@ local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 
 -- Global toggle state
-local toggleEnabled = false -- Toggle state (global scope)
-
--- Define hitboxPart globally to avoid nil reference
-local hitboxPart = Instance.new("Part")
-hitboxPart.Anchored = true
-hitboxPart.CanCollide = false
-hitboxPart.Transparency = 0.5
-hitboxPart.BrickColor = BrickColor.new("Bright red")
-hitboxPart.Parent = Workspace -- Parent it to the workspace initially
+local toggleEnabled = false -- Toggle state (moved to global scope)
 
 -- Function encapsulating all the logic
 local function HitboxAndTeleportLogic()
@@ -2983,6 +2975,7 @@ local function HitboxAndTeleportLogic()
     local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
     local TELEPORT_DISTANCE = 20
+    local hitboxPart = nil
 
     -- Function to find the nearest player
     local function getNearestPlayer()
@@ -3032,8 +3025,8 @@ local function HitboxAndTeleportLogic()
                 end
 
                 if m1ingAccessory and m1ingAccessory:IsA("Accessory") then
-                    -- Ensure the hitbox part is in the workspace
-                    if not hitboxPart.Parent then
+                    -- Create or update the hitbox part
+                    if not hitboxPart then
                         hitboxPart = Instance.new("Part")
                         hitboxPart.Anchored = true
                         hitboxPart.CanCollide = false
@@ -3093,19 +3086,13 @@ end
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
-    Name = "Toggle Example",
-    CurrentValue = false,
-    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Name = "Enable Hitbox and Teleport (Accessory Check)",
+    CurrentValue = false, -- Default state of the toggle
+    Flag = "HitboxTeleportAccessoryToggle", -- Unique identifier for configuration saving
     Callback = function(Value)
         toggleEnabled = Value -- Update the toggle state
         if Value then
             HitboxAndTeleportLogic() -- Call the function to execute the logic
-        else
-            -- Destroy hitboxPart when toggle is turned off
-            if hitboxPart then
-                hitboxPart:Destroy()
-                hitboxPart = nil
-            end
         end
     end,
 })
