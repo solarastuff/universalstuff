@@ -3166,19 +3166,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouis
 })
 
 
-local Section = Tab:CreateSection("clientstuff")
-local Input = Tab:CreateInput({
-   Name = "total kills (CLIENT)",
-   CurrentValue = "",
-   PlaceholderText = "how many kills u want...",
-   RemoveTextAfterFocusLost = true,
-   Flag = "Input1",
-   Callback = function(Text)
-game.Players.LocalPlayer.leaderstats["Total Kills"].Value = Text
-   -- The function that takes place when the input is changed
-   -- The variable (Text) is a string for the value in the text box
-   end,
-})
 
 end
 local Tab = Window:CreateTab("evil") -- Title, Image
