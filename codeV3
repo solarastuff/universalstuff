@@ -2966,7 +2966,7 @@ local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 
 -- Global toggle state
-local toggleEnabled = false -- Toggle state (moved to global scope)
+local toggleEnabled = false -- Toggle state (global scope)
 
 -- Function encapsulating all the logic
 local function HitboxAndTeleportLogic()
@@ -3086,9 +3086,9 @@ end
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
-    Name = "n",
-    CurrentValue = false, -- Default state of the toggle
-    Flag = "HitboxTeleportAccessoryToggle", -- Unique identifier for configuration saving
+    Name = "Toggle Example",
+    CurrentValue = false,
+    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
     Callback = function(Value)
         toggleEnabled = Value -- Update the toggle state
         if Value then
