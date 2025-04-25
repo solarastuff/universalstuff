@@ -3153,17 +3153,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads
    -- The function that takes place when the button is pressed
    end,
 })
-local Section = Tab:CreateSection("void stuff")
-local Button = Tab:CreateButton({
-   Name = "void kill (GUI)",
-   Callback = function()
--- VOID V2! MADE BY ItsLouisPlayz AKA 1ml3g1t
--- Press R to teleport to the void, For mobile there will be a button for it
--- Yes this does gives u kills :)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/VOID%20V2%20TSB.lua"))()
-   -- The function that takes place when the button is pressed
-   end,
-})
+
 
 
 
