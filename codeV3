@@ -2968,6 +2968,14 @@ local RunService = game:GetService("RunService")
 -- Global toggle state
 local toggleEnabled = false -- Toggle state (global scope)
 
+-- Define hitboxPart globally to avoid nil reference
+local hitboxPart = Instance.new("Part")
+hitboxPart.Anchored = true
+hitboxPart.CanCollide = false
+hitboxPart.Transparency = 0.5
+hitboxPart.BrickColor = BrickColor.new("Bright red")
+hitboxPart.Parent = Workspace -- Parent it to the workspace initially
+
 -- Function encapsulating all the logic
 local function HitboxAndTeleportLogic()
     local LocalPlayer = Players.LocalPlayer
@@ -2975,7 +2983,6 @@ local function HitboxAndTeleportLogic()
     local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 
     local TELEPORT_DISTANCE = 20
-    local hitboxPart = nil
 
     -- Function to find the nearest player
     local function getNearestPlayer()
@@ -3025,8 +3032,8 @@ local function HitboxAndTeleportLogic()
                 end
 
                 if m1ingAccessory and m1ingAccessory:IsA("Accessory") then
-                    -- Create or update the hitbox part
-                    if not hitboxPart then
+                    -- Ensure the hitbox part is in the workspace
+                    if not hitboxPart.Parent then
                         hitboxPart = Instance.new("Part")
                         hitboxPart.Anchored = true
                         hitboxPart.CanCollide = false
@@ -3093,6 +3100,12 @@ local Toggle = Tab:CreateToggle({
         toggleEnabled = Value -- Update the toggle state
         if Value then
             HitboxAndTeleportLogic() -- Call the function to execute the logic
+        else
+            -- Destroy hitboxPart when toggle is turned off
+            if hitboxPart then
+                hitboxPart:Destroy()
+                hitboxPart = nil
+            end
         end
     end,
 })
