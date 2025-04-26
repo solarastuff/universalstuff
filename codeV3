@@ -116,20 +116,20 @@ on.Volume = 20
 on.Parent = game.Players.LocalPlayer
 
 on:Play()
--- local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added invisible block for tsb and jjs • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
- local Label = Tab:CreateLabel("last updated : yesterday", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
+
+ local Label = Tab:CreateLabel("last updated : just now", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
         "• auto dodge finally added (tsb) ❤️‍🩹🌹\n\n" ..
-        "• CHAT BYPASS\n\n" ..
-        "• VC UNSUSPEND\n\n" ..
+        "• CHAT BYPASS💬💬\n\n" ..
+        "• VC UNSUSPEND🎤\n\n" ..
         "• added invisible block for tsb and jjs\n\n" ..
-        "• added fly\n\n" ..
+        "• added fly🦋🦅\n\n" ..
         "• added no stun for jujutsu shenanigans\n\n" ..
         "• added two new move sets for TSB\n\n" ..
-        "• added looping Fling everyone\n\n" ..
-        "• loop User fling"
+        "• added looping Fling everyone🔄\n\n" ..
+        "• loop User fling🔁"
 })
 
 local Paragraph = Tab:CreateParagraph({
@@ -3085,6 +3085,8 @@ local Button = Tab:CreateButton({
    -- The function that takes place when the button is pressed
    end,
 })
+
+
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
    Name = "death counter notifier",
@@ -3096,7 +3098,98 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouis
 })
 local Divider = Tab:CreateDivider()
 
+-- Configuration
+local teleportPosition = Vector3.new(240.31468200683594, -491.9150390625, -183.96755981445312)
+local platformSize = Vector3.new(10, 1, 10)
+local loopDuration = 5 -- Seconds to loop teleport
+local teleportInterval = 0.05 -- Time between teleports (faster than 0.1 seconds)
 
+-- Variables
+local player = game.Players.LocalPlayer
+local liveFolder = workspace:FindFirstChild("Live")
+local isTeleporting = false
+local camera = workspace.CurrentCamera
+local toggleEnabled = false -- Variable to track toggle state
+
+-- Function to create a platform
+local function createPlatform(position)
+    local platform = Instance.new("Part")
+    platform.Name = "TemporaryPlatform"
+    platform.Size = platformSize
+    platform.Position = position
+    platform.Anchored = true
+    platform.Color = Color3.new(1, 0, 0) -- Red platform
+    platform.Parent = workspace
+    return platform
+end
+
+-- Function to reset the camera
+local function resetCamera()
+    camera.CameraSubject = player.Character:WaitForChild("Humanoid")
+    camera.CameraType = Enum.CameraType.Custom
+end
+
+-- Function to handle teleportation
+local function startTeleporting()
+    if isTeleporting then return end
+    isTeleporting = true
+    local startTime = tick()
+
+    -- Create a platform at the teleport position
+    local platform = createPlatform(teleportPosition)
+
+    while isTeleporting and (tick() - startTime) < loopDuration and toggleEnabled do
+        -- Teleport the character to the teleport position
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(teleportPosition)
+        end
+        wait(teleportInterval)
+    end
+
+    -- Clean up platform after teleportation ends
+    if platform and platform.Parent then
+        platform:Destroy()
+    end
+
+    -- Reset the camera
+    resetCamera()
+
+    isTeleporting = false
+end
+
+-- Main logic
+game:GetService("RunService").RenderStepped:Connect(function()
+    if toggleEnabled and liveFolder then
+        local playerModel = liveFolder:FindFirstChild(player.Name)
+        if playerModel and playerModel:IsA("Model") then
+            local absoluteImmortal = playerModel:FindFirstChild("AbsoluteImmortal")
+            if absoluteImmortal and absoluteImmortal:IsA("ForceField") then
+                -- Start teleporting if AbsoluteImmortal exists
+                startTeleporting()
+            else
+                -- Stop teleporting if AbsoluteImmortal is gone
+                isTeleporting = false
+            end
+        end
+    elseif not toggleEnabled then
+        isTeleporting = false
+    end
+end)
+
+-- Rayfield Toggle
+local Toggle = Tab:CreateToggle({
+   Name = "anti/kill death counter",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file
+   Callback = function(Value)
+       -- The function that takes place when the toggle is pressed
+       -- The variable (Value) is a boolean on whether the toggle is true or false
+       toggleEnabled = Value -- Update the toggle state
+       if not toggleEnabled then
+           isTeleporting = false -- Stop teleporting when the toggle is turned off
+       end
+   end,
+})
 
 local Section = Tab:CreateSection("movesets")
 local Button = Tab:CreateButton({
