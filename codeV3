@@ -3969,7 +3969,7 @@ end
 
 
 
-local Tab = Window:CreateTab("fun", "laugh") -- Title, Image
+--[[local Tab = Window:CreateTab("fun", "laugh") -- Title, Image
 
 
 
@@ -4034,6 +4034,7 @@ print(Text)
    -- The variable (Text) is a string for the value in the text box
    end,
 })
+]]
 
 
 
