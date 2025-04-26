@@ -997,7 +997,7 @@ game.Workspace.Gravity = 196.2
    -- The function that takes place when the button is pressed
    end,
 })
---[[local Tab = Window:CreateTab("fling", "shell") -- Title, Image
+local Tab = Window:CreateTab("fling", "shell") -- Title, Image
 
 
 
@@ -1873,7 +1873,7 @@ end
    -- The variable (Value) is a boolean on whether the toggle is true or false
    end,
 })
-]]
+
 local Tab = Window:CreateTab("fighting", "axe") -- Title, Image
 
 local runServiceRenamed = game:GetService("RunService")
