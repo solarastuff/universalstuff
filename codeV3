@@ -117,7 +117,7 @@ on.Parent = game.Players.LocalPlayer
 
 on:Play()
 -- local Paragraph = Tab:CreateParagraph({Title = "Updates", Content = " • added invisible block for tsb and jjs • added fly • added no stun for jujutsu shenanigans • Added two new moves sets for TSB • added looping Fling everyone and loop User fling"})
- local Label = Tab:CreateLabel("last updated : just now", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
+ local Label = Tab:CreateLabel("last updated : yesterday", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
