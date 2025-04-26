@@ -2910,7 +2910,7 @@ local Divider = Tab:CreateDivider()
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
-
+--[[
 -- Global toggle state
 local toggleEnabled = false -- Toggle state (moved to global scope)
 
@@ -3060,6 +3060,149 @@ TELEPORT_DISTANCE = Value
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
 })
+]]
+-- Global toggle state
+local toggleEnabled = false -- Toggle state (moved to global scope)
+
+-- Function encapsulating all the logic
+local function HitboxAndTeleportLogic()
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local Workspace = game:GetService("Workspace")
+    
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    local TELEPORT_DISTANCE = 3.3
+    local hitboxPart = nil
+
+    -- Function to find the nearest player
+    local function getNearestPlayer()
+        local nearestPlayer = nil
+        local shortestDistance = math.huge
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local distance = (player.Character.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
+                if distance < shortestDistance then
+                    nearestPlayer = player
+                    shortestDistance = distance
+                end
+            end
+        end
+        return nearestPlayer
+    end
+
+    -- Function to handle touch events and teleport the local player away
+    local function onHitboxTouched(otherPart)
+        if toggleEnabled and Character and otherPart:IsDescendantOf(Character) then
+            -- Calculate teleport direction and position
+            local direction = (HumanoidRootPart.Position - hitboxPart.Position)
+            if direction.Magnitude == 0 then
+                direction = Vector3.new(0, 0, -1) -- fallback backward if perfectly overlapping
+            else
+                direction = direction.Unit
+            end
+
+            -- Teleport player using CFrame
+            HumanoidRootPart.CFrame = CFrame.new(
+                HumanoidRootPart.Position + direction * TELEPORT_DISTANCE
+            )
+        end
+    end
+
+    -- Function to create/remove hitbox based on the presence of an "M1ing" accessory
+    local function updateHitboxForPlayer(player)
+        local liveFolder = Workspace:FindFirstChild("Live")
+        if liveFolder then
+            local playerModel = liveFolder:FindFirstChild(player.Name)
+            if playerModel then
+                -- Continuously check for the "M1ing" accessory
+                local m1ingAccessory = playerModel:FindFirstChild("M1ing")
+                if not m1ingAccessory then
+                    -- Accessory might not yet exist, so wait for it
+                    for i = 1, 10 do -- Wait for up to 1 second
+                        task.wait(0.1)
+                        m1ingAccessory = playerModel:FindFirstChild("M1ing")
+                        if m1ingAccessory then
+                            break
+                        end
+                    end
+                end
+
+                if m1ingAccessory and m1ingAccessory:IsA("Accessory") then
+                    -- Create or update the hitbox part
+                    if not hitboxPart then
+                        hitboxPart = Instance.new("Part")
+                        hitboxPart.Anchored = true
+                        hitboxPart.CanCollide = false
+                        hitboxPart.Transparency = 0.5
+                        hitboxPart.BrickColor = BrickColor.new("Bright red")
+                        hitboxPart.Touched:Connect(onHitboxTouched) -- Connect the Touched event
+                        hitboxPart.Parent = Workspace
+                    end
+                    local targetHumanoidRootPart = player.Character.HumanoidRootPart
+                    hitboxPart.Size = targetHumanoidRootPart.Size + Vector3.new(10, 10, 10) -- Make the hitbox significantly larger
+                    hitboxPart.Position = targetHumanoidRootPart.Position -- Align hitbox with the player's position
+                else
+                    -- Remove the hitbox if "M1ing" accessory is not found
+                    if hitboxPart then
+                        hitboxPart:Destroy()
+                        hitboxPart = nil
+                    end
+                end
+            else
+                -- Ensure the hitbox is destroyed if player's model is not found
+                if hitboxPart then
+                    hitboxPart:Destroy()
+                    hitboxPart = nil
+                end
+            end
+        else
+            -- Ensure the hitbox is destroyed if "Live" folder is not found
+            if hitboxPart then
+                hitboxPart:Destroy()
+                hitboxPart = nil
+            end
+        end
+    end
+
+    -- Main loop
+    RunService.Heartbeat:Connect(function()
+        if toggleEnabled then
+            local nearestPlayer = getNearestPlayer()
+            if nearestPlayer then
+                updateHitboxForPlayer(nearestPlayer) -- Check for "M1ing" accessory and update the hitbox
+            else
+                -- Ensure the hitbox is destroyed if no nearest player is found
+                if hitboxPart then
+                    hitboxPart:Destroy()
+                    hitboxPart = nil
+                end
+            end
+        else
+            -- Ensure the hitbox is destroyed if the toggle is disabled
+            if hitboxPart then
+                hitboxPart:Destroy()
+                hitboxPart = nil
+            end
+        end
+    end)
+end
+
+-- Rayfield Toggle
+local Toggle = Tab:CreateToggle({
+    Name = "auto dodge (M1's)(test)",
+    CurrentValue = false, -- Default state of the toggle
+    Flag = "HitboxTeleportAccessoryToggle", -- Unique identifier for configuration saving
+    Callback = function(Value)
+        toggleEnabled = Value -- Update the toggle state
+        if Value then
+            HitboxAndTeleportLogic() -- Call the function to execute the logic
+        end
+    end,
+})
+
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
    Name = "death counter notifier",
