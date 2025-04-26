@@ -3073,17 +3073,7 @@ TELEPORT_DISTANCE = Value
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
 })
-
-local Section = Tab:CreateSection("death counter")
-local Button = Tab:CreateButton({
-   Name = "death counter notifier",
-   Callback = function()
--- Made by ItsLouisPlayz AKA 1ml3g1t
-loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/TSB%20Death%20Counter%20Identifier.lua"))()
-   -- The function that takes place when the button is pressed
-   end,
-})
-
+local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
    Name = "character lock on",
    Callback = function()
@@ -3095,6 +3085,18 @@ local Button = Tab:CreateButton({
    -- The function that takes place when the button is pressed
    end,
 })
+local Section = Tab:CreateSection("death counter")
+local Button = Tab:CreateButton({
+   Name = "death counter notifier",
+   Callback = function()
+-- Made by ItsLouisPlayz AKA 1ml3g1t
+loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/main/TSB%20Death%20Counter%20Identifier.lua"))()
+   -- The function that takes place when the button is pressed
+   end,
+})
+local Divider = Tab:CreateDivider()
+
+
 
 local Section = Tab:CreateSection("movesets")
 local Button = Tab:CreateButton({
