@@ -3099,7 +3099,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouis
 })
 local Divider = Tab:CreateDivider()
 
---[[ Configuration
+--Configuration
 local teleportPosition = Vector3.new(240.31468200683594, -491.9150390625, -183.96755981445312)
 local platformSize = Vector3.new(10, 1, 10)
 local loopDuration = 5 -- Seconds to loop teleport
@@ -3191,7 +3191,7 @@ local Toggle = Tab:CreateToggle({
        end
    end,
 })
-]]
+
 
 local Section = Tab:CreateSection("movesets")
 local Button = Tab:CreateButton({
