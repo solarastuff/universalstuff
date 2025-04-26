@@ -121,6 +121,7 @@ on:Play()
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+           "• anti death  counter✅\n\n" ..
           "• fixed fling menu disappearing\n\n" ..
         "• auto dodge finally added (tsb) ❤️‍🩹🌹\n\n" ..
         "• CHAT BYPASS💬💬\n\n" ..
