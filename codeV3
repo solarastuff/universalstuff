@@ -2700,7 +2700,7 @@ local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 
 
-
+local hitboxsiz = 11
 
 -- Global toggle state
 local toggleEnabled = false -- Toggle state (moved to global scope)
@@ -2783,7 +2783,7 @@ local function HitboxAndTeleportLogic()
                         hitboxPart.Parent = Workspace
                     end
                     local targetHumanoidRootPart = player.Character.HumanoidRootPart
-                    hitboxPart.Size = targetHumanoidRootPart.Size + Vector3.new(15, 15, 15) -- Make the hitbox significantly larger
+                    hitboxPart.Size = targetHumanoidRootPart.Size + Vector3.new(hitboxsiz, hitboxsiz, hitboxsiz) -- Make the hitbox significantly larger
                     hitboxPart.Position = targetHumanoidRootPart.Position -- Align hitbox with the player's position
                 else
                     -- Remove the hitbox if "M1ing" accessory is not found
@@ -2857,6 +2857,20 @@ local Slider = Tab:CreateSlider({
 
 TELEPORT_DISTANCE = Value
 
+   -- The function that takes place when the slider changes
+   -- The variable (Value) is a number which correlates to the value the slider is currently at
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "hitbox size",
+   Range = {0, 30},
+   Increment = 1,
+   Suffix = "size",
+   CurrentValue = 11,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+hitboxsiz = Value
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
