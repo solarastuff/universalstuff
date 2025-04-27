@@ -790,7 +790,7 @@ end
 
 
 
-local Players = game:GetService("Players")
+
 
 -- Function to teleport to the player with a matching display name
 local function teleportToPlayer(playerName)
@@ -1004,7 +1004,7 @@ local Tab = Window:CreateTab("fling", "shell") -- Title, Image
 
 
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Ensure the detection object exists
@@ -1064,7 +1064,7 @@ local Toggle = Tab:CreateToggle({
 
 -- Initial setup of services and variables
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
@@ -1167,7 +1167,7 @@ end
 
 -- // Services \\ --
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
+
 local LocalPlayer = Players.LocalPlayer
 
 -- // Variables \\ --
@@ -1264,7 +1264,7 @@ toggle5:Set(true)
     end,
 })
 
-local Players = game:GetService("Players")
+
 local Player = Players.LocalPlayer
 
 -- Function to find a player by partial username or display name
@@ -1408,7 +1408,7 @@ local Input = Tab:CreateInput({
         end
     end
 })
-local Players = game:GetService("Players")
+
 local Player = Players.LocalPlayer
 
 -- Save original FallenPartsDestroyHeight
@@ -1557,7 +1557,7 @@ local Button = Tab:CreateButton({
    Callback = function()
  local Targets = {"All"} -- "All", "Target Name", "arian_was_here"
 
-local Players = game:GetService("Players")
+
 local Player = Players.LocalPlayer
 
 local AllBool = false
@@ -1690,7 +1690,7 @@ end
    -- The function that takes place when the button is pressed
    end,
 })
-local Players = game:GetService("Players")
+
 local Player = Players.LocalPlayer
 
 local Targets = {"All"} -- Use "All", "others", specific usernames, etc.
@@ -1953,7 +1953,7 @@ Tab:CreateToggle({
 })
 
 
-local players = game:GetService("Players")
+
 local localPlayer = players.LocalPlayer
 local camera = game.Workspace.CurrentCamera
 local runService = game:GetService("RunService")
@@ -2032,7 +2032,7 @@ runService.RenderStepped:Connect(function()
     end
 end)
 
-local Players = game:GetService("Players")
+
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
@@ -2242,7 +2242,7 @@ local Button = Tab:CreateButton({
    Name = "Void Tool",
    Callback = function()
 
-local Players = game:GetService("Players")
+
 local player = Players.LocalPlayer
 
 -- Create the Tool
@@ -2440,7 +2440,7 @@ end)
 
 local Section = Tab:CreateSection("random")
 
-local Players = game:GetService("Players")
+
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -2496,7 +2496,7 @@ looptping = true
 else 
 looptping = false 
 end
-local players = game:GetService("Players")
+
 local player = players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -2524,7 +2524,7 @@ local Tab = Window:CreateTab("esp", "eye") -- Title, Image
 
 
 
-local Players = game:GetService("Players")
+
 local ESPEnabled = false
 local ESPColor = Color3.new(1, 0, 0) -- Default color (red)
 local Highlights = {} -- Store highlights to manage toggling
@@ -2597,7 +2597,7 @@ updateESP()
 
 
 
-local Players = game:GetService("Players")
+
 local player = Players.LocalPlayer
 
 if player.Name == "sigmaguypie" or player.Name == "hashtag_hashtagcoma8" then
@@ -2715,7 +2715,7 @@ local Toggle = Tab:CreateToggle({
    end,
 })
 
-local Players = game:GetService("Players")
+
 local localPlayer = Players.LocalPlayer
 local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
@@ -2819,7 +2819,7 @@ if game.PlaceId == 10449761463 then
 local Tab = Window:CreateTab("tsb") -- Title, Image
 local Section = Tab:CreateSection("fighting")
 
-local Players = game:GetService("Players")
+
 local player = Players.LocalPlayer
 local monitoring = false -- State to track if the monitoring is active
 
@@ -2910,7 +2910,7 @@ task.spawn(function()
     })
 end)
 local Divider = Tab:CreateDivider()
-local Players = game:GetService("Players")
+
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 
@@ -3224,7 +3224,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/yes1nt/yes/refs/heads
 end
 local Tab = Window:CreateTab("evil") -- Title, Image
 
-local Players = game:GetService("Players")
+
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
