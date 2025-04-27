@@ -117,7 +117,7 @@ on.Parent = game.Players.LocalPlayer
 
 on:Play()
 
- local Label = Tab:CreateLabel("last updated : just now", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
+ local Label = Tab:CreateLabel("last updated : 30 mins ago", "timer-reset", Color3.fromRGB(139, 247, 15), false) -- Title, Icon, Color, IgnoreTheme
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
@@ -2601,7 +2601,7 @@ updateESP()
 local player = Players.LocalPlayer
 
 
-if game.PlaceId == 10449761463 then
+if game.PlaceId == 10449761463 or 12360882630  then 
 local Tab = Window:CreateTab("tsb") -- Title, Image
 local Section = Tab:CreateSection("fighting")
 
