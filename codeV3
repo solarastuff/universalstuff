@@ -2779,7 +2779,7 @@ local function HitboxAndTeleportLogic()
                         hitboxPart.Anchored = true
                         hitboxPart.CanCollide = false
                         hitboxPart.Transparency = 0.6
-                        hitboxPart.BrickColor = BrickColor.new("Bright red")
+                        hitboxPart.BrickColor = BrickColor.new("Light stone grey")
                         hitboxPart.Touched:Connect(onHitboxTouched) -- Connect the Touched event
                         hitboxPart.Parent = Workspace
                     end
