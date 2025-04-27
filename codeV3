@@ -2783,7 +2783,7 @@ local function HitboxAndTeleportLogic()
                         hitboxPart.Parent = Workspace
                     end
                     local targetHumanoidRootPart = player.Character.HumanoidRootPart
-                    hitboxPart.Size = targetHumanoidRootPart.Size + Vector3.new(10, 10, 10) -- Make the hitbox significantly larger
+                    hitboxPart.Size = targetHumanoidRootPart.Size + Vector3.new(15, 15, 15) -- Make the hitbox significantly larger
                     hitboxPart.Position = targetHumanoidRootPart.Position -- Align hitbox with the player's position
                 else
                     -- Remove the hitbox if "M1ing" accessory is not found
