@@ -2751,7 +2751,21 @@ local function HitboxAndTeleportLogic()
                 HumanoidRootPart.Position + direction * TELEPORT_DISTANCE
 
             )
-local soundPlaying = false -- Flag to track if the sound is already playing
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://115523592797254"
@@ -2897,6 +2911,34 @@ hitboxsiz = Value
    -- The function that takes place when the slider changes
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
+})
+-- Define Sound IDs
+local soundIDs = {
+    ["Ultra Instinct"] = "rbxassetid://PLACEHOLDER_ID_1", -- Replace with actual SoundId
+    ["Substitution Jutsu"] = "rbxassetid://PLACEHOLDER_ID_2", -- Replace with actual SoundId
+    ["Teleport"] = "rbxassetid://PLACEHOLDER_ID_3", -- Replace with actual SoundId
+}
+
+-- Create the sound object
+local sound = Instance.new("Sound")
+sound.Looped = false
+sound.Volume = 20
+sound.Parent = game.Players.LocalPlayer -- You can change the parent as needed
+
+-- Create the drop-down menu
+local DropDown = Tab:CreateDropdown({
+    Name = "Select Sound",
+    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport"},
+    CurrentOption = "Ultra Instinct", -- Default option
+    Callback = function(selectedOption)
+        local selectedSoundID = soundIDs[selectedOption]
+        if selectedSoundID then
+            sound.SoundId = selectedSoundID
+            print("Sound changed to: " .. selectedOption)
+        else
+            warn("No SoundId found for: " .. selectedOption)
+        end
+    end,
 })
 local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
