@@ -2768,7 +2768,7 @@ local function HitboxAndTeleportLogic()
 
 
 local soundss = Instance.new("Sound")
-soundss.SoundId = "rbxassetid//:5066021887"
+soundss.SoundId = "rbxassetid://5066021887"
 soundss.Looped = false
 soundss.Volume = 3.3
 soundss.Parent = workspace
