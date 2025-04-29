@@ -2919,12 +2919,12 @@ local Dropdown = Tab:CreateDropdown({
         local selectedOption = Options[1] -- Extract the single selected option
         local selectedSoundID = soundIDs[selectedOption]
         if selectedSoundID then
-            sound.SoundId = selectedSoundID
+            soundss.SoundId = selectedSoundID
             print("Sound changed to: " .. selectedOption)
         else
             warn("No SoundId found for: " .. selectedOption)
         end
-soundss.SoundId = selectedSoundID
+
     end,
 })
 
