@@ -2914,23 +2914,21 @@ hitboxsiz = Value
 })
 -- Define Sound IDs
 local soundIDs = {
-    ["Ultra Instinct"] = "rbxassetid://115523592797254", -- Replace with actual SoundId
-    ["Substitution Jutsu"] = "rbxassetid://147722165", -- Replace with actual SoundId
-    ["Teleport"] = "rbxassetid://5066021887", -- Replace with actual SoundId
+    ["Ultra Instinct"] = "rbxassetid://115523592797254",
+    ["Substitution Jutsu"] = "rbxassetid://147722165",
+    ["Teleport"] = "rbxassetid://5066021887",
 }
 
--- Create the sound object
-local sound = Instance.new("Sound")
-sound.Looped = false
-sound.Volume = 20
-sound.Parent = game.Players.LocalPlayer -- You can change the parent as needed
 
--- Create the drop-down menu
-local DropDown = Tab:CreateDropdown({
+-- Create the drop-down menu with the new format
+local Dropdown = Tab:CreateDropdown({
     Name = "Select Sound",
-    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport(goku)"},
-    CurrentOption = "Ultra Instinct", -- Default option
-    Callback = function(selectedOption)
+    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport"},
+    CurrentOption = {"Ultra Instinct"}, -- Default option in a table format
+    MultipleOptions = false, -- Only one option can be selected
+    Flag = "SoundDropdown", -- Unique flag for configuration saving
+    Callback = function(Options)
+        local selectedOption = Options[1] -- Extract the single selected option
         local selectedSoundID = soundIDs[selectedOption]
         if selectedSoundID then
             sound.SoundId = selectedSoundID
@@ -2940,19 +2938,6 @@ local DropDown = Tab:CreateDropdown({
         end
     end,
 })
-local Divider = Tab:CreateDivider()
-local Button = Tab:CreateButton({
-   Name = "character lock on",
-   Callback = function()
-
-
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/louismich4el/ItsLouisPlayz-Scripts/refs/heads/main/Lock%20On.lua"))()
-
-    
-   -- The function that takes place when the button is pressed
-   end,
-})
-
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
