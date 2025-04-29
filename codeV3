@@ -2753,7 +2753,7 @@ local function HitboxAndTeleportLogic()
             )
 local bound = Instance.new("Sound")
 bound.Parent = workspace
-bound.Volume = 10
+bound.Volume = 3
 bound.SoundId = "rbxassetid://115523592797254"
 bound:Play()
         end
