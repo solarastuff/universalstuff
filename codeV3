@@ -2768,7 +2768,7 @@ local function HitboxAndTeleportLogic()
 
 
 local soundss = Instance.new("Sound")
-soundss.SoundId = "rbxassetid://5066021887"
+soundss.SoundId = nil
 soundss.Looped = false
 soundss.Volume = 3.3
 soundss.Parent = workspace
@@ -2918,12 +2918,7 @@ local Dropdown = Tab:CreateDropdown({
     Callback = function(Options)
         local selectedOption = Options[1] -- Extract the single selected option
         local selectedSoundID = soundIDs[selectedOption]
-        if selectedSoundID then
-            soundss.SoundId = selectedSoundID
-            print("Sound changed to: " .. selectedOption)
-        else
-            warn("No SoundId found for: " .. selectedOption)
-        end
+        soundss.SoundId = selectedSoundID
 
     end,
 })
