@@ -2751,11 +2751,27 @@ local function HitboxAndTeleportLogic()
                 HumanoidRootPart.Position + direction * TELEPORT_DISTANCE
 
             )
-local bound = Instance.new("Sound")
-bound.Parent = workspace
-bound.Volume = 3
-bound.SoundId = "rbxassetid://115523592797254"
-bound:Play()
+local soundPlaying = false -- Flag to track if the sound is already playing
+
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://115523592797254"
+sound.Looped = false
+sound.Volume = 3.3
+sound.Parent = workspace
+
+sound.Ended:Connect(function()
+    soundPlaying = false -- Reset the flag when the sound finishes playing
+end)
+
+local function playSound()
+    if not soundPlaying then -- Check if the sound is not already playing
+        soundPlaying = true -- Set the flag to indicate the sound is playing
+        sound:Play()
+    end
+end
+
+-- Call playSound() whenever you want to play the sound
+playSound()
         end
     end
 
