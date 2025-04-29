@@ -2749,7 +2749,13 @@ local function HitboxAndTeleportLogic()
             -- Teleport player using CFrame
             HumanoidRootPart.CFrame = CFrame.new(
                 HumanoidRootPart.Position + direction * TELEPORT_DISTANCE
+
             )
+local bound = Instance.new("Sound")
+bound.Parent = workspace
+bound.Volume = 10
+bound.SoundId = "rbxassetid//:115523592797254"
+bound:Play()
         end
     end
 
