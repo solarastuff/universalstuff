@@ -2768,7 +2768,7 @@ local function HitboxAndTeleportLogic()
 
 
 local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://115523592797254"
+sound.SoundId = selectedSoundID
 sound.Looped = false
 sound.Volume = 3.3
 sound.Parent = workspace
@@ -2914,9 +2914,9 @@ hitboxsiz = Value
 })
 -- Define Sound IDs
 local soundIDs = {
-    ["Ultra Instinct"] = "rbxassetid://PLACEHOLDER_ID_1", -- Replace with actual SoundId
-    ["Substitution Jutsu"] = "rbxassetid://PLACEHOLDER_ID_2", -- Replace with actual SoundId
-    ["Teleport"] = "rbxassetid://PLACEHOLDER_ID_3", -- Replace with actual SoundId
+    ["Ultra Instinct"] = "rbxassetid://115523592797254", -- Replace with actual SoundId
+    ["Substitution Jutsu"] = "rbxassetid://147722165", -- Replace with actual SoundId
+    ["Teleport"] = "rbxassetid://5066021887", -- Replace with actual SoundId
 }
 
 -- Create the sound object
@@ -2928,7 +2928,7 @@ sound.Parent = game.Players.LocalPlayer -- You can change the parent as needed
 -- Create the drop-down menu
 local DropDown = Tab:CreateDropdown({
     Name = "Select Sound",
-    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport"},
+    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport(goku)"},
     CurrentOption = "Ultra Instinct", -- Default option
     Callback = function(selectedOption)
         local selectedSoundID = soundIDs[selectedOption]
