@@ -2767,25 +2767,13 @@ local function HitboxAndTeleportLogic()
 
 
 
-local sound = Instance.new("Sound")
-sound.SoundId = selectedSoundID
-sound.Looped = false
-sound.Volume = 3.3
-sound.Parent = workspace
+local soundss = Instance.new("Sound")
+soundss.SoundId = "rbxassetid//:5066021887"
+soundss.Looped = false
+soundss.Volume = 3.3
+soundss.Parent = workspace
 
-sound.Ended:Connect(function()
-    soundPlaying = false -- Reset the flag when the sound finishes playing
-end)
-
-local function playSound()
-    if not soundPlaying then -- Check if the sound is not already playing
-        soundPlaying = true -- Set the flag to indicate the sound is playing
-        sound:Play()
-    end
-end
-
--- Call playSound() whenever you want to play the sound
-playSound()
+soundss:Play()
         end
     end
 
@@ -2936,6 +2924,7 @@ local Dropdown = Tab:CreateDropdown({
         else
             warn("No SoundId found for: " .. selectedOption)
         end
+soundss.SoundId = selectedSoundID
     end,
 })
 
