@@ -2908,9 +2908,9 @@ local soundIDs = {
 }
 
 
--- Create the drop-down menu with the new format
+-- Ensure soundIDs and soundss are properly initialized above this code
 local Dropdown = Tab:CreateDropdown({
-    Name = "Select Sound",
+    Name = "dodge sound",
     Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport"},
     CurrentOption = {"Ultra Instinct"}, -- Default option in a table format
     MultipleOptions = false, -- Only one option can be selected
@@ -2918,8 +2918,14 @@ local Dropdown = Tab:CreateDropdown({
     Callback = function(Options)
         local selectedOption = Options[1] -- Extract the single selected option
         local selectedSoundID = soundIDs[selectedOption]
-        soundss.SoundId = selectedSoundID
-
+        if selectedSoundID then
+            soundss:Stop() -- Stop any currently playing sound
+            soundss.SoundId = selectedSoundID -- Update the SoundId
+            soundss:Play() -- Play the newly selected sound
+            print("Sound changed to: " .. selectedOption)
+        else
+            warn("Invalid SoundId for selected option: " .. tostring(selectedOption))
+        end
     end,
 })
 
