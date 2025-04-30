@@ -2904,34 +2904,6 @@ hitboxsiz = Value
    -- The variable (Value) is a number which correlates to the value the slider is currently at
    end,
 })
--- Define Sound IDs
-local soundIDs = {
-    ["Ultra Instinct"] = "rbxassetid://115523592797254",
-    ["Substitution Jutsu"] = "rbxassetid://147722165",
-    ["Teleport"] = "rbxassetid://5066021887",
-}
-
-
--- Ensure soundIDs and soundss are properly initialized above this code
-local Dropdown = Tab:CreateDropdown({
-    Name = "dodge sound",
-    Options = {"Ultra Instinct", "Substitution Jutsu", "Teleport"},
-    CurrentOption = {"Ultra Instinct"}, -- Default option in a table format
-    MultipleOptions = false, -- Only one option can be selected
-    Flag = "SoundDropdown", -- Unique flag for configuration saving
-    Callback = function(Options)
-        local selectedOption = Options[1] -- Extract the single selected option
-        local selectedSoundID = soundIDs[selectedOption]
-        if selectedSoundID then
-            
-            soundss.SoundId = selectedSoundID -- Update the SoundId
-            soundss:Play() -- Play the newly selected sound
-            print("Sound changed to: " .. selectedOption)
-        else
-            warn("Invalid SoundId for selected option: " .. tostring(selectedOption))
-        end
-    end,
-})
 
 local Section = Tab:CreateSection("death counter")
 local Button = Tab:CreateButton({
