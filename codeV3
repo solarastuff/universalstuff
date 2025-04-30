@@ -122,13 +122,13 @@ local lastUpdatedTime = os.time({
     year = 2025,
     month = 4,
     day = 30,
-    hour = 20,
-    min = 41,
-    sec = 10
+    hour = 18,
+    min = 30,
+    sec = 0
 })
 
 -- Function to calculate how long ago the update occurred
- function getTimeSinceUpdate()
+local function calculateTimeAgo()
     local currentTime = os.time()
     local timeDifference = currentTime - lastUpdatedTime -- Difference in seconds
 
@@ -146,9 +146,11 @@ local lastUpdatedTime = os.time({
     end
 end
 
--- Create the label dynamically with the calculated time
-local Label = Tab:CreateLabel("last updated: " .. getTimeSinceUpdate(), "timer-reset",Color3.fromRGB(139, 247, 15),false)
+-- Calculate the "time ago" string
+local timeAgo = calculateTimeAgo()
 
+-- Create the label using the calculated time
+local Label = Tab:CreateLabel("last updated: " .. timeAgo, "timer-reset", Color3.fromRGB(139, 247, 15), false)
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
