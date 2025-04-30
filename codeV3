@@ -2921,7 +2921,7 @@ local Dropdown = Tab:CreateDropdown({
         local selectedOption = Options[1] -- Extract the single selected option
         local selectedSoundID = soundIDs[selectedOption]
         if selectedSoundID then
-            soundss:Stop() -- Stop any currently playing sound
+            
             soundss.SoundId = selectedSoundID -- Update the SoundId
             soundss:Play() -- Play the newly selected sound
             print("Sound changed to: " .. selectedOption)
