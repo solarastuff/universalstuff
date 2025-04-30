@@ -117,40 +117,9 @@ on.Parent = game.Players.LocalPlayer
 
 on:Play()
 
- -- Define the last updated time (manual update when script is modified)
-local lastUpdatedTime = os.time({
-    year = 2025,
-    month = 4,
-    day = 30,
-    hour = 18,
-    min = 30,
-    sec = 0
-})
-
--- Function to calculate how long ago the update occurred
-local function calculateTimeAgo()
-    local currentTime = os.time()
-    local timeDifference = currentTime - lastUpdatedTime -- Difference in seconds
-
-    if timeDifference < 60 then
-        return timeDifference .. " seconds ago"
-    elseif timeDifference < 3600 then
-        local minutes = math.floor(timeDifference / 60)
-        return minutes .. " minute" .. (minutes == 1 and "" or "s") .. " ago"
-    elseif timeDifference < 86400 then
-        local hours = math.floor(timeDifference / 3600)
-        return hours .. " hour" .. (hours == 1 and "" or "s") .. " ago"
-    else
-        local days = math.floor(timeDifference / 86400)
-        return days .. " day" .. (days == 1 and "" or "s") .. " ago"
-    end
-end
-
--- Calculate the "time ago" string
-local timeAgo = calculateTimeAgo()
-
+ 
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: " .. timeAgo, "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: april 30th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
