@@ -119,7 +119,7 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: april 30th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+--local Label = Tab:CreateLabel("last updated: april 30th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
