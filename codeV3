@@ -2903,8 +2903,8 @@ hitboxsiz = Value
 local Section = Tab:CreateSection("Section Example")
 
 --===[ Settings and Script Initialization ]===--
-
-local players = game:GetService("Players")
+task.spawn(function()
+    local players = game:GetService("Players")
 local plr = players.LocalPlayer
 local cd = false
 
@@ -3095,6 +3095,8 @@ task.spawn(function()
 end)
 
 warn("Executed")
+end)
+
 
 
 local Section = Tab:CreateSection("death counter")
