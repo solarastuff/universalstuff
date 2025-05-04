@@ -2900,7 +2900,7 @@ hitboxsiz = Value
    end,
 })
 
-local Section = Tab:CreateSection("Section Example")
+local Section = Tab:CreateSection("auto block")
 
 --===[ Settings and Script Initialization ]===--
 task.spawn(function()
