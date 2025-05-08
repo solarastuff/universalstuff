@@ -2382,6 +2382,7 @@ local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
 
 
+task.spawn(function()
 
 local TweenService = game:GetService("TweenService")
 
@@ -2486,6 +2487,9 @@ Tab:CreateInput({
         targetName = Text
     end,
 })
+
+
+end)
 
 
 
