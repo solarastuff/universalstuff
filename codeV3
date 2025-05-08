@@ -2378,6 +2378,123 @@ local Button = Tab:CreateButton({
 
 local Tab = Window:CreateTab("troll", "align-center") -- Title, Image
 
+
+
+
+
+
+local TweenService = game:GetService("TweenService")
+
+
+local following = false
+local targetPlayer = nil
+local animationId = "189854234"
+local activeAnimation = nil
+local targetName = ""
+
+-- Tab Toggle for Follow
+Tab:CreateToggle({
+    Name = "get fucked",
+    CurrentValue = false,
+    Callback = function(Value)
+        following = Value
+
+        if following then
+            -- Start following
+            local name = targetName:lower()
+            targetPlayer = nil
+
+            -- Find the target player by matching the first few letters of their name or display name
+            for _, player in pairs(Players:GetPlayers()) do
+                if player.Name:lower():sub(1, #name) == name or player.DisplayName:lower():sub(1, #name) == name then
+                    targetPlayer = player
+                    break
+                end
+            end
+
+            if targetPlayer and targetPlayer.Character then
+                -- Play Animation
+                local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    local animation = Instance.new("Animation")
+                    animation.AnimationId = "rbxassetid://" .. animationId
+                    activeAnimation = humanoid:LoadAnimation(animation)
+                    activeAnimation:Play()
+                end
+
+                -- Start moving toward the target
+                coroutine.wrap(function()
+                    while following do
+                        local targetCharacter = targetPlayer.Character
+                        if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+                            local targetHRP = targetCharacter.HumanoidRootPart
+                            local forwardCFrame = targetHRP.CFrame * CFrame.new(0, 0, -2.5)
+                            local backwardCFrame = targetHRP.CFrame * CFrame.new(0, 0, -1.3)
+
+                            -- Move forward
+                            local tweenForward = TweenService:Create(
+                                LocalPlayer.Character:FindFirstChild("HumanoidRootPart"),
+                                TweenInfo.new(0.15, Enum.EasingStyle.Linear),
+                                {CFrame = forwardCFrame}
+                            )
+                            tweenForward:Play()
+                            tweenForward.Completed:Wait()
+
+                            -- Move backward
+                            local tweenBackward = TweenService:Create(
+                                LocalPlayer.Character:FindFirstChild("HumanoidRootPart"),
+                                TweenInfo.new(0.15, Enum.EasingStyle.Linear),
+                                {CFrame = backwardCFrame}
+                            )
+                            tweenBackward:Play()
+                            tweenBackward.Completed:Wait()
+                        else
+                            following = false
+                            if activeAnimation then
+                                activeAnimation:Stop()
+                                activeAnimation = nil
+                            end
+                            break
+                        end
+                    end
+                end)()
+            else
+                -- Notify if target is not found or invalid
+                Tab:Notify({
+                    Title = "Error",
+                    Content = "Target not found or invalid.",
+                    Duration = 4
+                })
+            end
+        else
+            -- Stop following
+            following = false
+            if activeAnimation then
+                activeAnimation:Stop()
+                activeAnimation = nil
+            end
+        end
+    end,
+})
+
+-- Tab Input for Target Name
+Tab:CreateInput({
+    Name = "get fucked by",
+    PlaceholderText = "display name/username..",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        targetName = Text
+    end,
+})
+
+
+
+
+
+
+
+
+
 local Section = Tab:CreateSection("tools")
 local Button = Tab:CreateButton({
    Name = "jerk off",
