@@ -2957,7 +2957,7 @@ local abilities = {
 
 Tab:CreateToggle({
     Name = "auto block",
-    CurrentValue = true,
+    CurrentValue = false,
     Flag = "AutoParryToggle",
     Callback = function(Value)
         Settings.Autoparry.Toggle = Value
