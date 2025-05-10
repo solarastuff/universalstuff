@@ -2730,6 +2730,95 @@ local Tab = Window:CreateTab("tsb") -- Title, Image
 local Section = Tab:CreateSection("fighting")
 
 
+task.spawn()
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local liveFolder = workspace:WaitForChild("Live")
+local character = liveFolder:WaitForChild(player.Name)
+
+local humanoid = character:WaitForChild("Humanoid")
+
+local animation = Instance.new("Animation")
+animation.AnimationId = "rbxassetid://136370737633649"
+local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+local animationTrack = animator:LoadAnimation(animation)
+
+local heartbeatConnection
+local renderConnection
+
+-- List of parts to modify
+local partsToSet = {
+	"Head",
+	"Torso",
+	"Left Arm",
+	"Right Arm",
+	"Left Leg",
+	"Right Leg"
+}
+
+-- Function to set transparency
+local function setTransparency(value)
+	for _, partName in ipairs(partsToSet) do
+		local part = character:FindFirstChild(partName)
+		if part and part:IsA("BasePart") then
+			part.Transparency = value
+		end
+	end
+end
+
+-- Rayfield Toggle inside your existing Tab
+Tab:CreateToggle({
+	Name = "invisible",
+	CurrentValue = false,
+	Callback = function(enabled)
+		if enabled then
+			-- Enable: Set transparency and start animation loop
+			setTransparency(0.5)
+
+			heartbeatConnection = RunService.Heartbeat:Connect(function()
+				if not animationTrack.IsPlaying then
+					animationTrack:Play()
+				end
+				animationTrack:AdjustSpeed(0)
+				animationTrack.TimePosition = 4.56
+			end)
+
+			renderConnection = RunService.RenderStepped:Connect(function()
+				if animationTrack.IsPlaying then
+					animationTrack:Stop()
+				end
+			end)
+
+		else
+			-- Disable: Reset transparency and stop animation
+			setTransparency(0)
+
+			if heartbeatConnection then
+				heartbeatConnection:Disconnect()
+				heartbeatConnection = nil
+			end
+
+			if renderConnection then
+				renderConnection:Disconnect()
+				renderConnection = nil
+			end
+
+			if animationTrack.IsPlaying then
+				animationTrack:Stop()
+			end
+		end
+	end,
+})
+
+
+end
+
+
+
+
 local player = Players.LocalPlayer
 local monitoring = false -- State to track if the monitoring is active
 
