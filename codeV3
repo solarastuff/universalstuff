@@ -2727,6 +2727,7 @@ local player = Players.LocalPlayer
 
 if game.PlaceId == 10449761463 or 12360882630  then 
 local Tab = Window:CreateTab("tsb") -- Title, Image
+local Label = Tab:CreateLabel("this game is supported", "check-check", Color3.fromRGB(191, 114, 27), false) -- Title, Icon, Color, IgnoreTheme
 local Section = Tab:CreateSection("fighting")
 
 
