@@ -3033,7 +3033,7 @@ local plr = players.LocalPlayer
 local cd = false
 
 local Settings = {
-    Autoparry = { Toggle = true, Range = 11, Delay = 0, Fov = 360, Facing = false, Dodgerange = 3, Aimhelper = false },
+    Autoparry = { Toggle = false, Range = 11, Delay = 0, Fov = 360, Facing = false, Dodgerange = 3, Aimhelper = false },
     ESP = { Toggle = false, Config = {} },
     Tpaura = { Toggle = false },
 }
