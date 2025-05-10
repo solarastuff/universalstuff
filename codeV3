@@ -2730,7 +2730,7 @@ local Tab = Window:CreateTab("tsb") -- Title, Image
 local Section = Tab:CreateSection("fighting")
 
 
-task.spawn()
+task.spawn(function()
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -2814,7 +2814,7 @@ Tab:CreateToggle({
 })
 
 
-end
+end)
 
 
 
