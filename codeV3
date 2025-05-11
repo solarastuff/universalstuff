@@ -1432,6 +1432,7 @@ end
 
 -- Fling function with loop and ground check
 function SkidFling(TargetPlayer)
+getgenv().StopFling = false
 	task.spawn(function()
 		while TargetPlayer and TargetPlayer.Parent == Players do
 			task.wait(0.1)
@@ -1552,6 +1553,12 @@ local Input = Tab:CreateInput({
 		else
 			Message("Error Occurred", "Invalid username or display name", 5)
 		end
+	end
+})
+local StopButton = Tab:CreateButton({
+	Name = "stop flinging",
+	Callback = function()
+		getgenv().StopFling = true
 	end
 })
 local Divider = Tab:CreateDivider()
