@@ -1559,7 +1559,7 @@ local StopButton = Tab:CreateButton({
 	Name = "stop flinging",
 	Callback = function()
 		getgenv().StopFling = true
-	end
+	end,
 })
 local Divider = Tab:CreateDivider()
 
