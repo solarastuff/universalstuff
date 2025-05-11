@@ -2824,7 +2824,74 @@ Tab:CreateToggle({
 
 end)
 
+task.spawn(function()
+local Button = Tab:CreateButton({
+   Name = "transmission,",
+   Callback = function()
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local player = Players.LocalPlayer
 
+local predictionTime = 0.2 -- Movement prediction time ahead
+
+-- Get nearest player
+local function getNearestPlayer()
+	local character = player.Character
+	if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+
+	local closest, minDistance = nil, math.huge
+	for _, otherPlayer in ipairs(Players:GetPlayers()) do
+		if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			local distance = (character.HumanoidRootPart.Position - otherPlayer.Character.HumanoidRootPart.Position).Magnitude
+			if distance < minDistance then
+				minDistance = distance
+				closest = otherPlayer
+			end
+		end
+	end
+	return closest
+end
+
+-- Tween teleport to predicted position
+local function teleportViaTween()
+	local target = getNearestPlayer()
+	local myChar = player.Character
+	local myHRP = myChar and myChar:FindFirstChild("HumanoidRootPart")
+	if not (target and myHRP) then return end
+
+	local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
+	if not targetHRP then return end
+
+	-- Predict movement
+	local predictedPos = targetHRP.Position + targetHRP.Velocity * predictionTime
+	local goalCFrame = CFrame.new(predictedPos) * CFrame.new(0, 0, 3) -- Behind target
+
+	-- Tween
+	local tween = TweenService:Create(
+		myHRP,
+		TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
+		{CFrame = goalCFrame}
+	)
+	tween:Play()
+end
+
+-- Create one teleport tool with Skill attribute
+local function createTool()
+	local tool = Instance.new("Tool")
+	tool.RequiresHandle = false
+	tool.Name = "transmission"
+	tool:SetAttribute("Skill", true)
+	tool.Parent = player:WaitForChild("Backpack")
+
+	tool.Equipped:Connect(teleportViaTween)
+end
+
+createTool()
+   -- The function that takes place when the button is pressed
+   end,
+})
+
+end)
 
 
 local player = Players.LocalPlayer
