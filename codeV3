@@ -127,8 +127,8 @@ local Label = Tab:CreateLabel("last updated: May 11th ", "timer-reset", Color3.f
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-          "• 
-            "transmission (tsb)\n\n" ..
+          
+            "• transmission (tsb)\n\n" ..
            "• INVISIBLE🫥 (tsb)\n\n" ..
            " •added get fucked😳\n\n" ..
                    "• auto block (tsb)\n\n" ..
