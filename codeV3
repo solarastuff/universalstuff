@@ -4278,7 +4278,7 @@ local currentAnimationTrack = nil
 
 -- Create a Rayfield text input for animation playback
 Tab:CreateInput({
-    Name = "Animations",
+    Name = "play animation",
     PlaceholderText = "Enter Animation ID Here",
     RemoveTextAfterFocusLost = true,
     Callback = function(AnimationID)
