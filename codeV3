@@ -121,13 +121,13 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 11th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 12th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-          
+          " • trashcan tool\n\n" .. 
             "• transmission (tsb)\n\n" ..
            "• INVISIBLE🫥 (tsb)\n\n" ..
            " •added get fucked😳\n\n" ..
@@ -2894,7 +2894,114 @@ createTool()
 })
 
 end)
+task.spawn(function()
+local Button = Tab:CreateButton({
+   Name = "trashcan tool",
+   Callback = function()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
 
+local backpack = player:WaitForChild("Backpack")
+local trashFolder = workspace:WaitForChild("Map"):WaitForChild("Trash")
+
+local currentIndex = 1
+local offsetDistance = 3
+
+-- Create the tool
+local tool = Instance.new("Tool")
+tool.Name = "grab trashcan"
+tool.RequiresHandle = false
+tool:SetAttribute("Skill", true)
+tool.Parent = backpack
+
+-- Helpers
+local function getCharacter()
+	return player.Character or player.CharacterAdded:Wait()
+end
+
+local function fireServer(args)
+	if player.Character and player.Character:FindFirstChild("Communicate") then
+		player.Character.Communicate:FireServer(unpack(args))
+	else
+		warn("Communicate RemoteEvent not found!")
+	end
+end
+
+local function simulateLeftClick()
+	fireServer({
+		[1] = { ["Mobile"] = true, ["Goal"] = "LeftClick" }
+	})
+	wait(0.1)
+	fireServer({
+		[1] = { ["Goal"] = "LeftClickRelease", ["Mobile"] = true }
+	})
+	print("Left-click and release simulated!")
+end
+
+-- Main teleport logic
+local function teleportToTrash()
+	local character = getCharacter()
+	local hrp = character:WaitForChild("HumanoidRootPart")
+	local humanoid = character:WaitForChild("Humanoid")
+
+	local trashCans = trashFolder:GetChildren()
+	if #trashCans == 0 then return end
+	if currentIndex > #trashCans then currentIndex = 1 end
+
+	local target = trashCans[currentIndex]
+	local teleportPart = target:FindFirstChildWhichIsA("BasePart")
+	if not teleportPart then return end
+
+	-- Save original state
+	local originalCameraType = camera.CameraType
+	local savedCameraCFrame = camera.CFrame
+	local originalCFrame = hrp.CFrame
+	local originalWalkSpeed = humanoid.WalkSpeed
+
+	-- Lock camera
+	camera.CameraType = Enum.CameraType.Scriptable
+	camera.CFrame = savedCameraCFrame
+
+	-- Freeze movement by setting WalkSpeed to 0 and enforcing it in a loop
+	local enforcing = true
+	local enforceConnection = RunService.RenderStepped:Connect(function()
+		if enforcing and humanoid.WalkSpeed ~= 0 then
+			humanoid.WalkSpeed = 0
+		end
+	end)
+	humanoid.WalkSpeed = 0
+
+	-- Teleport to trash
+	local offsetCFrame = teleportPart.CFrame - teleportPart.CFrame.LookVector * offsetDistance
+	offsetCFrame = offsetCFrame + Vector3.new(0, 5, 0)
+	hrp.CFrame = offsetCFrame
+
+	task.wait(0.2)
+	simulateLeftClick()
+	task.wait(0.6)
+
+	-- Teleport back
+	hrp.CFrame = originalCFrame
+
+	-- Stop freezing and restore WalkSpeed
+	enforcing = false
+	enforceConnection:Disconnect()
+	humanoid.WalkSpeed = originalWalkSpeed
+
+	-- Restore camera
+	task.wait(0.1)
+	camera.CameraType = originalCameraType
+
+	currentIndex += 1
+end
+
+tool.Equipped:Connect(teleportToTrash)
+   -- The function that takes place when the button is pressed
+   end,
+})
+end)
 
 local player = Players.LocalPlayer
 local monitoring = false -- State to track if the monitoring is active
