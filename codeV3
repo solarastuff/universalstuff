@@ -127,7 +127,8 @@ local Label = Tab:CreateLabel("last updated: May 12th ", "timer-reset", Color3.f
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-          " • trashcan tool\n\n" .. 
+          " • fixed some trashcan grabber bugs\n\n" .. 
+          " • trashcan tool (tsb)\n\n" .. 
             "• transmission (tsb)\n\n" ..
            "• INVISIBLE🫥 (tsb)\n\n" ..
            " •added get fucked😳\n\n" ..
@@ -2980,7 +2981,7 @@ local function teleportToTrash()
 
 	task.wait(0.2)
 	simulateLeftClick()
-	task.wait(0.6)
+	task.wait(0.7)
 
 	-- Teleport back
 	hrp.CFrame = originalCFrame
