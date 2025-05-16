@@ -127,29 +127,18 @@ local Label = Tab:CreateLabel("last updated: May 12th ", "timer-reset", Color3.f
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-          " • fixed some trashcan grabber bugs\n\n" .. 
+          " • fixed some trashcan grabber bugs (tsb)\n\n" .. 
           " • trashcan tool (tsb)\n\n" .. 
             "• transmission (tsb)\n\n" ..
-           "• INVISIBLE🫥 (tsb)\n\n" ..
-           " •added get fucked😳\n\n" ..
-                   "• auto block (tsb)\n\n" ..
-            "• fixed some auto dodge bugs💔🥀\n\n" ..
-         "• anti death  counter✅"
+           "• INVISIBLE🫥 (tsb)"
+           
+       
           
         
         
 })
 
-local Paragraph = Tab:CreateParagraph({
-    Title = "upcoming features", 
-    Content = 
-        
-        "• anti bang (universal)\n\n" ..
-        "• auto dodge (jjs)\n\n" ..
- "• auto block (jjs)\n\n" ..
-        "• wall combo anywhere (tsb)\n\n" ..
-        "• invisible parry for TSB and jujutsu shenanigans"
-})
+
 local Label = Tab:CreateLabel("executor: ".. exe, "parentheses")
 
 local Button = Tab:CreateButton({
