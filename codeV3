@@ -2815,7 +2815,128 @@ Tab:CreateToggle({
 
 end)
 
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
 
+local teleportCFrame = CFrame.new(10000, -480, 0)
+local running = false
+local originalCFrame = nil
+local platform = nil
+local systemEnabled = false
+
+local targetAnimIds = {
+	["rbxassetid://12273188754"] = true,
+	["rbxassetid://12296113986"] = true,
+	["rbxassetid://15145462680"] = 0.5,
+	["rbxassetid://15295895753"] = 0.5,
+}
+
+local cameraLockConnection = nil
+local savedCameraCFrame = nil
+
+local function lockCamera()
+	savedCameraCFrame = camera.CFrame
+	cameraLockConnection = RunService.RenderStepped:Connect(function()
+		camera.CFrame = savedCameraCFrame
+	end)
+end
+
+local function unlockCamera()
+	if cameraLockConnection then
+		cameraLockConnection:Disconnect()
+		cameraLockConnection = nil
+	end
+end
+
+local function teleportBack(humanoidRootPart)
+	running = false
+	if platform and platform.Parent then
+		platform:Destroy()
+	end
+	humanoidRootPart.Anchored = false
+	humanoidRootPart.CFrame = originalCFrame
+	unlockCamera()
+end
+
+local function startTeleport()
+	if running or not systemEnabled then return end
+	running = true
+
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+	originalCFrame = humanoidRootPart.CFrame
+	lockCamera()
+
+	task.spawn(function()
+		while running do
+			humanoidRootPart.CFrame = teleportCFrame
+			task.wait(0.1)
+		end
+	end)
+
+	task.wait(0.2)
+
+	platform = Instance.new("Part")
+	platform.Size = Vector3.new(10, 1, 10)
+	platform.Position = teleportCFrame.Position - Vector3.new(0, 3, 0)
+	platform.Anchored = true
+	platform.CanCollide = true
+	platform.Material = Enum.Material.SmoothPlastic
+	platform.Color = Color3.fromRGB(180, 180, 180)
+	platform.Name = "TeleportPlatform"
+	platform.Parent = workspace
+
+	humanoidRootPart.Anchored = true
+end
+
+local function setupAnimDetection()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+
+	humanoid.AnimationPlayed:Connect(function(track)
+		if not systemEnabled then return end
+
+		local animId = track.Animation and track.Animation.AnimationId
+		local delayTime = targetAnimIds[animId]
+
+		if delayTime then
+			if type(delayTime) == "number" then
+				task.delay(delayTime, function()
+					if running or not systemEnabled then return end
+					startTeleport()
+				end)
+			else
+				if not running then
+					startTeleport()
+				end
+			end
+
+			track.Stopped:Connect(function()
+				local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+				teleportBack(humanoidRootPart)
+			end)
+		end
+	end)
+end
+
+if player.Character then
+	setupAnimDetection()
+end
+
+player.CharacterAdded:Connect(setupAnimDetection)
+
+-- RAYFIELD TOGGLE ONLY
+local Toggle = Tab:CreateToggle({
+	Name = "Auto Void Kill",
+	CurrentValue = false,
+	Flag = "VoidKillToggle",
+	Callback = function(Value)
+		systemEnabled = Value
+	end,
+})
 
 task.spawn(function()
 local Button = Tab:CreateButton({
