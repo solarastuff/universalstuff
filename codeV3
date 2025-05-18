@@ -2823,8 +2823,7 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
--- Rayfield (assumes it's already loaded)
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
 
 -- Anim system vars
 local teleportCFrame = CFrame.new(10000, -480, 0)
