@@ -2814,7 +2814,7 @@ Tab:CreateToggle({
 
 
 end)
-
+task.spawn(function()
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
@@ -2937,7 +2937,7 @@ local Toggle = Tab:CreateToggle({
 		systemEnabled = Value
 	end,
 })
-
+end)
 task.spawn(function()
 local Button = Tab:CreateButton({
    Name = "transmission,",
