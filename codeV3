@@ -3083,7 +3083,7 @@ task.spawn(function()
     })
 end)
 local Divider = Tab:CreateDivider()
-
+task.spawn(function()
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -3215,6 +3215,7 @@ local HitboxSlider = Tab:CreateSlider({
 		hitboxsiz = Value
 	end,
 })
+end)
 
 local Section = Tab:CreateSection("auto block")
 
