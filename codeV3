@@ -121,17 +121,16 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 12th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 17th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+                  " • auto dodge is fully working now (tsb)\n\n" ..
           " • fixed some trashcan grabber bugs (tsb)\n\n" .. 
-          " • trashcan tool (tsb)\n\n" .. 
-            "• transmission (tsb)\n\n" ..
-           "• INVISIBLE🫥 (tsb)"
-           
+          " • trashcan tool (tsb)"
+            
        
           
         
@@ -3183,7 +3182,7 @@ end)
 
 -- Rayfield Toggle
 local Toggle = Tab:CreateToggle({
-	Name = "auto dodge (M1's) BETA",
+	Name = "auto dodgeV2 (M1's)",
 	CurrentValue = false,
 	Flag = "HitboxTeleportAccessoryToggle",
 	Callback = function(Value)
@@ -3205,7 +3204,7 @@ local TeleportSlider = Tab:CreateSlider({
 })
 
 local HitboxSlider = Tab:CreateSlider({
-	Name = "hitbox sizeV2",
+	Name = "hitbox size",
 	Range = {0, 30},
 	Increment = 1,
 	Suffix = "size",
