@@ -2938,8 +2938,8 @@ if player.Character then
 end
 player.CharacterAdded:Connect(setupAnimDetection)
 
--- Rayfield toggle (no tab or window)
-Tab:CreateToggle({
+
+local toggle = Tab:CreateToggle({
 	Name = "auto void kill",
 	CurrentValue = false,
 	Callback = function(Value)
