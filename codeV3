@@ -127,6 +127,7 @@ local Label = Tab:CreateLabel("last updated: May 19th ", "timer-reset", Color3.f
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+ " • anti bang (universal)\n\n" ..
   " • fixed invisibility not working after reset (tsb)\n\n" ..
                         " • auto void kill (tsb)\n\n" ..
                   " • auto dodge is fully working now (tsb)"
@@ -2805,21 +2806,14 @@ task.spawn(function()
 	local player = Players.LocalPlayer
 	local liveFolder = workspace:WaitForChild("Live")
 
-	local heartbeatConnection
-	local renderConnection
-	local animationTrack
+	local toggleState = false -- to remember if toggle is ON
+	local currentConnections = {}
+	local currentTrack = nil
 
-	-- List of parts to modify
 	local partsToSet = {
-		"Head",
-		"Torso",
-		"Left Arm",
-		"Right Arm",
-		"Left Leg",
-		"Right Leg"
+		"Head", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg"
 	}
 
-	-- Function to set transparency
 	local function setTransparency(value, character)
 		for _, partName in ipairs(partsToSet) do
 			local part = character:FindFirstChild(partName)
@@ -2829,66 +2823,73 @@ task.spawn(function()
 		end
 	end
 
-	-- Function to run your invisibility logic
-	local function setupInvisibility(character)
+	local function cleanup()
+		for _, conn in pairs(currentConnections) do
+			if conn then conn:Disconnect() end
+		end
+		currentConnections = {}
+
+		if currentTrack and currentTrack.IsPlaying then
+			currentTrack:Stop()
+		end
+	end
+
+	local function setup(character)
 		local humanoid = character:WaitForChild("Humanoid")
+		local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+
 		local animation = Instance.new("Animation")
 		animation.AnimationId = "rbxassetid://136370737633649"
-		local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
-		animationTrack = animator:LoadAnimation(animation)
+		currentTrack = animator:LoadAnimation(animation)
 
-		Tab:CreateToggle({
-			Name = "invisible",
-			CurrentValue = false,
-			Callback = function(enabled)
-				if enabled then
-					setTransparency(0.5, character)
+		if toggleState then
+			setTransparency(0.5, character)
 
-					heartbeatConnection = RunService.Heartbeat:Connect(function()
-						if not animationTrack.IsPlaying then
-							animationTrack:Play()
-						end
-						animationTrack:AdjustSpeed(0)
-						animationTrack.TimePosition = 4.56
-					end)
-
-					renderConnection = RunService.RenderStepped:Connect(function()
-						if animationTrack.IsPlaying then
-							animationTrack:Stop()
-						end
-					end)
-				else
-					setTransparency(0, character)
-
-					if heartbeatConnection then
-						heartbeatConnection:Disconnect()
-						heartbeatConnection = nil
-					end
-
-					if renderConnection then
-						renderConnection:Disconnect()
-						renderConnection = nil
-					end
-
-					if animationTrack and animationTrack.IsPlaying then
-						animationTrack:Stop()
-					end
+			table.insert(currentConnections, RunService.Heartbeat:Connect(function()
+				if not currentTrack.IsPlaying then
+					currentTrack:Play()
 				end
-			end,
-		})
+				currentTrack:AdjustSpeed(0)
+				currentTrack.TimePosition = 4.56
+			end))
+
+			table.insert(currentConnections, RunService.RenderStepped:Connect(function()
+				if currentTrack.IsPlaying then
+					currentTrack:Stop()
+				end
+			end))
+		else
+			setTransparency(0, character)
+		end
 	end
 
-	-- Run setup on current char if exists
-	if player.Character then
-		local character = liveFolder:WaitForChild(player.Name)
-		setupInvisibility(character)
-	end
+	-- UI toggle once
+	Tab:CreateToggle({
+		Name = "invisible",
+		CurrentValue = false,
+		Callback = function(enabled)
+			toggleState = enabled
 
-	-- Run setup on respawn too
+			local char = liveFolder:FindFirstChild(player.Name)
+			if not char then return end
+
+			cleanup()
+			setup(char)
+		end,
+	})
+
+	-- Handle respawn/rebuild
 	player.CharacterAdded:Connect(function()
-		local character = liveFolder:WaitForChild(player.Name)
-		setupInvisibility(character)
+		local newChar = liveFolder:WaitForChild(player.Name)
+		cleanup()
+		setup(newChar)
 	end)
+
+	-- First spawn too
+	if player.Character then
+		local firstChar = liveFolder:WaitForChild(player.Name)
+		setup(firstChar)
+	end
 end)
 task.spawn(function()
 local Players = game:GetService("Players")
