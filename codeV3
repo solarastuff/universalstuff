@@ -121,17 +121,16 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 18th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 19th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
-                        " • auto void kill\n\n" ..
-                  " • auto dodge is fully working now (tsb)\n\n" ..
-          " • fixed some trashcan grabber bugs (tsb)\n\n" .. 
-          " • trashcan tool (tsb)"
-            
+  " • fixed invisibility not working after reset (tsb)\n\n" ..
+                        " • auto void kill (tsb)\n\n" ..
+                  " • auto dodge is fully working now (tsb)"
+          
        
           
         
@@ -1955,7 +1954,77 @@ Tab:CreateToggle({
     end
 })
 
+task.spawn(function()
+local Button = Tab:CreateButton({
+   Name = "anti bang/follow ",
+   Callback = function()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
+-- Create the tool
+local tool = Instance.new("Tool")
+tool.Name = "anti bang"
+tool.RequiresHandle = false
+tool.Parent = player.Backpack
+
+-- Target position
+local teleportCFrame = CFrame.new(10000, -480, 0)
+
+-- Loop control
+local running = false
+local originalCFrame = nil
+local platform = nil
+
+tool.Equipped:Connect(function()
+	if running then return end
+	running = true
+
+	-- Save original position
+	originalCFrame = humanoidRootPart.CFrame
+
+	task.spawn(function()
+		while running do
+			humanoidRootPart.CFrame = teleportCFrame
+			task.wait(0.1)
+		end
+	end)
+
+	task.wait(0.2)
+
+	-- Place clean platform
+	platform = Instance.new("Part")
+	platform.Size = Vector3.new(10, 1, 10)
+	platform.Position = teleportCFrame.Position - Vector3.new(0, 3, 0)
+	platform.Anchored = true
+	platform.CanCollide = true
+	platform.Material = Enum.Material.SmoothPlastic
+	platform.Color = Color3.fromRGB(180, 180, 180)
+	platform.Name = "TeleportPlatform"
+	platform.Parent = workspace
+
+	-- Anchor player
+	humanoidRootPart.Anchored = true
+end)
+
+tool.Unequipped:Connect(function()
+	running = false
+
+	-- Clean up
+	if platform and platform.Parent then
+		platform:Destroy()
+	end
+
+	humanoidRootPart.Anchored = false
+	if originalCFrame then
+		humanoidRootPart.CFrame = originalCFrame
+	end
+end)
+   -- The function that takes place when the button is pressed
+   end,
+})
+end)
 
 local localPlayer = Players.LocalPlayer
 local camera = game.Workspace.CurrentCamera
@@ -2729,93 +2798,98 @@ local Tab = Window:CreateTab("tsb") -- Title, Image
 
 local Section = Tab:CreateSection("fighting")
 
-
 task.spawn(function()
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
 
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+	local player = Players.LocalPlayer
+	local liveFolder = workspace:WaitForChild("Live")
 
-local player = Players.LocalPlayer
-local liveFolder = workspace:WaitForChild("Live")
-local character = liveFolder:WaitForChild(player.Name)
+	local heartbeatConnection
+	local renderConnection
+	local animationTrack
 
-local humanoid = character:WaitForChild("Humanoid")
+	-- List of parts to modify
+	local partsToSet = {
+		"Head",
+		"Torso",
+		"Left Arm",
+		"Right Arm",
+		"Left Leg",
+		"Right Leg"
+	}
 
-local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://136370737633649"
-local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
-local animationTrack = animator:LoadAnimation(animation)
-
-local heartbeatConnection
-local renderConnection
-
--- List of parts to modify
-local partsToSet = {
-	"Head",
-	"Torso",
-	"Left Arm",
-	"Right Arm",
-	"Left Leg",
-	"Right Leg"
-}
-
--- Function to set transparency
-local function setTransparency(value)
-	for _, partName in ipairs(partsToSet) do
-		local part = character:FindFirstChild(partName)
-		if part and part:IsA("BasePart") then
-			part.Transparency = value
+	-- Function to set transparency
+	local function setTransparency(value, character)
+		for _, partName in ipairs(partsToSet) do
+			local part = character:FindFirstChild(partName)
+			if part and part:IsA("BasePart") then
+				part.Transparency = value
+			end
 		end
 	end
-end
 
--- Rayfield Toggle inside your existing Tab
-Tab:CreateToggle({
-	Name = "invisible",
-	CurrentValue = false,
-	Callback = function(enabled)
-		if enabled then
-			-- Enable: Set transparency and start animation loop
-			setTransparency(0.5)
+	-- Function to run your invisibility logic
+	local function setupInvisibility(character)
+		local humanoid = character:WaitForChild("Humanoid")
+		local animation = Instance.new("Animation")
+		animation.AnimationId = "rbxassetid://136370737633649"
+		local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+		animationTrack = animator:LoadAnimation(animation)
 
-			heartbeatConnection = RunService.Heartbeat:Connect(function()
-				if not animationTrack.IsPlaying then
-					animationTrack:Play()
+		Tab:CreateToggle({
+			Name = "invisible",
+			CurrentValue = false,
+			Callback = function(enabled)
+				if enabled then
+					setTransparency(0.5, character)
+
+					heartbeatConnection = RunService.Heartbeat:Connect(function()
+						if not animationTrack.IsPlaying then
+							animationTrack:Play()
+						end
+						animationTrack:AdjustSpeed(0)
+						animationTrack.TimePosition = 4.56
+					end)
+
+					renderConnection = RunService.RenderStepped:Connect(function()
+						if animationTrack.IsPlaying then
+							animationTrack:Stop()
+						end
+					end)
+				else
+					setTransparency(0, character)
+
+					if heartbeatConnection then
+						heartbeatConnection:Disconnect()
+						heartbeatConnection = nil
+					end
+
+					if renderConnection then
+						renderConnection:Disconnect()
+						renderConnection = nil
+					end
+
+					if animationTrack and animationTrack.IsPlaying then
+						animationTrack:Stop()
+					end
 				end
-				animationTrack:AdjustSpeed(0)
-				animationTrack.TimePosition = 4.56
-			end)
+			end,
+		})
+	end
 
-			renderConnection = RunService.RenderStepped:Connect(function()
-				if animationTrack.IsPlaying then
-					animationTrack:Stop()
-				end
-			end)
+	-- Run setup on current char if exists
+	if player.Character then
+		local character = liveFolder:WaitForChild(player.Name)
+		setupInvisibility(character)
+	end
 
-		else
-			-- Disable: Reset transparency and stop animation
-			setTransparency(0)
-
-			if heartbeatConnection then
-				heartbeatConnection:Disconnect()
-				heartbeatConnection = nil
-			end
-
-			if renderConnection then
-				renderConnection:Disconnect()
-				renderConnection = nil
-			end
-
-			if animationTrack.IsPlaying then
-				animationTrack:Stop()
-			end
-		end
-	end,
-})
-
-
+	-- Run setup on respawn too
+	player.CharacterAdded:Connect(function()
+		local character = liveFolder:WaitForChild(player.Name)
+		setupInvisibility(character)
+	end)
 end)
-
 task.spawn(function()
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
