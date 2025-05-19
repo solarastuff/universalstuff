@@ -121,12 +121,13 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 17th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 18th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+                        " • auto void kill\n\n" ..
                   " • auto dodge is fully working now (tsb)\n\n" ..
           " • fixed some trashcan grabber bugs (tsb)\n\n" .. 
           " • trashcan tool (tsb)"
@@ -2936,6 +2937,74 @@ local Toggle = Tab:CreateToggle({
    Flag = "Toggle1",
    Callback = function(Value)
       systemEnabled = Value
+if Value then
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local playerGui = player:WaitForChild("PlayerGui") -- no wait for character
+
+-- Create GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "SupportedMovesGui"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
+
+-- Main frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 250)
+frame.Position = UDim2.new(0.5, -200, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+frame.Parent = gui
+frame.AnchorPoint = Vector2.new(0.5, 0)
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+local stroke = Instance.new("UIStroke", frame)
+stroke.Thickness = 2
+stroke.Color = Color3.fromRGB(100, 100, 255)
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Supported Moves"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+title.Parent = frame
+
+-- Move List
+local list = Instance.new("TextLabel")
+list.Size = UDim2.new(1, -40, 0, 130)
+list.Position = UDim2.new(0, 20, 0, 60)
+list.BackgroundTransparency = 1
+list.Text = "• Flowing Water\n• Lethal Whirlwind\n• Foul Ball\n• Atmos Cleve\n• Pinpoint Cut"
+list.TextColor3 = Color3.fromRGB(200, 220, 255)
+list.TextScaled = true
+list.TextWrapped = true
+list.Font = Enum.Font.Gotham
+list.TextXAlignment = Enum.TextXAlignment.Left
+list.TextYAlignment = Enum.TextYAlignment.Top
+list.Parent = frame
+
+-- Button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 100, 0, 40)
+button.Position = UDim2.new(0.5, -50, 1, -50)
+button.Text = "✔"
+button.Font = Enum.Font.GothamBold
+button.TextScaled = true
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.BackgroundColor3 = Color3.fromRGB(50, 180, 120)
+button.Parent = frame
+Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
+
+-- Button click
+button.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+end
    end,
 })
 end)
