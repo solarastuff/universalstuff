@@ -121,12 +121,14 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 19th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 21st ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+ " • behind search (universal)\n\n" ..
+  " • fixed some auto dodge bugs (tsb)\n\n" ..
  " • anti bang (universal)\n\n" ..
   " • fixed invisibility not working after reset (tsb)\n\n" ..
                         " • auto void kill (tsb)\n\n" ..
