@@ -1930,7 +1930,7 @@ end
 
 -- Create the toggle
 Tab:CreateToggle({
-    Name = "behind (pretty much bang but better)", -- Name of the toggle
+    Name = "behind/bang (nearest player)", -- Name of the toggle
     CurrentValue = false, -- Initial state is OFF
     Callback = function(toggleState) -- Function triggered when the toggle is toggled
         isFollowing = toggleState
@@ -1954,6 +1954,84 @@ Tab:CreateToggle({
         end
     end
 })
+
+task.spawn(function()
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local isFollowing = false
+local lockedPlayer = nil
+local typedName = ""
+
+-- Find player by username or display name
+local function findPlayerByName(name)
+	for _, plr in pairs(Players:GetPlayers()) do
+		if string.lower(plr.Name) == string.lower(name) or string.lower(plr.DisplayName) == string.lower(name) then
+			return plr
+		end
+	end
+	return nil
+end
+
+-- Follow behind the locked player
+local function moveToLockedPlayer()
+	local char = LocalPlayer.Character
+	if char and char:FindFirstChild("HumanoidRootPart") and lockedPlayer then
+		local targetChar = lockedPlayer.Character
+		if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+			local pos = targetChar.HumanoidRootPart.Position - targetChar.HumanoidRootPart.CFrame.LookVector * 3
+			char.HumanoidRootPart.CFrame = CFrame.new(pos, targetChar.HumanoidRootPart.Position)
+		end
+	end
+end
+
+-- Lock onto the target and follow respawn
+local function setLockedPlayer(target)
+	lockedPlayer = target
+	target.CharacterAdded:Connect(function(newChar)
+		lockedPlayer.Character = newChar
+	end)
+end
+
+-- TextBox for typing the name
+Tab:CreateInput({
+	Name = "behind (search)",
+	PlaceholderText = "DisplayName/UserName",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(text)
+		typedName = text
+	end,
+})
+
+-- Toggle to follow the typed player
+Tab:CreateToggle({
+	Name = "behind player",
+	CurrentValue = false,
+	Callback = function(state)
+		isFollowing = state
+		if isFollowing then
+			local found = findPlayerByName(typedName)
+			if found then
+				setLockedPlayer(found)
+			else
+				warn("No player found with name: " .. typedName)
+				isFollowing = false
+				return
+			end
+			RunService.RenderStepped:Connect(function()
+				if isFollowing then
+					moveToLockedPlayer()
+				end
+			end)
+		else
+			lockedPlayer = nil
+		end
+	end
+})
+
+end)
 
 task.spawn(function()
 local Button = Tab:CreateButton({
@@ -3352,137 +3430,146 @@ task.spawn(function()
 end)
 local Divider = Tab:CreateDivider()
 task.spawn(function()
-local Workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+	local Workspace = game:GetService("Workspace")
+	local Players = game:GetService("Players")
+	local RunService = game:GetService("RunService")
 
-local LocalPlayer = Players.LocalPlayer
-local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+	local LocalPlayer = Players.LocalPlayer
+	local Character, HumanoidRootPart
 
-local TELEPORT_DISTANCE = 3.3
-local hitboxsiz = 15
-local toggleEnabled = false
-local hitboxPart = nil
+	local TELEPORT_DISTANCE = 3.3
+	local hitboxsiz = 15
+	local toggleEnabled = false
+	local hitboxPart = nil
 
--- Function to get nearest player
-local function getNearestPlayer()
-	local nearestPlayer = nil
-	local shortestDistance = math.huge
-	for _, player in pairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-			local distance = (player.Character.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
-			if distance < shortestDistance then
-				nearestPlayer = player
-				shortestDistance = distance
+	-- Character setup
+	local function setupCharacter()
+		Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+		HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+	end
+
+	setupCharacter()
+
+	-- On respawn
+	LocalPlayer.CharacterAdded:Connect(function(char)
+		char:WaitForChild("HumanoidRootPart")
+		setupCharacter()
+	end)
+
+	-- Get nearest player
+	local function getNearestPlayer()
+		local nearestPlayer = nil
+		local shortestDistance = math.huge
+		for _, player in pairs(Players:GetPlayers()) do
+			if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+				local distance = (player.Character.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
+				if distance < shortestDistance then
+					nearestPlayer = player
+					shortestDistance = distance
+				end
 			end
 		end
+		return nearestPlayer
 	end
-	return nearestPlayer
-end
 
--- Touch = teleport
-local function onHitboxTouched(otherPart)
-	if toggleEnabled and otherPart:IsDescendantOf(Character) then
-		local direction = (HumanoidRootPart.Position - hitboxPart.Position).Unit
-		if direction.Magnitude == 0 then
-			direction = Vector3.new(0, 0, -1)
+	-- Hitbox touched = teleport
+	local function onHitboxTouched(otherPart)
+		if toggleEnabled and otherPart:IsDescendantOf(Character) then
+			local direction = (HumanoidRootPart.Position - hitboxPart.Position).Unit
+			if direction.Magnitude == 0 then direction = Vector3.new(0, 0, -1) end
+			HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position + direction * TELEPORT_DISTANCE)
+
+			local soundss = Instance.new("Sound")
+			soundss.SoundId = nil
+			soundss.Looped = false
+			soundss.Volume = 3.3
+			soundss.Parent = workspace
+			soundss:Play()
 		end
-		HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position + direction * TELEPORT_DISTANCE)
-
-		local soundss = Instance.new("Sound")
-		soundss.SoundId = nil
-		soundss.Looped = false
-		soundss.Volume = 3.3
-		soundss.Parent = workspace
-		soundss:Play()
-	end
-end
-
--- Hitbox logic
-local function updateHitboxForPlayer(player)
-	local liveFolder = Workspace:FindFirstChild("Live")
-	if not liveFolder then return end
-
-	local playerModel = liveFolder:FindFirstChild(player.Name)
-	if not playerModel then return end
-
-	local m1ingAccessory = playerModel:FindFirstChild("M1ing")
-	if not m1ingAccessory then return end
-
-	if not hitboxPart then
-		hitboxPart = Instance.new("Part")
-		hitboxPart.Anchored = true
-		hitboxPart.CanCollide = false
-		hitboxPart.Transparency = 0.6
-		hitboxPart.BrickColor = BrickColor.new("Light stone grey")
-		hitboxPart.Touched:Connect(onHitboxTouched)
-		hitboxPart.Parent = Workspace
 	end
 
-	local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if targetHRP then
-		hitboxPart.Size = targetHRP.Size + Vector3.new(hitboxsiz, hitboxsiz, hitboxsiz)
-		hitboxPart.Position = targetHRP.Position
-	end
-end
+	-- Update hitbox
+	local function updateHitboxForPlayer(player)
+		local liveFolder = Workspace:FindFirstChild("Live")
+		if not liveFolder then return end
 
--- Cleanup hitbox
-local function destroyHitbox()
-	if hitboxPart then
-		hitboxPart:Destroy()
-		hitboxPart = nil
-	end
-end
+		local playerModel = liveFolder:FindFirstChild(player.Name)
+		if not playerModel then return end
 
--- Live loop
-RunService.Heartbeat:Connect(function()
-	if toggleEnabled then
-		local nearestPlayer = getNearestPlayer()
-		if nearestPlayer then
-			updateHitboxForPlayer(nearestPlayer)
+		local m1ingAccessory = playerModel:FindFirstChild("M1ing")
+		if not m1ingAccessory then return end
+
+		if not hitboxPart then
+			hitboxPart = Instance.new("Part")
+			hitboxPart.Anchored = true
+			hitboxPart.CanCollide = false
+			hitboxPart.Transparency = 0.6
+			hitboxPart.BrickColor = BrickColor.new("Light stone grey")
+			hitboxPart.Touched:Connect(onHitboxTouched)
+			hitboxPart.Parent = Workspace
+		end
+
+		local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if targetHRP then
+			hitboxPart.Size = targetHRP.Size + Vector3.new(hitboxsiz, hitboxsiz, hitboxsiz)
+			hitboxPart.Position = targetHRP.Position
+		end
+	end
+
+	local function destroyHitbox()
+		if hitboxPart then
+			hitboxPart:Destroy()
+			hitboxPart = nil
+		end
+	end
+
+	-- Loop
+	RunService.Heartbeat:Connect(function()
+		if toggleEnabled then
+			local nearestPlayer = getNearestPlayer()
+			if nearestPlayer then
+				updateHitboxForPlayer(nearestPlayer)
+			else
+				destroyHitbox()
+			end
 		else
 			destroyHitbox()
 		end
-	else
-		destroyHitbox()
-	end
-end)
+	end)
 
--- Rayfield Toggle
-local Toggle = Tab:CreateToggle({
-	Name = "auto dodgeV2 (M1's)",
-	CurrentValue = false,
-	Flag = "HitboxTeleportAccessoryToggle",
-	Callback = function(Value)
-		toggleEnabled = Value
-	end,
-})
+	-- Rayfield UI
+	local Toggle = Tab:CreateToggle({
+		Name = "auto dodgeV2 (M1's)",
+		CurrentValue = false,
+		Flag = "HitboxTeleportAccessoryToggle",
+		Callback = function(Value)
+			toggleEnabled = Value
+		end,
+	})
 
--- Sliders
-local TeleportSlider = Tab:CreateSlider({
-	Name = "teleport distance",
-	Range = {0, 30},
-	Increment = 1,
-	Suffix = "feet",
-	CurrentValue = TELEPORT_DISTANCE,
-	Flag = "TeleportSlider",
-	Callback = function(Value)
-		TELEPORT_DISTANCE = Value
-	end,
-})
+	local TeleportSlider = Tab:CreateSlider({
+		Name = "teleport distance",
+		Range = {0, 30},
+		Increment = 1,
+		Suffix = "feet",
+		CurrentValue = TELEPORT_DISTANCE,
+		Flag = "TeleportSlider",
+		Callback = function(Value)
+			TELEPORT_DISTANCE = Value
+		end,
+	})
 
-local HitboxSlider = Tab:CreateSlider({
-	Name = "hitbox size",
-	Range = {0, 30},
-	Increment = 1,
-	Suffix = "size",
-	CurrentValue = hitboxsiz,
-	Flag = "HitboxSlider",
-	Callback = function(Value)
-		hitboxsiz = Value
-	end,
-})
+	local HitboxSlider = Tab:CreateSlider({
+		Name = "hitbox size",
+		Range = {0, 30},
+		Increment = 1,
+		Suffix = "size",
+		CurrentValue = hitboxsiz,
+		Flag = "HitboxSlider",
+		Callback = function(Value)
+			hitboxsiz = Value
+		end,
+	})
 end)
 
 local Section = Tab:CreateSection("auto block")
