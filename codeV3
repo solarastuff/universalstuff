@@ -3013,7 +3013,7 @@ local function teleportBack(humanoidRootPart)
 		platform:Destroy()
 	end
 	humanoidRootPart.Anchored = false
-task.wait(0.1)
+task.wait(0.2)
 	humanoidRootPart.CFrame = originalCFrame
 	unlockCamera()
 end
