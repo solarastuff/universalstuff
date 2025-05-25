@@ -1,0 +1,26 @@
+local clone = script:Clone()
+clone.Name = "Hook"
+clone.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+function test()
+while true do
+print("normal")
+
+task.wait(0.3)
+end
+end
+
+task.wait(1)
+
+test()
+
+
+
+
+
+local SCRIPT = game.Players.LocalPlayer.PlayerGui:WaitForChild("Hook")
+
+local senv = senv.test;
+
+hookfunction(test, function(...)
+print("hooked")
+end)
