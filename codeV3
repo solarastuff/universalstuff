@@ -1,5 +1,11 @@
 -- ccgvb on discord 😎
 --yeah
+-- i miss my pc 
+
+
+
+
+
 local Players = game:GetService("Players")
 
 -- Replace this with your Discord Webhook URL
@@ -4718,6 +4724,9 @@ print(Text)
    -- The variable (Text) is a string for the value in the text box
    end,
 })
+
+
+
 
 
 
