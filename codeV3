@@ -1556,7 +1556,7 @@ end
 
 -- Rayfield input field
 local Input = Tab:CreateInput({
-	Name = "loop user fling",
+	Name = "loop user flingV2",
 	CurrentValue = "",
 	PlaceholderText = "UserName/DisplayName",
 	RemoveTextAfterFocusLost = true,
