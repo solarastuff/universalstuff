@@ -1432,6 +1432,7 @@ local Input = Tab:CreateInput({
     end
 })
 
+local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
 -- Save original FallenPartsDestroyHeight
@@ -1449,9 +1450,9 @@ function GetPlayer(Name)
 	end
 end
 
--- Fling function with loop and ground check
+-- Fling function without prediction
 function SkidFling(TargetPlayer)
-getgenv().StopFling = false
+	getgenv().StopFling = false
 	task.spawn(function()
 		while TargetPlayer and TargetPlayer.Parent == Players do
 			task.wait(0.1)
@@ -1470,12 +1471,10 @@ getgenv().StopFling = false
 				continue
 			end
 
-			-- Only fling if on the same level (ground check)
 			if math.abs(TRootPart.Position.Y - RootPart.Position.Y) > 5 then
 				continue
 			end
 
-			-- Save position
 			if RootPart.Velocity.Magnitude < 50 then
 				getgenv().OldPos = RootPart.CFrame
 			end
@@ -1487,8 +1486,9 @@ getgenv().StopFling = false
 			workspace.CurrentCamera.CameraSubject = THead or Handle or THumanoid
 
 			local function FPos(BasePart, Pos, Ang)
-				RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
-				Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+				local targetPos = CFrame.new(BasePart.Position) * Pos * Ang
+				RootPart.CFrame = targetPos
+				Character:SetPrimaryPartCFrame(targetPos)
 				RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
 				RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
 			end
@@ -1499,16 +1499,11 @@ getgenv().StopFling = false
 				local Angle = 0
 				repeat
 					if RootPart and THumanoid then
-						if BasePart.Velocity.Magnitude < 50 then
-							Angle += 100
-							FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
-							task.wait()
-							FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
-							task.wait()
-						else
-							FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
-							task.wait()
-						end
+						Angle += 100
+						FPos(BasePart, CFrame.new(0, 1.5, 0), CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
 					else
 						break
 					end
@@ -1542,8 +1537,9 @@ getgenv().StopFling = false
 			workspace.CurrentCamera.CameraSubject = Humanoid
 
 			repeat
-				RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
-				Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+				local returnCFrame = getgenv().OldPos * CFrame.new(0, 0.5, 0)
+				RootPart.CFrame = returnCFrame
+				Character:SetPrimaryPartCFrame(returnCFrame)
 				Humanoid:ChangeState("GettingUp")
 				for _, x in ipairs(Character:GetChildren()) do
 					if x:IsA("BasePart") then
