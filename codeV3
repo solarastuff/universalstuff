@@ -1556,7 +1556,7 @@ end
 
 -- Rayfield input field
 local Input = Tab:CreateInput({
-	Name = "loop user flingV2",
+	Name = "loop user fling",
 	CurrentValue = "",
 	PlaceholderText = "UserName/DisplayName",
 	RemoveTextAfterFocusLost = true,
@@ -3102,6 +3102,7 @@ local function setupAnimDetection()
 
 			track.Stopped:Connect(function()
 				local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+task.wait(0.2)
 				teleportBack(humanoidRootPart)
 			end)
 		end
