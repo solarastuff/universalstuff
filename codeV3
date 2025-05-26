@@ -6,6 +6,22 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local Players = game:GetService("Players")
 
 -- Replace this with your Discord Webhook URL
@@ -127,12 +143,15 @@ on:Play()
 
  
 -- Create the label using the calculated time
-local Label = Tab:CreateLabel("last updated: May 21st ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
+local Label = Tab:CreateLabel("last updated: May 25th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
 local Paragraph = Tab:CreateParagraph({
     Title = "Updates",
     Content = 
+" • you now only have to type the first few letters of their name for behind search (universal)\n\n" ..
+
+" • added monster garou moves to auto void kill (tsb)\n\n" ..
  " • behind search (universal)\n\n" ..
   " • fixed some auto dodge bugs (tsb)\n\n" ..
  " • anti bang (universal)\n\n" ..
@@ -1973,10 +1992,13 @@ local isFollowing = false
 local lockedPlayer = nil
 local typedName = ""
 
--- Find player by username or display name
+-- Find player by partial username or display name
 local function findPlayerByName(name)
+	name = string.lower(name)
 	for _, plr in pairs(Players:GetPlayers()) do
-		if string.lower(plr.Name) == string.lower(name) or string.lower(plr.DisplayName) == string.lower(name) then
+		local username = string.lower(plr.Name)
+		local displayName = string.lower(plr.DisplayName)
+		if username:sub(1, #name) == name or displayName:sub(1, #name) == name then
 			return plr
 		end
 	end
@@ -2024,7 +2046,7 @@ Tab:CreateToggle({
 			if found then
 				setLockedPlayer(found)
 			else
-				warn("No player found with name: " .. typedName)
+				warn("No player found starting with: " .. typedName)
 				isFollowing = false
 				return
 			end
@@ -2994,7 +3016,11 @@ local targetAnimIds = {
 	["rbxassetid://12296113986"] = true,
 	["rbxassetid://15145462680"] = 0.5,
 	["rbxassetid://15295895753"] = 0.5,
+	["rbxassetid://115484690572880"] = 1,
+	["rbxassetid://94638356008696"] = 1,
+
 }
+
 
 local cameraLockConnection = nil
 local savedCameraCFrame = nil
@@ -3141,7 +3167,7 @@ local list = Instance.new("TextLabel")
 list.Size = UDim2.new(1, -40, 0, 130)
 list.Position = UDim2.new(0, 20, 0, 60)
 list.BackgroundTransparency = 1
-list.Text = "• Flowing Water\n• Lethal Whirlwind\n• Foul Ball\n• Atmos Cleve\n• Pinpoint Cut"
+list.Text = "• Flowing Water(patched)\n• Lethal Whirlwind\n• Foul Ball\n• Atmos Cleve\n• Pinpoint Cut\n• new monster garou moves"
 list.TextColor3 = Color3.fromRGB(200, 220, 255)
 list.TextScaled = true
 list.TextWrapped = true
