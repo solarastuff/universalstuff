@@ -3417,123 +3417,14 @@ local Toggle = Tab:CreateToggle({
 })
 local Divider = Tab:CreateDivider()
 task.spawn(function()
-    local Players = game:GetService("Players")
-    local CurrentPlayer = Players.LocalPlayer
 
-    local isInvisibleBlockActive = false
-
-    local function blockAnimationIfActive(animationTrack)
-        local currentAnimationId = animationTrack.Animation.AnimationId
-        local restrictedAnimationId = "rbxassetid://10470389827"
-
-        print("Animation Played:", currentAnimationId)
-
-        if isInvisibleBlockActive and currentAnimationId == restrictedAnimationId then
-            animationTrack:Stop()
-            print("Blocked animation with ID:", currentAnimationId)
-        end
-    end
-
-    local function monitorAnimationsForCharacter(character)
-        local humanoid = character:WaitForChild("Humanoid", 5)
-        if humanoid then
-            local animator = humanoid:FindFirstChildOfClass("Animator")
-            if animator then
-                animator.AnimationPlayed:Connect(blockAnimationIfActive)
-            end
-        end
-    end
-
-    if CurrentPlayer.Character then
-        monitorAnimationsForCharacter(CurrentPlayer.Character)
-    end
-
-    CurrentPlayer.CharacterAdded:Connect(monitorAnimationsForCharacter)
-
-    Tab:CreateToggle({
-        Name = "Invisible Block",
-        CurrentValue = false,
-        Flag = "Toggle1",
-        Callback = function(Value)
-            isInvisibleBlockActive = Value
-            print("Invisible Block is now", Value and "ENABLED" or "DISABLED")
-        end,
-    })
-end)
-local Divider = Tab:CreateDivider()
-task.spawn(function()
-local Workspace = game:GetService("Workspace")
-local RunService = game:GetService("RunService")
-
-local HITBOX_SIZE = 15
-local hitboxPart = nil
-
--- Function to create the hitbox part
-local function createHitboxPart(targetHRP)
-    if not hitboxPart then
-        hitboxPart = Instance.new("Part")
-        hitboxPart.Anchored = true
-        hitboxPart.CanCollide = false
-        hitboxPart.Transparency = 0.6
-        hitboxPart.BrickColor = BrickColor.new("Light stone grey")
-        hitboxPart.Parent = Workspace
-    end
-
-    -- Update the hitbox part's size and position
-    hitboxPart.Size = Vector3.new(HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE) + targetHRP.Size
-    hitboxPart.Position = targetHRP.Position
-end
-
--- Function to destroy the hitbox part
-local function destroyHitboxPart()
-    if hitboxPart then
-        hitboxPart:Destroy()
-        hitboxPart = nil
-    end
-end
-
--- Function to monitor the player for the M1ing accessory
-local function monitorPlayer(player)
-    local liveFolder = Workspace:FindFirstChild("Live")
-    if not liveFolder then
-        destroyHitboxPart()
-        return
-    end
-
-    local playerModel = liveFolder:FindFirstChild(player.Name)
-    if not playerModel then
-        destroyHitboxPart()
-        return
-    end
-
-    local m1ingAccessory = playerModel:FindFirstChild("M1ing")
-    if m1ingAccessory then
-        -- Get the target HumanoidRootPart
-        local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        if targetHRP then
-            createHitboxPart(targetHRP)
-        end
-    else
-        destroyHitboxPart()
-    end
-end
-
--- Main loop to monitor the nearest player for the M1ing accessory
-RunService.Heartbeat:Connect(function()
-    local nearestPlayer = getNearestPlayer() -- Assuming getNearestPlayer is already defined
-    if nearestPlayer then
-        monitorPlayer(nearestPlayer)
-    else
-        destroyHitboxPart()
-    end
-end)
 	-- Rayfield UI
 	local Toggle = Tab:CreateToggle({
 		Name = "auto dodgeV4 (M1's)",
 		CurrentValue = false,
 		Flag = "HitboxTeleportAccessoryToggle",
 		Callback = function(Value)
-			toggleEnabled = Value
+			
 		end,
 	})
 
@@ -3545,7 +3436,7 @@ end)
 		CurrentValue = TELEPORT_DISTANCE,
 		Flag = "TeleportSlider",
 		Callback = function(Value)
-			TELEPORT_DISTANCE = Value
+			
 		end,
 	})
 
@@ -3557,7 +3448,7 @@ end)
 		CurrentValue = hitboxsiz,
 		Flag = "HitboxSlider",
 		Callback = function(Value)
-			hitboxsiz = Value
+			
 		end,
 	})
 end)
