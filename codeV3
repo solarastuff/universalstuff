@@ -3463,125 +3463,68 @@ end)
 local Divider = Tab:CreateDivider()
 task.spawn(function()
 local Workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
-local LocalPlayer = Players.LocalPlayer
-local Character, HumanoidRootPart
-
-local TELEPORT_DISTANCE = 3.3
 local HITBOX_SIZE = 15
-local toggleEnabled = false
 local hitboxPart = nil
 
--- Character setup
-local function setupCharacter()
-    Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-end
-
-setupCharacter()
-
--- On respawn
-LocalPlayer.CharacterAdded:Connect(function(char)
-    char:WaitForChild("HumanoidRootPart")
-    setupCharacter()
-end)
-
--- Get nearest player
-local function getNearestPlayer()
-    local nearestPlayer = nil
-    local shortestDistance = math.huge
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local distance = (player.Character.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
-            if distance < shortestDistance then
-                nearestPlayer = player
-                shortestDistance = distance
-            end
-        end
-    end
-    return nearestPlayer
-end
-
--- Hitbox touched = teleport
-local function onHitboxTouched(otherPart)
-    if toggleEnabled and otherPart:IsDescendantOf(Character) then
-        -- Ensure direction vector is valid and normalized
-        local direction = (HumanoidRootPart.Position - hitboxPart.Position).Unit
-        if direction.Magnitude == 0 then direction = Vector3.new(0, 0, -1) end
-
-        -- Teleport the player
-        HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position + direction * TELEPORT_DISTANCE)
-
-        -- Play sound safely
-        local teleportSound = Instance.new("Sound")
-        teleportSound.SoundId = "rbxassetid://<YourSoundIdHere>" -- Replace with a valid SoundId
-        teleportSound.Looped = false
-        teleportSound.Volume = 3.3
-        teleportSound.Parent = Workspace
-        teleportSound:Play()
-
-        -- Cleanup the sound after it finishes playing
-        teleportSound.Ended:Connect(function()
-            teleportSound:Destroy()
-        end)
-    end
-end
-
--- Update hitbox
-local function updateHitboxForPlayer(player)
-    local liveFolder = Workspace:FindFirstChild("Live")
-    if not liveFolder then return end
-
-    local playerModel = liveFolder:FindFirstChild(player.Name)
-    if not playerModel then 
-        destroyHitbox()
-        return 
-    end
-
-    local m1ingAccessory = playerModel:FindFirstChild("M1ing")
-    if not m1ingAccessory then
-        destroyHitbox()
-        return 
-    end
-
+-- Function to create the hitbox part
+local function createHitboxPart(targetHRP)
     if not hitboxPart then
         hitboxPart = Instance.new("Part")
         hitboxPart.Anchored = true
         hitboxPart.CanCollide = false
         hitboxPart.Transparency = 0.6
         hitboxPart.BrickColor = BrickColor.new("Light stone grey")
-        hitboxPart.Touched:Connect(onHitboxTouched)
         hitboxPart.Parent = Workspace
     end
 
-    local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if targetHRP then
-        hitboxPart.Size = targetHRP.Size + Vector3.new(HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE)
-        hitboxPart.Position = targetHRP.Position
-    end
+    -- Update the hitbox part's size and position
+    hitboxPart.Size = Vector3.new(HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE) + targetHRP.Size
+    hitboxPart.Position = targetHRP.Position
 end
 
--- Destroy hitbox safely
-local function destroyHitbox()
+-- Function to destroy the hitbox part
+local function destroyHitboxPart()
     if hitboxPart then
         hitboxPart:Destroy()
         hitboxPart = nil
     end
 end
 
--- Loop
-RunService.Heartbeat:Connect(function()
-    if toggleEnabled then
-        local nearestPlayer = getNearestPlayer()
-        if nearestPlayer then
-            updateHitboxForPlayer(nearestPlayer)
-        else
-            destroyHitbox()
+-- Function to monitor the player for the M1ing accessory
+local function monitorPlayer(player)
+    local liveFolder = Workspace:FindFirstChild("Live")
+    if not liveFolder then
+        destroyHitboxPart()
+        return
+    end
+
+    local playerModel = liveFolder:FindFirstChild(player.Name)
+    if not playerModel then
+        destroyHitboxPart()
+        return
+    end
+
+    local m1ingAccessory = playerModel:FindFirstChild("M1ing")
+    if m1ingAccessory then
+        -- Get the target HumanoidRootPart
+        local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if targetHRP then
+            createHitboxPart(targetHRP)
         end
     else
-        destroyHitbox()
+        destroyHitboxPart()
+    end
+end
+
+-- Main loop to monitor the nearest player for the M1ing accessory
+RunService.Heartbeat:Connect(function()
+    local nearestPlayer = getNearestPlayer() -- Assuming getNearestPlayer is already defined
+    if nearestPlayer then
+        monitorPlayer(nearestPlayer)
+    else
+        destroyHitboxPart()
     end
 end)
 	-- Rayfield UI
