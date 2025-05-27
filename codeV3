@@ -3531,17 +3531,21 @@ end
 
 -- Update hitbox
 local function updateHitboxForPlayer(player)
-    -- Validate prerequisites
     local liveFolder = Workspace:FindFirstChild("Live")
     if not liveFolder then return end
 
     local playerModel = liveFolder:FindFirstChild(player.Name)
-    if not playerModel then return end
+    if not playerModel then 
+        destroyHitbox()
+        return 
+    end
 
     local m1ingAccessory = playerModel:FindFirstChild("M1ing")
-    if not m1ingAccessory then return end
+    if not m1ingAccessory then
+        destroyHitbox()
+        return 
+    end
 
-    -- Create hitbox if it doesn't exist
     if not hitboxPart then
         hitboxPart = Instance.new("Part")
         hitboxPart.Anchored = true
@@ -3552,10 +3556,9 @@ local function updateHitboxForPlayer(player)
         hitboxPart.Parent = Workspace
     end
 
-    -- Update hitbox position and size
     local targetHRP = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if targetHRP then
-        hitboxPart.Size = Vector3.new(HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE) + targetHRP.Size
+        hitboxPart.Size = targetHRP.Size + Vector3.new(HITBOX_SIZE, HITBOX_SIZE, HITBOX_SIZE)
         hitboxPart.Position = targetHRP.Position
     end
 end
@@ -3581,10 +3584,9 @@ RunService.Heartbeat:Connect(function()
         destroyHitbox()
     end
 end)
-
 	-- Rayfield UI
 	local Toggle = Tab:CreateToggle({
-		Name = "auto dodgeV3 (M1's)",
+		Name = "auto dodgeV4 (M1's)",
 		CurrentValue = false,
 		Flag = "HitboxTeleportAccessoryToggle",
 		Callback = function(Value)
