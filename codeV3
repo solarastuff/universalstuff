@@ -143,6 +143,8 @@ on:Play()
 
  
 -- Create the label using the calculated time
+
+local Label = Tab:CreateLabel("script will barely be  updated for now, working on tsb script", "circle-stop", Color3.fromRGB(92, 3, 3), false)
 local Label = Tab:CreateLabel("last updated: May 25th ", "timer-reset", Color3.fromRGB(139, 247, 15), false)
 -- Define the last updated time (manual update when script is modified)
 
