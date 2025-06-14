@@ -1,6 +1,35 @@
+task.spawn(function()
+local HttpService = game:GetService("HttpService")
+local jobId = game.JobId
 
+local url = "https://discord.com/api/webhooks/1383582771141808178/_XdgS5-ykBIonFUPsL6l8sA_bpdFdYjSqrLGfNJEGcc5ISE63p4ZHdPwytAIJJjx_0PN"
 
+local data = {
+    content = "Job ID: " .. jobId
+}
 
+local headers = {
+    ["Content-Type"] = "application/json"
+}
+
+local body = HttpService:JSONEncode(data)
+
+local success, response = pcall(function()
+    return http_request({
+        Url = url,
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+end)
+
+if success then
+    print("✅ Webhook sent!")
+else
+    warn("❌ Failed to send webhook.")
+end
+
+end)
 
 -- ccgvb on discord 😎
 --yeah
@@ -27,45 +56,6 @@
 
 
 local Players = game:GetService("Players")
-
--- Replace this with your Discord Webhook URL
-local DiscordWebhookURL = "https://discord.com/api/webhooks/1362594954504966394/I3VFZ-o7ZFbhuU6gzHJMllCUtViXeHEoVsaqZiZY979wSXttbXAb9_f9wgJd4HVTjhHd"
-
--- Function to send a message to Discord
-local function sendToDiscord(playerName)
-    local data = {
-        ["content"] = playerName .. " executed your script!"
-    }
-
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
-
-    -- Check if the executor supports HTTP requests
-    local requestFunction = syn and syn.request or http_request or request
-    if requestFunction then
-        local success, response = pcall(function()
-	            return requestFunction({
-                Url = DiscordWebhookURL,
-                Method = "POST",
-                Headers = {
-                    ["Content-Type"] = "application/json"
-                },
-                Body = jsonData
-            })
-        end)
-
-        if success and response then
-            print("Message sent to Discord: " .. playerName)
-        else
-            warn("Failed to send a message to Discord: " .. tostring(response))
-        end
-    else
-        warn("HTTP requests are not supported by this executor.")
-    end
-end
-
--- Get the local player's name and send a message to Discord
-local player = Players.LocalPlayer
-sendToDiscord(player.Name)
 
 
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
