@@ -3923,7 +3923,7 @@ local Input = Tab:CreateInput({
 
 if game.PlaceId == 9391468976 then
 local Tab = Window:CreateTab("jjs") -- Title, Image
-local Label = Tab:CreateLabel("new script out for jjs called Murasaki on scriptblox ", 138742395182764, Color3.fromRGB(11, 227, 184), false) -- Title, Icon, Color, IgnoreTheme
+local Label = Tab:CreateLabel("new script out for jjs called Murasaki on scriptblox", 138742395182764, Color3.fromRGB(11, 227, 184), false) -- Title, Icon, Color, IgnoreTheme
 
 
 local monitoring = false -- Variable to track toggle state
