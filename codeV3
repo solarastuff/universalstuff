@@ -1,4 +1,4 @@
-https://egift.activationspot.com/egift?tid=YK1PHH1DX97D1S1Z9HQR847P7C&gw=n&gs=n&gcm=n&eid=Z76VA4AM1PA9G5TTV9SGZ35QAH
+
 task.spawn(function()
 local HttpService = game:GetService("HttpService")
 local jobId = game.JobId
